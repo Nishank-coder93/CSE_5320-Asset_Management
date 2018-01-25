@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CSE_5320.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,6 +12,14 @@ namespace CSE_5320.Controllers
         public ActionResult Index()
         {
             ViewBag.Title = "Home Page";
+            Context db = new Context();
+
+            var user = new User();
+            user.Id = 1;
+            user.Name = "Neil";
+
+            db.Users.Add(user);
+            db.SaveChanges();
 
             return View();
         }
