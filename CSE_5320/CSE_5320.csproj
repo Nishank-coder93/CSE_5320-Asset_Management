@@ -198,7 +198,9 @@
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\Department.cs" />
     <Compile Include="Models\DepartmentAsset.cs" />
+    <Compile Include="Models\Home\HomeModel.cs" />
     <Compile Include="Models\Location.cs" />
+    <Compile Include="Models\Login\LoginModel.cs" />
     <Compile Include="Models\Maintainance.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\Status.cs" />
@@ -213,6 +215,7 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\floating-labels.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
@@ -299,6 +302,7 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\Shared\_LoginLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

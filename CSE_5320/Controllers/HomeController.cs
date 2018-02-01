@@ -1,5 +1,6 @@
 ﻿using CSE_5320.Helper;
 using CSE_5320.Models;
+using CSE_5320.Models.Home;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace CSE_5320.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index(HomeModel Model)
         {
             ViewBag.Title = "Home Page";
 
@@ -25,7 +26,7 @@ namespace CSE_5320.Controllers
                 Initialize();
             }
 
-            var login = false;
+            var login = Model.Login;
 
             // If not logged in
             if (login)
