@@ -7,10 +7,6 @@ namespace CSE_5320.Models.Home
 {
     public class HomeModel
     {
-        public HomeModel()
-        {
-            Login = false;
-        }
-        public bool Login { get; set; }
+
     }
 }

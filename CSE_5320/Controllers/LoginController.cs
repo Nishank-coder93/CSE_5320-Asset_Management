@@ -20,10 +20,16 @@ namespace CSE_5320.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Index(LoginModel Model)
         {
-            var homeModel = new HomeModel();
-            homeModel.Login = true;
+            Session["Login"] = true; 
+            return RedirectToAction("Index", "Home"); 
+        }
 
-            return RedirectToAction("Index", "Home", homeModel); 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Logout(LoginModel Model)
+        {
+            Session["Login"] = false;
+            return RedirectToAction("Index", "Home");
         }
     }
 }

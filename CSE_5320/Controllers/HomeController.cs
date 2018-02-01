@@ -13,8 +13,13 @@ namespace CSE_5320.Controllers
     {
         public ActionResult Index(HomeModel Model)
         {
-            ViewBag.Title = "Home Page";
-
+            if (Session["Login"] == null)
+            {
+                Session["Login"] = false;
+            }
+            
+            var login = (bool)Session["Login"];
+             
             Context db = new Context();
 
             var user = db.Users.FirstOrDefault();
@@ -26,7 +31,6 @@ namespace CSE_5320.Controllers
                 Initialize();
             }
 
-            var login = Model.Login;
 
             // If not logged in
             if (login)
