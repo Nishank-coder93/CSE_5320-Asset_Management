@@ -39,38 +39,8 @@ namespace CSE_5320.Controllers
                 db.Status.Add(s);
             }
 
-            var location = helper.LocationHelper();
-            foreach (var l in location)
-            {
-                db.Locations.Add(l);
-            }
-
-            var categories = helper.CategoryHelper();
-            foreach (var c in categories)
-            {
-                db.Categories.Add(c);
-            }
-
-            var asset = helper.AssetHelper();
-            foreach (var a in asset)
-            {
-                db.Assets.Add(a);
-            }
-
-            var departments = helper.DepartmentHelper();
-            foreach(var d in departments)
-            {
-                db.Departments.Add(d);
-            }
-
-            var departmentAssets = helper.DepartmentAssetHelper();
-            foreach (var da in departmentAssets)
-            {
-                db.DepartmentAssets.Add(da);
-            }
-
             var roles = helper.RoleHelper();
-            foreach(var r in roles)
+            foreach (var r in roles)
             {
                 db.Roles.Add(r);
             }
@@ -79,12 +49,42 @@ namespace CSE_5320.Controllers
             foreach (var u in users)
             {
                 db.Users.Add(u);
+            } 
+
+            var location = helper.LocationHelper();
+            foreach (var l in location)
+            {
+                db.Locations.Add(l);
             }
+
+            var departments = helper.DepartmentHelper();
+            foreach (var d in departments)
+            {
+                db.Departments.Add(d);
+            }
+
+            var categories = helper.CategoryHelper();
+            foreach (var c in categories)
+            {
+                db.Categories.Add(c);
+            } 
 
             var maintainance = helper.MaintainanceHelper();
             foreach (var m in maintainance)
             {
                 db.Maintainance.Add(m);
+            }
+
+            var asset = helper.AssetHelper();
+            foreach (var a in asset)
+            {
+                db.Assets.Add(a);
+            }
+
+            var departmentAssets = helper.DepartmentAssetHelper();
+            foreach (var da in departmentAssets)
+            {
+                db.DepartmentAssets.Add(da);
             }
 
             db.SaveChanges(); 
