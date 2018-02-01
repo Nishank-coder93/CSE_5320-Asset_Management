@@ -5,8 +5,9 @@ using System.Web;
 
 namespace CSE_5320.Models
 {
-    public class User : Base
+    public class DepartmentAsset : Base
     {
-        public int RoleId { get; set; }
+        public int DepartmentId { get; set; }
+        public int AssetId { get; set; }
     }
 }
