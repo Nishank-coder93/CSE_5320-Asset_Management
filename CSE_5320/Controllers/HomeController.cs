@@ -25,7 +25,17 @@ namespace CSE_5320.Controllers
                 Initialize();
             }
 
-            return View();
+            var login = false;
+
+            // If not logged in
+            if (login)
+            { 
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Login");
+            }
         }
 
         private void Initialize()
