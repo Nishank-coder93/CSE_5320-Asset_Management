@@ -27,20 +27,17 @@
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link" href="@Url.Action("Index", "Home")">
-                                <span data-feather="home"></span>
-                                Dashboard 
+                                <span class="lead">Dashboard</span> <span class="sr-only">(current)</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active" href="@Url.Action("Assets", "Home")">
-                                <span data-feather="tag"></span>
-                                Asset Management <span class="sr-only">(current)</span>
+                                <span class="lead">Asset Management</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="@Url.Action("Maintainance", "Home")">
-                                <span data-feather="users"></span>
-                                Maintainance
+                                <span class="lead">Maintainance</span>
                             </a>
                         </li>
                     </ul>
@@ -50,7 +47,6 @@
         </div>
     </div>
 
-    <script src="https://www.amcharts.com/lib/3/ammap.js"></script>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/dashboard")
