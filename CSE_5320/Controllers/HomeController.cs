@@ -30,12 +30,19 @@ namespace CSE_5320.Controllers
                 // Initializing the database
                 Initialize();
             }
+            
+            var helper = new ListHelper();
+            var mapLocations = helper.MapHelper();
 
+            foreach (var m in mapLocations)
+            {
+                Model.Map.Add(m);
+            } 
 
             // If not logged in
             if (login)
             { 
-                return View();
+                return View(Model);
             }
             else
             {

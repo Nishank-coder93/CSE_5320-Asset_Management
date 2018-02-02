@@ -18,11 +18,27 @@ namespace CSE_5320
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
-                      "~/Scripts/respond.js"));
+                      "~/Scripts/respond.js",
+                       "~/Scripts/feather.min.js",
+                       "~/Scripts/Chart.min.js"));
+            
+            bundles.Add(new ScriptBundle("~/bundles/map").Include(
+                      "~/Scripts/anmap.js",
+                      "~/Scripts/usaLow.js",
+                      "~/Scripts/export.min.js",
+                      "~/Scripts/light.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/dashboard").Include(
+                      "~/Scripts/dashboard.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new StyleBundle("~/Content/dashboard").Include(
+                      "~/Content/bootstrap.min.css",
+                      "~/Content/dashboard.css",
+                      "~/Content/dashboard_map.css"));
         }
     }
 }
