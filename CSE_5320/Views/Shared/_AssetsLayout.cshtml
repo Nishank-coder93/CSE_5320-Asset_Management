@@ -26,15 +26,15 @@
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="@Url.Action("Index", "Home")">
+                            <a class="nav-link" href="@Url.Action("Index", "Home")">
                                 <span data-feather="home"></span>
-                                Dashboard <span class="sr-only">(current)</span>
+                                Dashboard 
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Assets", "Home")">
+                            <a class="nav-link active" href="@Url.Action("Assets", "Home")">
                                 <span data-feather="tag"></span>
-                                Asset Management
+                                Asset Management <span class="sr-only">(current)</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -53,44 +53,11 @@
     <script src="https://www.amcharts.com/lib/3/ammap.js"></script>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/map")
     @Scripts.Render("~/bundles/dashboard")
     @RenderSection("scripts", required: false)
 
     <script>
-        feather.replace();
-        var map = @Html.Raw(Json.Encode(Model.Map));
-        var map_Json = map;
-
-        var mapLocations = @Html.Raw(Json.Encode(Model.MapLocations));
-        var mapLocations_Json = mapLocations;
-
-        var map_1 = AmCharts.makeChart("asset", {
-            "type": "map",
-            "theme": "light",
-            "colorSteps": 10,
-
-            "dataProvider": {
-                "map": "usaLow",
-                "areas": map_Json,
-                "images": mapLocations_Json
-            },
-
-            "areasSettings": {
-                "autoZoom": true
-            },
-
-            "valueLegend": {
-                "right": 100,
-                "minValue": "No Assets",
-                "maxValue": "Many Assets"
-            },
-
-            "export": {
-                "enabled": true
-            }
-
-        });
+        feather.replace(); 
     </script>
 </body>
 </html>

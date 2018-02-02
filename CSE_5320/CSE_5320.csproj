@@ -314,6 +314,10 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Shared\_LoginLayout.cshtml" />
     <Content Include="Views\Shared\_LayoutEmpty.cshtml" />
+    <Content Include="Views\Home\Assets.cshtml" />
+    <Content Include="Views\Home\Maintainance.cshtml" />
+    <Content Include="Views\Shared\_AssetsLayout.cshtml" />
+    <Content Include="Views\Shared\_MaintainanceLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

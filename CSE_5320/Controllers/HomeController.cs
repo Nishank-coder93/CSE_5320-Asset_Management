@@ -62,6 +62,16 @@ namespace CSE_5320.Controllers
             }
         }
 
+        public async Task<ActionResult> Assets(HomeModel Model)
+        {
+            return View();
+        }
+
+        public async Task<ActionResult> Maintainance(HomeModel Model)
+        {
+            return View();
+        }
+
         private void Initialize()
         {
             Context db = new Context();
