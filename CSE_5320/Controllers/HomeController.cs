@@ -48,7 +48,9 @@ namespace CSE_5320.Controllers
                     if (result.IsSuccessStatusCode)
                     {
                         var data = result.Content.ReadAsStringAsync().Result;
-                        Model.Map = JsonConvert.DeserializeObject<List<Map>>(data);
+                        var output = JsonConvert.DeserializeObject<HomeModel>(data);
+                        Model.Map = output.Map;
+                        Model.MapLocations = output.MapLocations;
                     }
                 } 
 
@@ -58,6 +60,11 @@ namespace CSE_5320.Controllers
             {
                 return RedirectToAction("Index", "Login");
             }
+        }
+
+        public async Task<ActionResult> Assets(HomeModel Model)
+        {
+            return View();
         }
 
         private void Initialize()
@@ -95,11 +102,6 @@ namespace CSE_5320.Controllers
                 db.Locations.Add(l);
             }
 
-            var departments = helper.DepartmentHelper();
-            foreach (var d in departments)
-            {
-                db.Departments.Add(d);
-            }
 
             var categories = helper.CategoryHelper();
             foreach (var c in categories)
@@ -107,22 +109,10 @@ namespace CSE_5320.Controllers
                 db.Categories.Add(c);
             } 
 
-            var maintainance = helper.MaintainanceHelper();
-            foreach (var m in maintainance)
-            {
-                db.Maintainance.Add(m);
-            }
-
             var asset = helper.AssetHelper();
             foreach (var a in asset)
             {
                 db.Assets.Add(a);
-            }
-
-            var departmentAssets = helper.DepartmentAssetHelper();
-            foreach (var da in departmentAssets)
-            {
-                db.DepartmentAssets.Add(da);
             }
 
             db.SaveChanges(); 

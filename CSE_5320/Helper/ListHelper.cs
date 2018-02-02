@@ -30,8 +30,8 @@ namespace CSE_5320.Helper
             var loc_1 = new Location();
             loc_1.Id = 1;
             loc_1.Name = "University of Texas at Arlington";
-            loc_1.Latitude = (float)32.7299;
-            loc_1.Longitude = (float)97.1140;
+            loc_1.Latitude = 32.7299;
+            loc_1.Longitude = -97.1140;
             loc_1.StateId = 43;
             loc_1.StatusId = 1;
             result.Add(loc_1);
@@ -39,8 +39,8 @@ namespace CSE_5320.Helper
             var loc_2 = new Location();
             loc_2.Id = 2;
             loc_2.Name = "University of Texas at Dallas";
-            loc_2.Latitude = (float)32.9858;
-            loc_2.Longitude = (float)96.7501;
+            loc_2.Latitude = 32.9858;
+            loc_2.Longitude = -96.7501;
             loc_2.StateId = 43;
             loc_2.StatusId = 1;
             result.Add(loc_2);
@@ -75,56 +75,15 @@ namespace CSE_5320.Helper
             return result;
         }
 
-        public List<Department> DepartmentHelper()
-        {
-            var result = new List<Department>();
-
-            var dep_1 = new Department();
-            dep_1.Id = 1;
-            dep_1.Name = "Engineering";
-            dep_1.LocationId = 1;
-            dep_1.StatusId = 1;
-            result.Add(dep_1);
-
-            return result;
-        }
-
-        public List<DepartmentAsset> DepartmentAssetHelper()
-        {
-            var result = new List<DepartmentAsset>();
-
-            var da_1 = new DepartmentAsset();
-            da_1.Id = 1;
-            da_1.Name = "Front Desk";
-            da_1.DepartmentId = 1;
-            da_1.AssetId = 1;
-            da_1.StatusId = 1;
-            result.Add(da_1);
-
-            return result;
-        }
-
         public List<Role> RoleHelper()
         {
             var result = new List<Role>();
 
             var role_1 = new Role();
             role_1.Id = 1;
-            role_1.Name = "IT Asset Manager";
+            role_1.Name = "Admin";
             role_1.StatusId = 1;
             result.Add(role_1);
-
-            var role_2 = new Role();
-            role_2.Id = 2;
-            role_2.Name = "Employee";
-            role_2.StatusId = 1;
-            result.Add(role_2);
-
-            var role_3 = new Role();
-            role_3.Id = 3;
-            role_3.Name = "Maintance";
-            role_3.StatusId = 1;
-            result.Add(role_3);
 
             return result;
         }
@@ -141,13 +100,6 @@ namespace CSE_5320.Helper
             user_1.RoleId = 1;
             user_1.StatusId = 1;
             result.Add(user_1);
-
-            return result;
-        }
-
-        public List<Maintainance> MaintainanceHelper()
-        {
-            var result = new List<Maintainance>();
 
             return result;
         }
