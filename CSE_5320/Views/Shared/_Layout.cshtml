@@ -4,11 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/Content/dashboard.css" rel="stylesheet" />
+
+    @Styles.Render("~/Content/dashboard")
 </head>
 <body>
-
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
         <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Inventory Management</a>
         <ul class="navbar-nav px-3">
@@ -17,7 +16,7 @@
                 {
                     @Html.AntiForgeryToken()
                     <input class="btn btn-outline-light" type="submit" value="Sign Out">
-                } 
+                }
             </li>
         </ul>
     </nav>
@@ -53,21 +52,40 @@
                     </ul>
                 </div>
             </nav>
-
             @RenderBody()
-
         </div>
     </div>
 
-    <script src="~/Scripts/feather.min.js"></script>
-    <script>
-        feather.replace()
-    </script>
-
-    <script src="~/Scripts/Chart.min.js"></script>
-
+    <script src="https://www.amcharts.com/lib/3/ammap.js"></script>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/map")
+    @Scripts.Render("~/bundles/dashboard")
     @RenderSection("scripts", required: false)
+
+    <script>
+        feather.replace();
+        var model = @Html.Raw(Json.Encode(Model.Map));
+        var map_Json = model; 
+        var map = AmCharts.makeChart("chartdiv", {
+            "type": "map",
+            "theme": "light",
+            "colorSteps": 10,
+
+            "dataProvider": {
+                "map": "usaLow",
+                "areas": map_Json
+            },
+
+            "areasSettings": {
+                "autoZoom": true
+            },
+            
+            "export": {
+                "enabled": true
+            }
+
+        });
+    </script>
 </body>
 </html>
