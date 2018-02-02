@@ -22,6 +22,7 @@ namespace CSE_5320.Helper
 
             return result;
         }
+
         public List<Location> LocationHelper()
         {
             var result = new List<Location>();
@@ -31,6 +32,7 @@ namespace CSE_5320.Helper
             loc_1.Name = "University of Texas at Arlington";
             loc_1.Latitude = (float)32.7299;
             loc_1.Longitude = (float)97.1140;
+            loc_1.StateId = 43;
             loc_1.StatusId = 1;
             result.Add(loc_1);
 
@@ -137,6 +139,313 @@ namespace CSE_5320.Helper
         public List<Maintainance> MaintainanceHelper()
         {
             var result = new List<Maintainance>();
+
+            return result;
+        }
+
+        public List<State> StateHelper()
+        {
+            var result = new List<State>();
+
+            var state_1 = new State();
+            state_1.Id = 1;
+            state_1.Code = "US-AL";
+            state_1.Name = "";
+            result.Add(state_1);
+
+            var state_2 = new State();
+            state_2.Id = 2;
+            state_2.Code = "US-AK";
+            state_2.Name = "";
+            result.Add(state_2);
+
+            var state_3 = new State();
+            state_3.Id = 3;
+            state_3.Code = "US-AZ";
+            state_3.Name = "";
+            result.Add(state_3);
+
+            var state_4 = new State();
+            state_4.Id = 4;
+            state_4.Code = "US-AR";
+            state_4.Name = "";
+            result.Add(state_4);
+
+            var state_5 = new State();
+            state_5.Id = 5;
+            state_5.Code = "US-CA";
+            state_5.Name = "";
+            result.Add(state_5);
+
+            var state_6 = new State();
+            state_6.Id = 6;
+            state_6.Code = "US-CO";
+            state_6.Name = "";
+            result.Add(state_6);
+
+            var state_7 = new State();
+            state_7.Id = 7;
+            state_7.Code = "US-CT";
+            state_7.Name = "";
+            result.Add(state_7);
+
+            var state_8 = new State();
+            state_8.Id = 8;
+            state_8.Code = "US-DE";
+            state_8.Name = "";
+            result.Add(state_8);
+
+            var state_9 = new State();
+            state_9.Id = 9;
+            state_9.Code = "US-FL";
+            state_9.Name = "";
+            result.Add(state_9);
+
+            var state_10 = new State();
+            state_10.Id = 10;
+            state_10.Code = "US-GA";
+            state_10.Name = "";
+            result.Add(state_10);
+
+            var state_11 = new State();
+            state_11.Id = 11;
+            state_11.Code = "US-HI";
+            state_11.Name = "";
+            result.Add(state_11);
+
+            var state_12 = new State();
+            state_12.Id = 12;
+            state_12.Code = "US-ID";
+            state_12.Name = "";
+            result.Add(state_12);
+
+            var state_13 = new State();
+            state_13.Id = 13;
+            state_13.Code = "US-IL";
+            state_13.Name = "";
+            result.Add(state_13);
+
+            var state_14 = new State();
+            state_14.Id = 14;
+            state_14.Code = "US-IN";
+            state_14.Name = "";
+            result.Add(state_14);
+
+            var state_15 = new State();
+            state_15.Id = 15;
+            state_15.Code = "US-IA";
+            state_15.Name = "";
+            result.Add(state_15);
+
+            var state_16 = new State();
+            state_16.Id = 16;
+            state_16.Code = "US-KS";
+            state_16.Name = "";
+            result.Add(state_16);
+
+            var state_17 = new State();
+            state_17.Id = 17;
+            state_17.Code = "US-KY";
+            state_17.Name = "";
+            result.Add(state_17);
+
+            var state_18 = new State();
+            state_18.Id = 18;
+            state_18.Code = "US-LA";
+            state_18.Name = "";
+            result.Add(state_18);
+
+            var state_19 = new State();
+            state_19.Id = 19;
+            state_19.Code = "US-ME";
+            state_19.Name = "";
+            result.Add(state_19);
+
+            var state_20 = new State();
+            state_20.Id = 20;
+            state_20.Code = "US-MD";
+            state_20.Name = "";
+            result.Add(state_20);
+
+            var state_21 = new State();
+            state_21.Id = 21;
+            state_21.Code = "US-MA";
+            state_21.Name = "";
+            result.Add(state_21);
+
+            var state_22 = new State();
+            state_22.Id = 22;
+            state_22.Code = "US-MI";
+            state_22.Name = "";
+            result.Add(state_22);
+
+            var state_23 = new State();
+            state_23.Id = 23;
+            state_23.Code = "US-MN";
+            state_23.Name = "";
+            result.Add(state_23);
+
+            var state_24 = new State();
+            state_24.Id = 24;
+            state_24.Code = "US-MS";
+            state_24.Name = "";
+            result.Add(state_24);
+
+            var state_25 = new State();
+            state_25.Id = 25;
+            state_25.Code = "US-MO";
+            state_25.Name = "";
+            result.Add(state_25);
+
+            var state_26 = new State();
+            state_26.Id = 26;
+            state_26.Code = "US-MT";
+            state_26.Name = "";
+            result.Add(state_26);
+
+            var state_27 = new State();
+            state_27.Id = 27;
+            state_27.Code = "US-NE";
+            state_27.Name = "";
+            result.Add(state_27);
+
+            var state_28 = new State();
+            state_28.Id = 28;
+            state_28.Code = "US-NV";
+            state_28.Name = "";
+            result.Add(state_28);
+
+            var state_29 = new State();
+            state_29.Id = 29;
+            state_29.Code = "US-NH";
+            state_29.Name = "";
+            result.Add(state_29);
+
+            var state_30 = new State();
+            state_30.Id = 30;
+            state_30.Code = "US-NJ";
+            state_30.Name = "";
+            result.Add(state_30);
+
+            var state_31 = new State();
+            state_31.Id = 31;
+            state_31.Code = "US-NM";
+            state_31.Name = "";
+            result.Add(state_31);
+
+            var state_32 = new State();
+            state_32.Id = 32;
+            state_32.Code = "US-NY";
+            state_32.Name = "";
+            result.Add(state_32);
+
+            var state_33 = new State();
+            state_33.Id = 33;
+            state_33.Code = "US-NC";
+            state_33.Name = "";
+            result.Add(state_33);
+
+            var state_34 = new State();
+            state_34.Id = 34;
+            state_34.Code = "US-ND";
+            state_34.Name = "";
+            result.Add(state_34);
+
+            var state_35 = new State();
+            state_35.Id = 35;
+            state_35.Code = "US-OH";
+            state_35.Name = "";
+            result.Add(state_35);
+
+            var state_36 = new State();
+            state_36.Id = 36;
+            state_36.Code = "US-OK";
+            state_36.Name = "";
+            result.Add(state_36);
+
+            var state_37 = new State();
+            state_37.Id = 37;
+            state_37.Code = "US-OR";
+            state_37.Name = "";
+            result.Add(state_37);
+
+            var state_38 = new State();
+            state_38.Id = 38;
+            state_38.Code = "US-PA";
+            state_38.Name = "";
+            result.Add(state_38);
+
+            var state_39 = new State();
+            state_39.Id = 39;
+            state_39.Code = "US-RI";
+            state_39.Name = "";
+            result.Add(state_39);
+
+            var state_40 = new State();
+            state_40.Id = 40;
+            state_40.Code = "US-SC";
+            state_40.Name = "";
+            result.Add(state_40);
+
+            var state_41 = new State();
+            state_41.Id = 41;
+            state_41.Code = "US-SD";
+            state_41.Name = "";
+            result.Add(state_41);
+
+            var state_42 = new State();
+            state_42.Id = 42;
+            state_42.Code = "US-TN";
+            state_42.Name = "";
+            result.Add(state_42);
+
+            var state_43 = new State();
+            state_43.Id = 43;
+            state_43.Code = "US-TX";
+            state_43.Name = "";
+            result.Add(state_43);
+
+            var state_44 = new State();
+            state_44.Id = 44;
+            state_44.Code = "US-UT";
+            state_44.Name = "";
+            result.Add(state_44);
+
+            var state_45 = new State();
+            state_45.Id = 45;
+            state_45.Code = "US-VT";
+            state_45.Name = "";
+            result.Add(state_45);
+
+            var state_46 = new State();
+            state_46.Id = 46;
+            state_46.Code = "US-VA";
+            state_46.Name = "";
+            result.Add(state_46);
+
+            var state_47 = new State();
+            state_47.Id = 47;
+            state_47.Code = "US-WA";
+            state_47.Name = "";
+            result.Add(state_47);
+
+            var state_48 = new State();
+            state_48.Id = 48;
+            state_48.Code = "US-WV";
+            state_48.Name = "";
+            result.Add(state_48);
+
+            var state_49 = new State();
+            state_49.Id = 49;
+            state_49.Code = "US-WI";
+            state_49.Name = "";
+            result.Add(state_49);
+
+            var state_50 = new State();
+            state_50.Id = 50;
+            state_50.Code = "US-WY";
+            state_50.Name = "";
+            result.Add(state_50);
 
             return result;
         }

@@ -71,7 +71,13 @@ namespace CSE_5320.Controllers
             foreach (var u in users)
             {
                 db.Users.Add(u);
-            } 
+            }
+
+            var states = helper.StateHelper();
+            foreach (var s in states)
+            {
+                db.State.Add(s);
+            }
 
             var location = helper.LocationHelper();
             foreach (var l in location)
