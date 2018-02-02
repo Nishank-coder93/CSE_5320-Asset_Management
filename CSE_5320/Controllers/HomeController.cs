@@ -48,7 +48,9 @@ namespace CSE_5320.Controllers
                     if (result.IsSuccessStatusCode)
                     {
                         var data = result.Content.ReadAsStringAsync().Result;
-                        Model.Map = JsonConvert.DeserializeObject<List<Map>>(data);
+                        var output = JsonConvert.DeserializeObject<HomeModel>(data);
+                        Model.Map = output.Map;
+                        Model.MapLocations = output.MapLocations;
                     }
                 } 
 

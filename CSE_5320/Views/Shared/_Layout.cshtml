@@ -65,8 +65,12 @@
 
     <script>
         feather.replace();
-        var model = @Html.Raw(Json.Encode(Model.Map));
-        var map_Json = model; 
+        var map = @Html.Raw(Json.Encode(Model.Map));
+        var map_Json = map;
+
+        var mapLocations = @Html.Raw(Json.Encode(Model.MapLocations));
+        var mapLocations_Json = mapLocations;
+
         var map = AmCharts.makeChart("chartdiv", {
             "type": "map",
             "theme": "light",
@@ -74,13 +78,20 @@
 
             "dataProvider": {
                 "map": "usaLow",
-                "areas": map_Json
+                "areas": map_Json,
+                "images": mapLocations_Json
             },
 
             "areasSettings": {
                 "autoZoom": true
             },
-            
+
+            "valueLegend": {
+                "right": 100,
+                "minValue": "little",
+                "maxValue": "a lot!"
+            },
+
             "export": {
                 "enabled": true
             }

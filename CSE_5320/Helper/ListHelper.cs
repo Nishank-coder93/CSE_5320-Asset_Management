@@ -30,8 +30,8 @@ namespace CSE_5320.Helper
             var loc_1 = new Location();
             loc_1.Id = 1;
             loc_1.Name = "University of Texas at Arlington";
-            loc_1.Latitude = (float)32.7299;
-            loc_1.Longitude = (float)97.1140;
+            loc_1.Latitude = 32.7299;
+            loc_1.Longitude = -97.1140;
             loc_1.StateId = 43;
             loc_1.StatusId = 1;
             result.Add(loc_1);
@@ -39,8 +39,8 @@ namespace CSE_5320.Helper
             var loc_2 = new Location();
             loc_2.Id = 2;
             loc_2.Name = "University of Texas at Dallas";
-            loc_2.Latitude = (float)32.9858;
-            loc_2.Longitude = (float)96.7501;
+            loc_2.Latitude = 32.9858;
+            loc_2.Longitude = -96.7501;
             loc_2.StateId = 43;
             loc_2.StatusId = 1;
             result.Add(loc_2);

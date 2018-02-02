@@ -9,9 +9,9 @@ namespace CSE_5320.Controllers
 {
     public class ValuesController : ApiController
     {
-        public List<Map> getMapLocations()
+        public HomeModel getMapLocations()
         {
-            var result = new List<Map>();
+            var result = new HomeModel();
 
             Context db = new Context();
             var states = db.State.ToList(); 
@@ -22,12 +22,18 @@ namespace CSE_5320.Controllers
                 var m = new Map();
                 m.id = s.Code;
                 m.value = 0;
-                result.Add(m);
+                result.Map.Add(m);
             }
 
             foreach (var l in locations)
             {
-                foreach (var r in result)
+                var ml = new MapLocations();
+                ml.title = l.Name;
+                ml.latitude = l.Latitude;
+                ml.longitude = l.Longitude; 
+                result.MapLocations.Add(ml);
+
+                foreach (var r in result.Map)
                 {
                     if (r.id == l.State.Code)
                     {
