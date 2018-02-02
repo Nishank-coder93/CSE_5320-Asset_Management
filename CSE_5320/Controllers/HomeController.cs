@@ -1,9 +1,12 @@
 ﻿using CSE_5320.Helper;
 using CSE_5320.Models;
 using CSE_5320.Models.Home;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -11,7 +14,7 @@ namespace CSE_5320.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index(HomeModel Model)
+        public async Task<ActionResult> Index(HomeModel Model)
         {
             if (Session["Login"] == null)
             {
@@ -29,19 +32,26 @@ namespace CSE_5320.Controllers
             {
                 // Initializing the database
                 Initialize();
-            }
-            
-            var helper = new ListHelper();
-            var mapLocations = helper.MapHelper();
-
-            foreach (var m in mapLocations)
-            {
-                Model.Map.Add(m);
             } 
 
-            // If not logged in
             if (login)
-            { 
+            {
+                var uri = new Uri(Request.Url.AbsoluteUri);
+                var api = "api/Values/";
+                var method = "getMapLocations";
+
+                var url = uri + api+ method;
+
+                using (var client = new HttpClient())
+                {
+                    var result = await client.GetAsync(url);
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var data = result.Content.ReadAsStringAsync().Result;
+                        Model.Map = JsonConvert.DeserializeObject<List<Map>>(data);
+                    }
+                } 
+
                 return View(Model);
             }
             else

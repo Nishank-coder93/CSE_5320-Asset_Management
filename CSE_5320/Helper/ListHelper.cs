@@ -36,6 +36,15 @@ namespace CSE_5320.Helper
             loc_1.StatusId = 1;
             result.Add(loc_1);
 
+            var loc_2 = new Location();
+            loc_2.Id = 2;
+            loc_2.Name = "University of Texas at Dallas";
+            loc_2.Latitude = (float)32.9858;
+            loc_2.Longitude = (float)96.7501;
+            loc_2.StateId = 43;
+            loc_2.StatusId = 1;
+            result.Add(loc_2);
+
             return result;
         }
 
