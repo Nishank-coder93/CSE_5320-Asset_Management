@@ -1,39 +1,42 @@
-﻿using System;
+﻿using CSE_5320.Models.Home;
+using CSE_5320.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
+using System.Linq; 
+using System.Web.Mvc;
 
 namespace CSE_5320.Controllers
 {
     public class ValuesController : ApiController
     {
-        // GET api/values
-        public IEnumerable<string> Get()
+        public List<Map> getMapLocations()
         {
-            return new string[] { "value1", "value2" };
-        }
+            var result = new List<Map>();
 
-        // GET api/values/5
-        public string Get(int id)
-        {
-            return "value";
-        }
+            Context db = new Context();
+            var states = db.State.ToList(); 
+            var locations = db.Locations.ToList();
 
-        // POST api/values
-        public void Post([FromBody]string value)
-        {
-        }
+            foreach(var s in states)
+            {
+                var m = new Map();
+                m.id = s.Code;
+                m.value = 0;
+                result.Add(m);
+            }
 
-        // PUT api/values/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
+            foreach (var l in locations)
+            {
+                foreach (var r in result)
+                {
+                    if (r.id == l.State.Code)
+                    {
+                        r.value += 1;
+                    }
+                }
+            }
 
-        // DELETE api/values/5
-        public void Delete(int id)
-        {
-        }
+            return result;
+        } 
     }
 }
