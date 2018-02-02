@@ -196,12 +196,10 @@
     <Compile Include="Models\Base.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Context.cs" />
-    <Compile Include="Models\Department.cs" />
-    <Compile Include="Models\DepartmentAsset.cs" />
+    <Compile Include="Models\Error\ErrorModel.cs" />
     <Compile Include="Models\Home\HomeModel.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\Login\LoginModel.cs" />
-    <Compile Include="Models\Maintainance.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\State.cs" />
     <Compile Include="Models\Status.cs" />
@@ -315,9 +313,7 @@
     <Content Include="Views\Shared\_LoginLayout.cshtml" />
     <Content Include="Views\Shared\_LayoutEmpty.cshtml" />
     <Content Include="Views\Home\Assets.cshtml" />
-    <Content Include="Views\Home\Maintainance.cshtml" />
     <Content Include="Views\Shared\_AssetsLayout.cshtml" />
-    <Content Include="Views\Shared\_MaintainanceLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

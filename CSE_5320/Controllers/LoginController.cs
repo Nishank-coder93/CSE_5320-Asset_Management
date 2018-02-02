@@ -13,7 +13,8 @@ namespace CSE_5320.Controllers
     { 
         public ActionResult Index()
         {
-            return View();
+            var Model = new LoginModel();
+            return View(Model);
         } 
 
         [HttpPost]

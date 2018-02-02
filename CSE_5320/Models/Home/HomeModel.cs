@@ -1,11 +1,9 @@
-﻿using System;
+﻿using CSE_5320.Models.Error;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace CSE_5320.Models.Home
 {
-    public class HomeModel
+    public class HomeModel : ErrorModel
     {
         public HomeModel()
         {
@@ -14,6 +12,7 @@ namespace CSE_5320.Models.Home
         }
         public List<Map> Map { get; set; }
         public List<MapLocations> MapLocations { get; set; }
+        public ErrorModel Error { get; set; }
     }
 
     public class Map

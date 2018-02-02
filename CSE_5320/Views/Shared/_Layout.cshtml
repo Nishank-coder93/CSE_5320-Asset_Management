@@ -15,7 +15,7 @@
                 @using (Html.BeginForm("logout", "Login", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
-                    <input class="btn btn-outline-light" type="submit" value="Sign Out">
+                    <input class="btn btn-outline-light btn-sm" type="submit" value="Sign Out">
                 }
             </li>
         </ul>
@@ -33,11 +33,6 @@
                         <li class="nav-item">
                             <a class="nav-link" href="@Url.Action("Assets", "Home")">
                                 <span class="lead">Asset Management</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Maintainance", "Home")">
-                                <span class="lead">Maintainance</span>
                             </a>
                         </li>
                     </ul>
