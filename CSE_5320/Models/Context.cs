@@ -11,6 +11,7 @@ namespace CSE_5320.Models
     {
         public Context() : base("name=Cse5320") { }
 
+        public virtual DbSet<State> State { get; set; }
         public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Asset> Assets { get; set; }
