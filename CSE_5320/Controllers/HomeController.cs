@@ -38,7 +38,7 @@ namespace CSE_5320.Controllers
             {
                 var uri = new Uri(Request.Url.AbsoluteUri);
                 var api = "api/Values/";
-                var method = "getMapLocations";
+                var method = "";
 
                 var url = uri + api+ method;
 
@@ -48,9 +48,8 @@ namespace CSE_5320.Controllers
                     if (result.IsSuccessStatusCode)
                     {
                         var data = result.Content.ReadAsStringAsync().Result;
-                        var output = JsonConvert.DeserializeObject<HomeModel>(data);
-                        Model.Map = output.Map;
-                        Model.MapLocations = output.MapLocations;
+                        //var output = JsonConvert.DeserializeObject<HomeModel>(data);
+                        
                     }
                 } 
 
@@ -89,19 +88,6 @@ namespace CSE_5320.Controllers
             {
                 db.Users.Add(u);
             }
-
-            var states = helper.StateHelper();
-            foreach (var s in states)
-            {
-                db.State.Add(s);
-            }
-
-            var location = helper.LocationHelper();
-            foreach (var l in location)
-            {
-                db.Locations.Add(l);
-            }
-
 
             var categories = helper.CategoryHelper();
             foreach (var c in categories)
