@@ -23,9 +23,6 @@ namespace CSE_5320.Models
         [ForeignKey("Status")]
         public int StatusId { get; set; }
 
-        [ForeignKey("Assigned")]
-        public int? AssignedTo { get; set; }
-
         [ForeignKey("Technical")]
         public int? TechnicalContact { get; set; }
 

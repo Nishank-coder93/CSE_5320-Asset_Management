@@ -9,7 +9,7 @@ namespace CSE_5320.Models
 {
     public class Context : DbContext
     {
-        public Context() : base("name=Cse5320") { }
+        public Context() : base("name=Cse5320_Azure") { }
 
         public virtual DbSet<Asset> Assets { get; set; } 
         public virtual DbSet<Status> Status { get; set; }
