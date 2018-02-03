@@ -19,13 +19,18 @@ namespace CSE_5320.Helper
 
             var status_2 = new Status();
             status_2.Id = 2;
-            status_2.Name = "InActive";
+            status_2.Name = "In Active";
             result.Add(status_2);
 
             var status_3 = new Status();
             status_3.Id = 3;
-            status_3.Name = "Expired";
+            status_3.Name = "Available";
             result.Add(status_3);
+
+            var status_4 = new Status();
+            status_4.Id = 4;
+            status_4.Name = "Returned";
+            result.Add(status_4);
 
             return result;
         }
@@ -158,7 +163,6 @@ namespace CSE_5320.Helper
             c1.CategoryId = 1;
             c1.CpuId = 3;
             c1.WarrantyStatus = 1;
-            c1.AssignedTo = null;
             c1.TechnicalContact = 2;
             result.Add(c1);
 
@@ -171,7 +175,6 @@ namespace CSE_5320.Helper
             c2.CategoryId = 1;
             c2.CpuId = 2;
             c2.WarrantyStatus = 3;
-            c2.AssignedTo = null;
             c2.TechnicalContact = 2;
             result.Add(c2);
 
@@ -189,7 +192,6 @@ namespace CSE_5320.Helper
             s1.OsId = 1;
             s1.CpuId = 1;
             s1.CategoryId = 2;
-            s1.AssignedTo = null;
             s1.TechnicalContact = 2;
             s1.StatusId = 1;
             s1.ExpiryDate = null;
@@ -208,17 +210,19 @@ namespace CSE_5320.Helper
             a1.Name = AssetCodeGenerator();
             a1.TimesUsed = 0;
             a1.ComputerId = 1;
+            a1.AssignedTo = null;
             a1.SoftwareId = null;
-            a1.StatusId = 1;
+            a1.StatusId = 3;
             result.Add(a1);
 
             var a2 = new Asset();
             a2.Id = 2;
             a2.Name = AssetCodeGenerator();
             a2.TimesUsed = 0;
-            a2.ComputerId = 2;
+            a2.ComputerId = 2; 
+            a2.AssignedTo = null;
             a2.SoftwareId = null;
-            a2.StatusId = 1;
+            a2.StatusId = 3;
             result.Add(a1);
 
             return result;

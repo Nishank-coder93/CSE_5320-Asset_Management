@@ -25,9 +25,6 @@ namespace CSE_5320.Models
         [ForeignKey("Status")]
         public int WarrantyStatus { get; set; }
 
-        [ForeignKey("Assigned")]
-        public int? AssignedTo { get; set; }
-
         [ForeignKey("Technical")]
         public int? TechnicalContact { get; set; }
 

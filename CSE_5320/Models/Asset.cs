@@ -13,12 +13,17 @@ namespace CSE_5320.Models
         public int? SoftwareId { get; set; }
 
         [ForeignKey("Status")]
-        public int StatusId { get; set; }
+        public int StatusId { get; set; } 
+
+        [ForeignKey("User")]
+        public int? AssignedTo { get; set; }
 
         public virtual Computer Computer { get;set;}
 
         public virtual Software Software { get;set; }
 
         public virtual Status Status { get; set; }
+
+        public virtual User User { get; set; }
     }
 }
