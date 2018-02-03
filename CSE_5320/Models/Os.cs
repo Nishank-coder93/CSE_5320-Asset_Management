@@ -7,5 +7,6 @@ namespace CSE_5320.Models
 {
     public class Os : Base
     {
+        public string Version { get; set; }
     }
 }

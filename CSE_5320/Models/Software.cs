@@ -8,9 +8,6 @@ namespace CSE_5320.Models
 {
     public class Software : Base
     {
-        [ForeignKey("Department")]
-        public int DepartmentId { get; set; }
-
         [ForeignKey("Category")]
         public int CategoryId { get; set; }
 
@@ -32,9 +29,7 @@ namespace CSE_5320.Models
         [ForeignKey("Technical")]
         public int? TechnicalContact { get; set; }
 
-        public DateTime? ExpiryDate { get; set; }
-
-        public virtual Department Department { get; set; }
+        public DateTime? ExpiryDate { get; set; }        
 
         public virtual Category Category { get; set; }
 

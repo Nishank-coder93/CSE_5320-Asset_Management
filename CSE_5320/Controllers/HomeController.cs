@@ -77,6 +77,12 @@ namespace CSE_5320.Controllers
                 db.Status.Add(s);
             }
 
+            var category = helper.CategoryHelper();
+            foreach (var c in category)
+            {
+                db.Category.Add(c);
+            }
+
             var roles = helper.RoleHelper();
             foreach (var r in roles)
             {
