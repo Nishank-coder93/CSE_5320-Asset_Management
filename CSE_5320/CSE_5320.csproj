@@ -198,10 +198,8 @@
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\Error\ErrorModel.cs" />
     <Compile Include="Models\Home\HomeModel.cs" />
-    <Compile Include="Models\Location.cs" />
     <Compile Include="Models\Login\LoginModel.cs" />
     <Compile Include="Models\Role.cs" />
-    <Compile Include="Models\State.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
