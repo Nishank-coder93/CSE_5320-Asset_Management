@@ -27,12 +27,13 @@ namespace CSE_5320.Helper
         {
             var result = new List<Category>();
 
-            var cat_1 = new Category();
-            cat_1.Id = 1;
-            cat_1.Name = "Computer";
-            cat_1.StatusId = 1;
-            result.Add(cat_1);
+            return result;
+        }
 
+        public List<Department> DepartmentHelper()
+        {
+            var result = new List<Department>();
+            
             return result;
         }
 
@@ -40,12 +41,40 @@ namespace CSE_5320.Helper
         {
             var result = new List<Asset>();
 
-            var asset_1 = new Asset();
-            asset_1.Id = 1;
-            asset_1.Name = "Dell 15R2";
-            asset_1.CategoryId = 1;
-            asset_1.StatusId = 1;
-            result.Add(asset_1);
+            return result;
+        }
+
+        public List<Os> OsHelper()
+        {
+            var result = new List<Os>();
+
+            return result;
+        }
+
+        public List<Cpu> CpuHelper()
+        {
+            var result = new List<Cpu>();
+
+            return result;
+        }
+
+        public List<Memory> MemoryHelper()
+        {
+            var result = new List<Memory>();
+
+            return result;
+        }
+
+        public List<Computer> ComputerHelper()
+        {
+            var result = new List<Computer>();
+
+            return result;
+        }
+
+        public List<Software> SoftwareHelper()
+        {
+            var result = new List<Software>();
 
             return result;
         }
@@ -57,7 +86,6 @@ namespace CSE_5320.Helper
             var role_1 = new Role();
             role_1.Id = 1;
             role_1.Name = "Admin";
-            role_1.StatusId = 1;
             result.Add(role_1);
 
             return result;
@@ -73,7 +101,6 @@ namespace CSE_5320.Helper
             user_1.Username = "Admin";
             user_1.Password = "Admin"; // Need to hash
             user_1.RoleId = 1;
-            user_1.StatusId = 1;
             result.Add(user_1);
 
             return result;

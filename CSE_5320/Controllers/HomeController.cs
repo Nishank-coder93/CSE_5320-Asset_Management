@@ -89,11 +89,41 @@ namespace CSE_5320.Controllers
                 db.Users.Add(u);
             }
 
-            var categories = helper.CategoryHelper();
-            foreach (var c in categories)
+            var department = helper.DepartmentHelper();
+            foreach (var d in department)
             {
-                db.Categories.Add(c);
-            } 
+                db.Department.Add(d);
+            }
+
+            var os = helper.OsHelper();
+            foreach (var o in os)
+            {
+                db.Os.Add(o);
+            }
+
+            var cpu = helper.CpuHelper();
+            foreach (var c in cpu)
+            {
+                db.Cpu.Add(c);
+            }
+
+            var memory = helper.MemoryHelper();
+            foreach (var m in memory)
+            {
+                db.Memory.Add(m);
+            }
+
+            var computer = helper.ComputerHelper();
+            foreach (var c in computer)
+            {
+                db.Computer.Add(c);
+            }
+
+            var software = helper.SoftwareHelper();
+            foreach (var s in software)
+            {
+                db.Software.Add(s);
+            }
 
             var asset = helper.AssetHelper();
             foreach (var a in asset)

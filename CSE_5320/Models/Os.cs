@@ -5,8 +5,7 @@ using System.Web;
 
 namespace CSE_5320.Models
 {
-    public class Category : Base
+    public class Os : Base
     {
-
     }
 }
