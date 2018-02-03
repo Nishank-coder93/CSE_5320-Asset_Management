@@ -4,9 +4,21 @@ namespace CSE_5320.Models
 {
     public class Asset : Base
     {
-        [ForeignKey("Category")]
-        public int CategoryId { get; set; }
+        public int TimesUsed { get; set; }
 
-        public virtual Category Category { get; set; }
+        [ForeignKey("Computer")]
+        public int? ComputerId { get; set; }
+
+        [ForeignKey("Software")]
+        public int? SoftwareId { get; set; }
+
+        [ForeignKey("Status")]
+        public int StatusId { get; set; }
+
+        public virtual Computer Computer { get;set;}
+
+        public virtual Software Software { get;set; }
+
+        public virtual Status Status { get; set; }
     }
 }
