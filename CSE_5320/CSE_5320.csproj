@@ -270,6 +270,8 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <None Include="Properties\PublishProfiles\5320 - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\5320 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.0.0-vsdoc.js" />
     <Content Include="Scripts\export.min.js" />
     <Content Include="Scripts\feather.min.js" />
