@@ -22,6 +22,7 @@ namespace CSE_5320.Models
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Computer> Computer { get; set; }
         public virtual DbSet<Software> Software { get; set; }
+        public virtual DbSet<Request> Request { get; set; }
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
