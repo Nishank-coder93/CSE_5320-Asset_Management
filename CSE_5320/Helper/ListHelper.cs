@@ -32,6 +32,21 @@ namespace CSE_5320.Helper
             status_4.Name = "Returned";
             result.Add(status_4);
 
+            var status_5 = new Status();
+            status_5.Id = 5;
+            status_5.Name = "Requested";
+            result.Add(status_5);
+
+            var status_6 = new Status();
+            status_6.Id = 6;
+            status_6.Name = "Approved";
+            result.Add(status_6);
+
+            var status_7 = new Status();
+            status_7.Id = 7;
+            status_7.Name = "Denied";
+            result.Add(status_7);
+
             return result;
         }
 
