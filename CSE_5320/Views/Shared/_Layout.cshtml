@@ -10,30 +10,29 @@
 <body class="bg-light">
 
     <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Group 7</a>
+        <a class="navbar-brand" href="#">Welcome Neil</a>
         <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
             <span class="navbar-toggler-icon"></span>
         </button>
+        <form class="form-inline my-2 my-lg-0 float-right">
+            @using (Html.BeginForm("logout", "Login", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+            }
 
-        <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
-            <ul class="navbar-nav mr-auto">
-                
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                @using (Html.BeginForm("logout", "Login",new { }, FormMethod.Post))
-                {
-                    @Html.AntiForgeryToken()
-                    <input class="btn btn-outline-light btn-sm" type="submit" value="Sign Out">
-                }
-            </form>
-        </div>
+            @using (Html.BeginForm("logout", "Login", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <input type="submit" class="btn btn-outline-light btn-sm" value="Sign Out">
+            }
+        </form>
     </nav>
 
     <div class="nav-scroller bg-white box-shadow">
         <nav class="nav nav-underline">
             <span class="nav-link active">@ViewBag.Title</span>
             <span class="nav-link">
-                Hi Neil
+                Need to add some Description
             </span>
         </nav>
     </div>
