@@ -14,6 +14,7 @@ namespace CSE_5320.Controllers
 {
     public class HomeController : Controller
     {
+
         public async Task<ActionResult> Index(HomeModel Model)
         {
             if (Session["Login"] == null)
@@ -51,19 +52,14 @@ namespace CSE_5320.Controllers
                         //var output = JsonConvert.DeserializeObject<HomeModel>(data);
                         
                     }
-                } 
+                }
 
-                return View(Model);
+                return RedirectToAction("Index", "Dashboard");
             }
             else
             {
                 return RedirectToAction("Index", "Login");
             }
-        }
-
-        public async Task<ActionResult> Assets(HomeModel Model)
-        {
-            return View();
         }
 
         private void Initialize()
