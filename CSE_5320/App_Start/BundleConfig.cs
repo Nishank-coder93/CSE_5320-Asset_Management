@@ -19,7 +19,6 @@ namespace CSE_5320
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js",
-                       "~/Scripts/feather.min.js",
                        "~/Scripts/Chart.min.js"));
             
             bundles.Add(new ScriptBundle("~/bundles/map").Include(

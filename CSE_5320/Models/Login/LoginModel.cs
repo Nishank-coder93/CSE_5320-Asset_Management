@@ -8,6 +8,7 @@ namespace CSE_5320.Models.Login
         {
             Username = string.Empty;
             Password = string.Empty;
+            Error = new ErrorModel();
         }
         public string Username { get; set; }
 

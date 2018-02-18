@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CSE_5320.Models
 {
@@ -17,6 +18,8 @@ namespace CSE_5320.Models
 
         [ForeignKey("User")]
         public int? AssignedTo { get; set; }
+
+        public DateTime? ReturnDate { get; set; }
 
         public virtual Computer Computer { get;set;}
 

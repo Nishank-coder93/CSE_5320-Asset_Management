@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Asset management";
 }
-
+@model CSE_5320.Models.ViewModels.AssetViewModel
 
 <main role="main" class="container">
     <div class="align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
@@ -25,15 +25,18 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td scope="row">PC</td>
-                    <td>Neil</td>
-                    <td>12/12/17 - 1/1/18</td>
-                    <td>
-                        <button type="button" class="btn btn-outline-success btn-block">Confirm</button>
-                        <button type="button" class="btn btn-outline-danger btn-block">Deny</button>
-                    </td>
-                </tr>
+                @foreach (var a in Model.AssetDetails)
+                {
+                    <tr>
+                        <td scope="row">@a.AssetName</td>
+                        <td>@a.AssignedUserName</td>
+                        <td>@a.ReturnDate</td>
+                        <td>
+                            <button type="button" class="btn btn-outline-success btn-block">Confirm</button>
+                            <button type="button" class="btn btn-outline-danger btn-block">Deny</button>
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>

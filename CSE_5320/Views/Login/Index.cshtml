@@ -5,15 +5,22 @@
     Layout = "~/Views/Shared/_LoginLayout.cshtml";
 }
 
-
 @using (Html.BeginForm("Index", "Login", FormMethod.Post, new { @class = "signin" }))
 {
     @Html.AntiForgeryToken()
-    <div class="text-center mb-4">
-        <img class="mb-4" src="https://cdn0.iconfinder.com/data/icons/everyday-objects-line-art-1/128/clipboard-512.png" alt="" width="100" height="92">
-        <h1 class="h3 mb-3 font-weight-normal">Inventory Management</h1><hr />
-        <p>Enter your username and password to continue</p>
+<div class="text-center mb-4">
+    <img class="mb-4" src="https://cdn0.iconfinder.com/data/icons/everyday-objects-line-art-1/128/clipboard-512.png" alt="" width="100" height="92">
+    <h1 class="h3 mb-3 font-weight-normal">Inventory Management</h1><hr />
+
+    @if (!string.IsNullOrEmpty(Model.Error.Message))
+    {
+    <div class="alert alert-danger" role="alert">
+        @Model.Error.Message
     </div>
+    }
+
+    <p>Enter your username and password to continue</p>
+</div>
 
     <div class="form-label-group">
         @Html.TextBoxFor(l => l.Username, new { @class = "form-control", @placeholder = "Username", @requried = "required" })
