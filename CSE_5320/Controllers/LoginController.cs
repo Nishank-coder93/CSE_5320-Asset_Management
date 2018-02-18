@@ -1,5 +1,7 @@
 ﻿using CSE_5320.Models.Home;
 using CSE_5320.Models.Login;
+using CSE_5320.Models.ViewModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,14 +39,22 @@ namespace CSE_5320.Controllers
                     {
                         var result = Res.Content.ReadAsStringAsync().Result;
 
-                        switch (result.ToLower())
+                        if (result.ToLower() == "null")
                         {
-                            case "true":
-                                Session["Login"] = true;
-                                return RedirectToAction("Index", "Home");
-                            case "false":
-                                Model.Error.Message = "Invalid username / password";
-                                return View(Model);
+                            Model.Error.Message = "Invalid username / password";
+                            return View(Model);
+                        }
+                        else
+                        {
+                            Session["Login"] = true;
+
+                            var user = JsonConvert.DeserializeObject<UserViewModel>(result);
+
+                            Session["LoggedInUserId"] = user.UserId;
+                            Session["LoggedInName"] = user.Name;
+                            Session["LoggedInUsername"] = user.UserName;
+
+                            return RedirectToAction("Index", "Home");
                         }
                     }
                 }
@@ -59,6 +69,11 @@ namespace CSE_5320.Controllers
         public ActionResult Logout(LoginModel Model)
         {
             Session["Login"] = false;
+
+            Session["LoggedInUserId"] = null;
+            Session["LoggedInName"] = null;
+            Session["LoggedInUsername"] = null;
+
             return RedirectToAction("Index", "Home");
         }
 

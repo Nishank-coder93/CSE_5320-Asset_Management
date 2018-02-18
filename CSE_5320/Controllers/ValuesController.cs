@@ -5,6 +5,7 @@ using System.Web.Http;
 using System.Linq; 
 using System.Web.Mvc;
 using CSE_5320.Models.Login;
+using CSE_5320.Models.ViewModels;
 
 namespace CSE_5320.Controllers
 {
@@ -22,18 +23,24 @@ namespace CSE_5320.Controllers
             return db.Assets.Where(x=>x.Id == Id).FirstOrDefault();
         }
 
-        public bool login(LoginModel model)
+        public UserViewModel login(LoginModel model)
         {
             var db = new Context();
             var user = db.Users.Where(x => x.Username == model.Username && x.Password == model.Password).FirstOrDefault();
 
-            if (user == null)
+            if (user != null)
             {
-                return false;
+                var result = new UserViewModel();
+
+                result.UserId = user.Id;
+                result.UserName = user.Username;
+                result.Name = user.Name;
+
+                return result;
             }
             else
             {
-                return true;
+                return null;
             }
         }
     }
