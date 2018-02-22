@@ -14,6 +14,25 @@
         </div>
     </div>
 
+    @if (Model.successMessage)
+    {
+        <div class="alert alert-success" id="confirmedAsset" role="alert">
+            Asset request confirmed
+        </div>
+    }
+    else if (Model.deniedMessage)
+    {
+        <div class="alert alert-danger" id="deniedAsset" role="alert">
+            Asset request denied
+        </div>
+    }
+    else if (Model.errorMessage)
+    {
+        <div class="alert alert-warning" id="somethingWentWrong" role="alert">
+            Something went wrong
+        </div>
+    }
+
     <div class="my-3 p-3 bg-white rounded box-shadow">
         <table class="table table-hover" style="border: none">
             <thead>
@@ -36,8 +55,8 @@
                         <td>@a.AssignedUserName</td>
                         <td>@a.Duration</td>
                         <td>
-                            <button type="button" class="btn btn-outline-success btn-sm">Confirm</button>
-                            <button type="button" class="btn btn-outline-danger btn-sm">Deny</button>
+                            <button type="button" class="btn btn-outline-success btn-sm" onclick="confirmRequest(@a.AssetId)">Confirm</button>
+                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="denyRequest(@a.AssetId)">Deny</button>
                         </td>
                     </tr>
                 }
@@ -47,6 +66,37 @@
 </main>
 
 <script>
+
+    $(document).ready(function () {
+    });
+
+    function confirmRequest(Id) {
+      var src = '@Url.Action("confirmRequest", "Asset", new { area = "" })'+ '?Id='+Id;
+
+      $.ajax({
+        type: "POST",
+        url: src,
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+
+        }
+      });
+    };
+
+    function denyRequest(Id) {
+      var src = '@Url.Action("denyRequest", "Asset", new { area = "" })'+ '?Id='+Id;
+
+      $.ajax({
+        type: "POST",
+        url: src,
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+        }
+      });
+    };
+
     function loadInfo(Id) {
       var src = '@Url.Action("Assetinfo", "Asset", new { area = "" })'+ '?Id='+Id;
 
@@ -58,9 +108,12 @@
         success: function (data) {
             $("#assetModalContainer").html(data.LocationModal);
             $('#assetModal').modal('show');
+        },
+        Error: function (data) {
         }
       });
     }
+    
 </script>
 
 <div id="assetModalContainer"></div>

@@ -11,6 +11,13 @@ namespace CSE_5320.Models.ViewModels
         {
             AssetDetails = new List<AssetDetails>();
         }
+
+        public bool successMessage { get; set; }
+
+        public bool deniedMessage { get; set; }
+
+        public bool errorMessage { get; set; }
+
         public List<AssetDetails> AssetDetails { get; set; }
     }
 

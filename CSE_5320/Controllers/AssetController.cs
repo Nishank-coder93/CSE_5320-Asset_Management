@@ -5,8 +5,11 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Mime;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -19,11 +22,9 @@ namespace CSE_5320.Controllers
             return View();
         }
 
-        public async Task<ActionResult> Requests()
+        public async Task<ActionResult> Requests(AssetViewModel model)
         {
             var Baseurl = getURL();
-
-            var model = new AssetViewModel();
 
             using (var client = new HttpClient())
             {
@@ -31,7 +32,7 @@ namespace CSE_5320.Controllers
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var apiURL = "/api/Values/getAssetRequests";
+                var apiURL = "/api/Values/getOpenAssetRequests";
 
                 HttpResponseMessage Res = await client.GetAsync(apiURL);
                 if (Res.IsSuccessStatusCode)
@@ -121,6 +122,93 @@ namespace CSE_5320.Controllers
             );
         }
         
+        public async Task<ActionResult> confirmRequest(string id)
+        {
+            var result = false;
+
+            var Baseurl = getURL();
+
+            var model = new AssetViewModel();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/confirmRequests";
+
+                var parameters = new Dictionary<string, string>();
+                parameters["Id"] = id;
+
+                var content = new StringContent(JsonConvert.SerializeObject(parameters), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage Res = await client.PostAsync(apiURL, content);
+                if (Res.IsSuccessStatusCode)
+                {
+                    result = true;
+                }
+            }
+            
+            switch (result)
+            {
+                case true:
+                    model.successMessage = true;
+                    break;
+                case false:
+                    model.deniedMessage = true;
+                    break;
+                default:
+                    model.errorMessage = true;
+                    break;
+            }
+
+            return RedirectToAction("Requests", "Asset", model);
+        }
+
+        public async Task<ActionResult> denyRequest(string id)
+        {
+            var result = false;
+
+            var Baseurl = getURL();
+
+            var model = new AssetViewModel();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/denyRequests";
+
+                var parameters = new Dictionary<string, string>();
+                parameters["Id"] = id;
+
+                var content = new StringContent(JsonConvert.SerializeObject(parameters), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage Res = await client.PostAsync(apiURL, content);
+                if (Res.IsSuccessStatusCode)
+                {
+                    result = true;
+                }
+            }
+
+            switch (result)
+            {
+                case true:
+                    model.successMessage = true;
+                    break;
+                case false:
+                    model.deniedMessage = true;
+                    break;
+                default:
+                    model.errorMessage = true;
+                    break;
+            }
+
+            return View("Requests", model);
+        }
 
         public ActionResult Return()
         {

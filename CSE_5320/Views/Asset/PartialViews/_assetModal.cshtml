@@ -79,8 +79,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-outline-success">Confirm</button>
-                <button type="button" class="btn btn-outline-danger">Deny</button>
+                <button type="button" class="btn btn-outline-success" onclick="confirmRequest(@Model.AsserRequestId)">Confirm</button>
+                <button type="button" class="btn btn-outline-danger" onclick="denyRequest(@Model.AsserRequestId)">Deny</button>
             </div>
         </div>
     </div>

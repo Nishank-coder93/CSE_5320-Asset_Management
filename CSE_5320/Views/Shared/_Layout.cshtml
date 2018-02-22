@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
 
-    @Styles.Render("~/Content/dashboard")
+    @Styles.Render("~/Content/dashboard") 
+    @Scripts.Render("~/bundles/jquery")
 </head>
 <body class="bg-light">
 
@@ -38,7 +39,6 @@
         @RenderBody()
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/dashboard")
     @RenderSection("scripts", required: false)
