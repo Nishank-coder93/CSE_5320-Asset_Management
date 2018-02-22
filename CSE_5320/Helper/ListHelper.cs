@@ -227,6 +227,7 @@ namespace CSE_5320.Helper
             a1.ComputerId = 1;
             a1.AssignedTo = null;
             a1.SoftwareId = null;
+            a1.ReturnDate = null;
             a1.StatusId = 3;
             result.Add(a1);
 
@@ -237,8 +238,20 @@ namespace CSE_5320.Helper
             a2.ComputerId = 2; 
             a2.AssignedTo = null;
             a2.SoftwareId = null;
+            a2.ReturnDate = null;
             a2.StatusId = 3;
-            result.Add(a1);
+            result.Add(a2);
+
+            var a3 = new Asset();
+            a3.Id = 3;
+            a3.Name = AssetCodeGenerator();
+            a3.TimesUsed = 0;
+            a3.ComputerId = 2;
+            a3.AssignedTo = 2;
+            a3.SoftwareId = null;
+            a3.ReturnDate = new DateTime(2018,12,12);
+            a3.StatusId = 3;
+            result.Add(a3);
 
             return result;
         }

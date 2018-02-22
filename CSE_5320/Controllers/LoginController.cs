@@ -28,36 +28,45 @@ namespace CSE_5320.Controllers
         {
             if (ModelState.IsValid)
             {
-                var Baseurl = getURL();
-                using (var client = new HttpClient())
+                try
                 {
-                    client.BaseAddress = new Uri(Baseurl);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    HttpResponseMessage Res = await client.PostAsJsonAsync("/api/Values/login", Model);
-                    if (Res.IsSuccessStatusCode)
+                    var Baseurl = getURL();
+                    using (var client = new HttpClient())
                     {
-                        var result = Res.Content.ReadAsStringAsync().Result;
-
-                        if (result.ToLower() == "null")
+                        client.BaseAddress = new Uri(Baseurl);
+                        client.DefaultRequestHeaders.Clear();
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        HttpResponseMessage Res = await client.PostAsJsonAsync("/api/Values/login", Model);
+                        if (Res.IsSuccessStatusCode)
                         {
-                            Model.Error.Message = "Invalid username / password";
-                            return View(Model);
-                        }
-                        else
-                        {
-                            Session["Login"] = true;
+                            var result = await Res.Content.ReadAsStringAsync();
 
-                            var user = JsonConvert.DeserializeObject<UserViewModel>(result);
+                            if (result.ToLower() == "null")
+                            {
+                                Model.Error.Message = "Invalid username / password";
+                                return View(Model);
+                            }
+                            else
+                            {
+                                Session["Login"] = true;
 
-                            Session["LoggedInUserId"] = user.UserId;
-                            Session["LoggedInName"] = user.Name;
-                            Session["LoggedInUsername"] = user.UserName;
+                                var output = fixResult(result);
+                                var user = JsonConvert.DeserializeObject<UserViewModel>(output);
 
-                            return RedirectToAction("Index", "Home");
+                                Session["LoggedInUserId"] = user.UserId;
+                                Session["LoggedInName"] = user.Name;
+                                Session["LoggedInUsername"] = user.UserName;
+
+                                return RedirectToAction("Index", "Home");
+                            }
                         }
                     }
                 }
+                catch (Exception ex)
+                {
+                    Model.Error.Message = "Something went wrong. Try again";
+                    return View(Model);
+                } 
             }
 
             Model.Error.Message = "Something went wrong. Try again";
@@ -81,6 +90,22 @@ namespace CSE_5320.Controllers
         {
             var result = Request.Url.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped);
             return result;
+        }
+
+        public string fixResult(string input)
+        {
+            var step_1 = input.Replace("\\", "");
+            var n = 2;
+
+            var result = string.Empty;
+
+            if (step_1.Length > n * 2)
+                result = step_1.Substring(n, step_1.Length - (n * 2));
+            else
+                result = string.Empty;
+
+            var output = "{" + result + "}";
+            return output;
         }
     }
 }

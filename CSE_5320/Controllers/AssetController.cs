@@ -23,10 +23,13 @@ namespace CSE_5320.Controllers
                 client.BaseAddress = new Uri(Baseurl);
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage Res = await client.GetAsync("/api/Values/getAssets");
+
+                var apiURL = "/api/Values/getAssetByUserId/?UserId=" + Session["LoggedInUserId"];
+
+                HttpResponseMessage Res = await client.GetAsync(apiURL);
                 if (Res.IsSuccessStatusCode)
                 {
-                    var result = Res.Content.ReadAsStringAsync().Result;
+                    var result = await Res.Content.ReadAsStringAsync();
                     var assetList = JsonConvert.DeserializeObject<List<Asset>>(result);
 
                     foreach (var a in assetList)
