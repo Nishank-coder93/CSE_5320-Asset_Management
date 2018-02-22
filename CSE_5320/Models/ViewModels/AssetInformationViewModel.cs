@@ -7,6 +7,8 @@ namespace CSE_5320.Models.ViewModels
 {
     public class AssetInformationViewModel
     { 
+        public int AsserRequestId { get; set; }
+
         public string AssetName { get; set; }
 
         public string AssetType { get; set; }

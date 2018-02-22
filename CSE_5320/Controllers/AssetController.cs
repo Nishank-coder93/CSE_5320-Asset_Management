@@ -46,7 +46,7 @@ namespace CSE_5320.Controllers
                     foreach (var r in requestList)
                     {
                         var asset = new AssetDetails();
-                        asset.AssetId = r.Asset.Id;
+                        asset.AssetId = r.Id;
                         asset.AssetName = r.Asset.Name;
                         asset.AssignedUserName = r.User.Name;
                         asset.Duration = r.FromDate.ToShortDateString() + " - " + r.ToDate.ToShortDateString();
@@ -83,6 +83,7 @@ namespace CSE_5320.Controllers
 
                     var request = JsonConvert.DeserializeObject<Request>(output);
 
+                    model.AsserRequestId = request.Id;
                     model.AssetName = request.Asset.Name;
 
                     if (request.Asset.ComputerId.HasValue)
