@@ -17,13 +17,20 @@ namespace CSE_5320.Controllers
 {
     public class AssetController : Controller
     {
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
             return View();
         }
 
-        public async Task<ActionResult> Requests(AssetViewModel model)
+        public ActionResult Requests(AssetViewModel Model)
         {
+            return View(Model);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> getAssetRequestData()
+        {
+            var model = new AssetViewModel();
             var Baseurl = getURL();
 
             using (var client = new HttpClient())
@@ -57,7 +64,87 @@ namespace CSE_5320.Controllers
                 }
             }
 
-            return View(model);
+            return PartialView("PartialViews/_assetRequestData", model);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> getAssetRequestConfirmedData()
+        {
+            var model = new AssetViewModel();
+            var Baseurl = getURL();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/getConfirmedAssetRequests";
+
+                HttpResponseMessage Res = await client.GetAsync(apiURL);
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = await Res.Content.ReadAsStringAsync();
+
+                    var response = new ResponseHelper();
+                    var output = response.fixListResult(result);
+
+                    var requestList = JsonConvert.DeserializeObject<List<Request>>(output);
+
+                    foreach (var r in requestList)
+                    {
+                        var asset = new AssetDetails();
+                        asset.AssetId = r.Id;
+                        asset.AssetName = r.Asset.Name;
+                        asset.AssignedUserName = r.User.Name;
+                        asset.Duration = r.FromDate.ToShortDateString() + " - " + r.ToDate.ToShortDateString();
+                        model.AssetDetails.Add(asset);
+                    }
+
+                }
+            }
+
+            return PartialView("PartialViews/_assetRequestConfirmedData", model);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> getAssetRequestDeniedData()
+        {
+            var model = new AssetViewModel();
+            var Baseurl = getURL();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/getDeniedAssetRequests";
+
+                HttpResponseMessage Res = await client.GetAsync(apiURL);
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = await Res.Content.ReadAsStringAsync();
+
+                    var response = new ResponseHelper();
+                    var output = response.fixListResult(result);
+
+                    var requestList = JsonConvert.DeserializeObject<List<Request>>(output);
+
+                    foreach (var r in requestList)
+                    {
+                        var asset = new AssetDetails();
+                        asset.AssetId = r.Id;
+                        asset.AssetName = r.Asset.Name;
+                        asset.AssignedUserName = r.User.Name;
+                        asset.Duration = r.FromDate.ToShortDateString() + " - " + r.ToDate.ToShortDateString();
+                        model.AssetDetails.Add(asset);
+                    }
+
+                }
+            }
+
+            return PartialView("PartialViews/_assetRequestDeniedData", model);
         }
 
         public async Task<JsonResult> Assetinfo(string id)
@@ -103,6 +190,14 @@ namespace CSE_5320.Controllers
 
                         model.WarrantyStatus = request.Asset.Computer.Status.Name;
 
+                        if(request.statusId != 5)
+                        {
+                            model.View = false;
+                        }
+                        else
+                        {
+                            model.View = true;
+                        }
                     }
                     else
                     {
@@ -110,7 +205,7 @@ namespace CSE_5320.Controllers
                     }
 
                     model.RequestingUser = request.User.Name;
-                    model.Duration = request.FromDate.ToShortDateString() +" - "+ request.ToDate.ToShortDateString();
+                    model.Duration = request.FromDate.ToShortDateString() + " - " + request.ToDate.ToShortDateString();
                 }
             }
 
@@ -121,8 +216,9 @@ namespace CSE_5320.Controllers
               JsonRequestBehavior.AllowGet
             );
         }
-        
-        public async Task<ActionResult> confirmRequest(string id)
+
+        [HttpPost]
+        public async Task<JsonResult> ConfirmRequest(string Id)
         {
             var result = false;
 
@@ -139,7 +235,7 @@ namespace CSE_5320.Controllers
                 var apiURL = "/api/Values/confirmRequests";
 
                 var parameters = new Dictionary<string, string>();
-                parameters["Id"] = id;
+                parameters["Id"] = Id;
 
                 var content = new StringContent(JsonConvert.SerializeObject(parameters), Encoding.UTF8, "application/json");
 
@@ -149,24 +245,20 @@ namespace CSE_5320.Controllers
                     result = true;
                 }
             }
-            
+
             switch (result)
             {
                 case true:
-                    model.successMessage = true;
-                    break;
+                    return Json("'Success':'true'");
                 case false:
-                    model.deniedMessage = true;
-                    break;
+                    return Json("'Success':'false'");
                 default:
-                    model.errorMessage = true;
-                    break;
-            }
-
-            return RedirectToAction("Requests", "Asset", model);
+                    return Json("'Success':'false'");
+            } 
         }
 
-        public async Task<ActionResult> denyRequest(string id)
+        [HttpPost]
+        public async Task<JsonResult> DenyRequest(string Id)
         {
             var result = false;
 
@@ -183,7 +275,7 @@ namespace CSE_5320.Controllers
                 var apiURL = "/api/Values/denyRequests";
 
                 var parameters = new Dictionary<string, string>();
-                parameters["Id"] = id;
+                parameters["Id"] = Id;
 
                 var content = new StringContent(JsonConvert.SerializeObject(parameters), Encoding.UTF8, "application/json");
 
@@ -197,17 +289,12 @@ namespace CSE_5320.Controllers
             switch (result)
             {
                 case true:
-                    model.successMessage = true;
-                    break;
+                    return Json("'Success':'true'");
                 case false:
-                    model.deniedMessage = true;
-                    break;
+                    return Json("'Success':'false'");
                 default:
-                    model.errorMessage = true;
-                    break;
+                    return Json("'Success':'false'");
             }
-
-            return View("Requests", model);
         }
 
         public ActionResult Return()

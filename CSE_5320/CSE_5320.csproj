@@ -347,6 +347,9 @@
     <Content Include="Views\Asset\Requests.cshtml" />
     <Content Include="Views\Asset\PartialViews\_assetInfo.cshtml" />
     <Content Include="Views\Asset\PartialViews\_assetModal.cshtml" />
+    <Content Include="Views\Asset\PartialViews\_assetRequestData.cshtml" />
+    <Content Include="Views\Asset\PartialViews\_assetRequestConfirmedData.cshtml" />
+    <Content Include="Views\Asset\PartialViews\_assetRequestDeniedData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

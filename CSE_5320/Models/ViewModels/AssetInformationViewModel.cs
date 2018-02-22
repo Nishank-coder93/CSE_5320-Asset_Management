@@ -32,6 +32,8 @@ namespace CSE_5320.Models.ViewModels
         public string RequestingUser { get; set; }
 
         public string Duration { get; set; }
+
+        public bool View { get; set; }
     }
     
 }

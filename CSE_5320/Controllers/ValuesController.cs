@@ -49,6 +49,24 @@ namespace CSE_5320.Controllers
             return response;
         }
 
+        public string getConfirmedAssetRequests()
+        {
+            var db = new Context();
+            var result = db.Request.Where(x => x.statusId == 6).ToList();
+            var response = JsonConvert.SerializeObject(result);
+
+            return response;
+        }
+
+        public string getDeniedAssetRequests()
+        {
+            var db = new Context();
+            var result = db.Request.Where(x => x.statusId == 7).ToList();
+            var response = JsonConvert.SerializeObject(result);
+
+            return response;
+        }
+
         public string login(LoginModel model)
         {
             var db = new Context();
