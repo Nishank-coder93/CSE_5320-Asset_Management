@@ -30,25 +30,19 @@ namespace CSE_5320.Controllers
             return response;
         }
 
-
-        public string getAssetByUserId(int UserId)
+        public string getAssetRequestById(int Id)
         {
             var db = new Context();
-            var assets = db.Assets.ToList();
+            var result = db.Request.Where(x => x.Id == Id).FirstOrDefault();
+            var response = JsonConvert.SerializeObject(result);
 
-            var result = new List<Asset>();
+            return response;
+        }
 
-            foreach (var a in assets)
-            {
-                if (a.AssignedTo.HasValue)
-                {
-                    if (a.AssignedTo.Value == UserId)
-                    {
-                        result.Add(a);
-                    }
-                }
-            }
-
+        public string getAssetRequests()
+        {
+            var db = new Context();
+            var result = db.Request.ToList();
             var response = JsonConvert.SerializeObject(result);
 
             return response;

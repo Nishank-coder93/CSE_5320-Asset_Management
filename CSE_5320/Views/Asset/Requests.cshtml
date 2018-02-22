@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "Asset management";
+}
+@model CSE_5320.Models.ViewModels.AssetViewModel
+
+<main role="main" class="container">
+    <div class="align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
+        <div class="float-right">
+            @Html.ActionLink("Back to Dashboard", "Index", "Dashboard", null, new { @class = "btn btn-outline-light float-right" })
+        </div>
+        <div class="lh-100">
+            <h6 class="mb-0 text-white lh-100">Asset Requests</h6>
+            <small>Below are a list of assets that have been requested. Click on the asset name to get information about the asset</small>
+        </div>
+    </div>
+
+    <div class="my-3 p-3 bg-white rounded box-shadow">
+        <table class="table table-hover" style="border: none">
+            <thead>
+                <tr>
+                    <th scope="col">Asset</th>
+                    <th scope="col">user</th>
+                    <th scope="col">Duration</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var a in Model.AssetDetails)
+                {
+                    <tr>
+                        <td scope="row">
+                            <button type="button" class="btn btn-outline-dark btn-sm" onclick="loadInfo(@a.AssetId)">
+                                @a.AssetName
+                            </button>
+                        </td>
+                        <td>@a.AssignedUserName</td>
+                        <td>@a.Duration</td>
+                        <td>
+                            <button type="button" class="btn btn-outline-success btn-sm">Confirm</button>
+                            <button type="button" class="btn btn-outline-danger btn-sm">Deny</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<script>
+    function loadInfo(Id) {
+      var src = '@Url.Action("Assetinfo", "Asset", new { area = "" })'+ '?Id='+Id;
+
+      $.ajax({
+        type: "GET",
+        url: src,
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            $("#assetModalContainer").html(data.LocationModal);
+            $('#assetModal').modal('show');
+        }
+      });
+    }
+</script>
+
+<div id="assetModalContainer"></div>

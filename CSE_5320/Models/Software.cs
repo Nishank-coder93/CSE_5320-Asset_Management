@@ -8,6 +8,8 @@ namespace CSE_5320.Models
 {
     public class Software : Base
     {
+        public string SerialNumber { get; set; }
+
         [ForeignKey("Category")]
         public int CategoryId { get; set; }
 

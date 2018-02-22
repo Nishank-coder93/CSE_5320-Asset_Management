@@ -25,12 +25,13 @@ namespace CSE_5320.Controllers
             var login = (bool)Session["Login"];
              
             Context db = new Context();
-
-            var user = db.Users.FirstOrDefault();
+            var dbCheck = db.Database.Exists();
+            db.Database.CommandTimeout = int.MaxValue;
 
             // If true, the database does not exist
-            if (user == null)
+            if (!dbCheck)
             {
+                db.Database.Create();
                 // Initializing the database
                 Initialize();
             } 
@@ -131,6 +132,12 @@ namespace CSE_5320.Controllers
             foreach (var a in asset)
             {
                 db.Assets.Add(a);
+            }
+
+            var requests = helper.RequestHelper();
+            foreach (var r in requests)
+            {
+                db.Request.Add(r);
             }
 
             db.SaveChanges(); 

@@ -1,4 +1,5 @@
-﻿using CSE_5320.Models.Home;
+﻿using CSE_5320.Helper;
+using CSE_5320.Models.Home;
 using CSE_5320.Models.Login;
 using CSE_5320.Models.ViewModels;
 using Newtonsoft.Json;
@@ -50,7 +51,9 @@ namespace CSE_5320.Controllers
                             {
                                 Session["Login"] = true;
 
-                                var output = fixResult(result);
+                                var response = new ResponseHelper();
+                                var output = response.fixResult(result);
+
                                 var user = JsonConvert.DeserializeObject<UserViewModel>(output);
 
                                 Session["LoggedInUserId"] = user.UserId;
@@ -90,22 +93,7 @@ namespace CSE_5320.Controllers
         {
             var result = Request.Url.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped);
             return result;
-        }
-
-        public string fixResult(string input)
-        {
-            var step_1 = input.Replace("\\", "");
-            var n = 2;
-
-            var result = string.Empty;
-
-            if (step_1.Length > n * 2)
-                result = step_1.Substring(n, step_1.Length - (n * 2));
-            else
-                result = string.Empty;
-
-            var output = "{" + result + "}";
-            return output;
-        }
+        } 
+        
     }
 }

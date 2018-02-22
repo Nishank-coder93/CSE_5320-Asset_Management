@@ -13,14 +13,20 @@ namespace CSE_5320.Models
         [Key]
         public int Id { get; set; }
 
+        [ForeignKey("Asset")]
+        public int AssetId { get; set; }
+
         [ForeignKey("User")]
         public int RequestedUser { get; set; }
 
-        [ForeignKey("Status")]
+        public DateTime FromDate { get; set; }
+
+        public DateTime ToDate { get; set; }
+
         public int statusId { get; set; }
 
-        public virtual User User { get; set; }
+        public virtual Asset Asset { get; set; }
 
-        public virtual Status Status { get; set; }
+        public virtual User User { get; set; }
     }
 }

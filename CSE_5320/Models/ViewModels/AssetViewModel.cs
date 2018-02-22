@@ -20,9 +20,7 @@ namespace CSE_5320.Models.ViewModels
 
         public string AssetName { get; set; }
 
-        public int? AssignedUserId { get; set; }
-
-        public string ReturnDate { get; set; }
+        public string Duration { get; set; }
 
         public string AssignedUserName { get; set; }
     }

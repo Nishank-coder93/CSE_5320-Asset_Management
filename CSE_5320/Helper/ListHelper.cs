@@ -225,7 +225,6 @@ namespace CSE_5320.Helper
             a1.Name = AssetCodeGenerator();
             a1.TimesUsed = 0;
             a1.ComputerId = 1;
-            a1.AssignedTo = null;
             a1.SoftwareId = null;
             a1.ReturnDate = null;
             a1.StatusId = 3;
@@ -235,8 +234,7 @@ namespace CSE_5320.Helper
             a2.Id = 2;
             a2.Name = AssetCodeGenerator();
             a2.TimesUsed = 0;
-            a2.ComputerId = 2; 
-            a2.AssignedTo = null;
+            a2.ComputerId = 2;
             a2.SoftwareId = null;
             a2.ReturnDate = null;
             a2.StatusId = 3;
@@ -247,7 +245,6 @@ namespace CSE_5320.Helper
             a3.Name = AssetCodeGenerator();
             a3.TimesUsed = 0;
             a3.ComputerId = 2;
-            a3.AssignedTo = 2;
             a3.SoftwareId = null;
             a3.ReturnDate = new DateTime(2018,12,12);
             a3.StatusId = 3;
@@ -292,6 +289,55 @@ namespace CSE_5320.Helper
             user_2.Password = PasswordHash("Neil");
             user_2.RoleId = 2;
             result.Add(user_2);
+
+            var user_3 = new User();
+            user_3.Id = 3;
+            user_3.Name = "Nishank";
+            user_3.Username = "Nishank";
+            user_3.Password = PasswordHash("Nishank");
+            user_3.RoleId = 2;
+            result.Add(user_3);
+
+            var user_4 = new User();
+            user_4.Id = 4;
+            user_4.Name = "Sid";
+            user_4.Username = "Sid";
+            user_4.Password = PasswordHash("Sid");
+            user_4.RoleId = 2;
+            result.Add(user_4);
+
+            var user_5 = new User();
+            user_5.Id = 5;
+            user_5.Name = "Vibhor";
+            user_5.Username = "Vibhor";
+            user_5.Password = PasswordHash("Vibhor");
+            user_5.RoleId = 2;
+            result.Add(user_5);
+
+            return result;
+        }
+
+        public List<Request> RequestHelper()
+        {
+            var result = new List<Request>();
+
+            var request_1 = new Request();
+            request_1.Id = 1;
+            request_1.RequestedUser = 2;
+            request_1.AssetId = 1;
+            request_1.FromDate = new DateTime(2018,1,1);
+            request_1.ToDate = new DateTime(2018,8,12);
+            request_1.statusId = 5;
+            result.Add(request_1);
+
+            var request_2 = new Request();
+            request_2.Id = 2;
+            request_2.RequestedUser = 3;
+            request_2.AssetId = 1;
+            request_2.FromDate = new DateTime(2018, 8, 12);
+            request_2.ToDate = new DateTime(2018, 8, 20);
+            request_2.statusId = 5;
+            result.Add(request_2);
 
             return result;
         }
