@@ -36,6 +36,7 @@ namespace CSE_5320
 
             bundles.Add(new StyleBundle("~/Content/dashboard").Include(
                       "~/Content/bootstrap.min.css",
+                      "~/Content/site.css",
                       "~/Content/offcanvas.css"));
         }
     }

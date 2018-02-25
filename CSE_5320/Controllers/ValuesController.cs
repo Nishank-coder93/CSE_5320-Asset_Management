@@ -8,11 +8,50 @@ using CSE_5320.Models.Login;
 using CSE_5320.Models.ViewModels;
 using Newtonsoft.Json;
 using System.Web;
+using CSE_5320.Models.Dashboard;
 
 namespace CSE_5320.Controllers
 {
     public class ValuesController : ApiController
     {
+        public string login(LoginModel model)
+        {
+            var db = new Context();
+            var user = db.Users.Where(x => x.Username == model.Username && x.Password == model.Password).FirstOrDefault();
+
+            if (user != null)
+            {
+                var result = new UserViewModel();
+
+                result.UserId = user.Id;
+                result.UserName = user.Username;
+                result.Name = user.Name;
+
+                var response = JsonConvert.SerializeObject(result);
+
+                return response;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public string getDashboard()
+        {
+            var db = new Context();
+            var assetRequestCount = db.Assets.Where(x => x.StatusId == 5).ToList().Count();
+            var assetReturnConfirmationCount = db.Request.Where(x => x.statusId == 5).ToList().Count();
+
+            var result = new DasboardViewModel();
+            result.AssetRequestCount = assetRequestCount;
+            result.AssetReturnConfirmationCount = assetReturnConfirmationCount;
+
+            var response = JsonConvert.SerializeObject(result);
+
+            return response;
+        }
+
         public string getAssets()
         {
             var db = new Context();
@@ -65,29 +104,6 @@ namespace CSE_5320.Controllers
             var response = JsonConvert.SerializeObject(result);
 
             return response;
-        }
-
-        public string login(LoginModel model)
-        {
-            var db = new Context();
-            var user = db.Users.Where(x => x.Username == model.Username && x.Password == model.Password).FirstOrDefault();
-
-            if (user != null)
-            {
-                var result = new UserViewModel();
-
-                result.UserId = user.Id;
-                result.UserName = user.Username;
-                result.Name = user.Name;
-
-                var response = JsonConvert.SerializeObject(result);
-
-                return response;
-            }
-            else
-            {
-                return null;
-            }
         }
 
         [System.Web.Mvc.HttpPost]

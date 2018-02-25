@@ -29,6 +29,7 @@
 
 
     <div class="my-3 p-3 bg-white rounded box-shadow">
+        <div id="assetRequestData_loader" class="loader"></div>
         <div id="assetRequestData">
             @Html.Partial("PartialViews/_assetRequestData", Model)
         </div>
@@ -42,7 +43,8 @@
     </div>
 
     <div class="my-3 p-3 bg-white rounded box-shadow">
-        <div id="confirmedAssets">
+        <div id="confirmedAssetsData_loader" class="loader"></div> 
+        <div id="confirmedAssetsData">
             @Html.Partial("PartialViews/_assetRequestConfirmedData", Model)
         </div>
     </div>
@@ -55,7 +57,8 @@
     </div>
 
     <div class="my-3 p-3 bg-white rounded box-shadow">
-        <div id="deniedAssets">
+        <div id="deniedAssetsData_loader" class="loader"></div>
+        <div id="deniedAssetsData">
             @Html.Partial("PartialViews/_assetRequestDeniedData", Model)
         </div>
     </div>
@@ -65,6 +68,11 @@
 
     $(document).ready(function () {
         hideMessages();
+
+        $("#assetRequestData_loader").hide();
+        $("#confirmedAssetsData_loader").hide();
+        $("#deniedAssetsData_loader").hide(); 
+
         loadTables();
     });
 
@@ -82,6 +90,9 @@
 
     function loadRequestsTable() {
 
+        $("#assetRequestData").hide();
+        $("#assetRequestData_loader").show();
+        
         var src = "@Url.Action("getAssetRequestData", "Asset", new { area = "" })";
 
         $.ajax({
@@ -89,13 +100,19 @@
             type: 'GET',
             cache: false,
             data: {}
-        }).done(function(result) {
+        }).done(function (result) { 
             $('#assetRequestData').html(result);
+
+            $("#assetRequestData_loader").hide();
+            $("#assetRequestData").show();
          });
 
     }
 
     function loadConfirmedRequestsTable() {
+
+        $("#confirmedAssetsData").hide(); 
+        $("#confirmedAssetsData_loader").show();
 
         var src = "@Url.Action("getAssetRequestConfirmedData", "Asset", new { area = "" })";
 
@@ -104,13 +121,19 @@
             type: 'GET',
             cache: false,
             data: {}
-        }).done(function(result) {
-            $('#confirmedAssets').html(result);
+        }).done(function(result) { 
+            $('#confirmedAssetsData').html(result);
+
+            $("#confirmedAssetsData_loader").hide();
+            $("#confirmedAssetsData").show(); 
          });
 
     }
 
     function loadDeniedRequestsTable() {
+
+        $("#deniedAssetsData").hide();  
+        $("#deniedAssetsData_loader").show(); 
 
         var src = "@Url.Action("getAssetRequestDeniedData", "Asset", new { area = "" })";
 
@@ -120,7 +143,11 @@
             cache: false,
             data: {}
         }).done(function(result) {
-            $('#deniedAssets').html(result);
+            $('#deniedAssetsData').html(result);
+
+
+            $("#deniedAssetsData_loader").hide();
+            $("#deniedAssetsData").show();
          });
 
     }

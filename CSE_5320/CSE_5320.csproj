@@ -214,6 +214,7 @@
     <Compile Include="Models\Computer.cs" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\Cpu.cs" />
+    <Compile Include="Models\Dashboard\DasboardViewModel.cs" />
     <Compile Include="Models\Department.cs" />
     <Compile Include="Models\Error\ErrorModel.cs" />
     <Compile Include="Models\Home\HomeModel.cs" />
