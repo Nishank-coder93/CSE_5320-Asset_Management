@@ -42,7 +42,7 @@ namespace CSE_5320.Controllers
         {
             var db = new Context();
             var assetRequestCount = db.Assets.Where(x => x.StatusId == 5).ToList().Count();
-            var assetReturnConfirmationCount = db.Request.Where(x => x.statusId == 5).ToList().Count();
+            var assetReturnConfirmationCount = db.Request.Where(x => x.statusId == 8).ToList().Count();
 
             var result = new DasboardViewModel();
             result.AssetRequestCount = assetRequestCount;
