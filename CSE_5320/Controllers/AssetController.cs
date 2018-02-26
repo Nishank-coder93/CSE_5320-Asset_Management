@@ -58,7 +58,10 @@ namespace CSE_5320.Controllers
                         asset.AssetId = r.Id;
                         asset.AssetName = r.Asset.Name;
                         asset.AssignedUserName = r.User.Name;
-                        asset.Duration = r.FromDate.ToShortDateString() + " - " + r.ToDate.ToShortDateString();
+                        if (r.ToDate.HasValue)
+                        {
+                            asset.Duration = r.ToDate.Value.ToShortDateString();
+                        }
                         model.AssetDetails.Add(asset);
                     }
 
@@ -98,7 +101,24 @@ namespace CSE_5320.Controllers
                         asset.AssetId = r.Id;
                         asset.AssetName = r.Asset.Name;
                         asset.AssignedUserName = r.User.Name;
-                        asset.Duration = r.FromDate.ToShortDateString() + " - " + r.ToDate.ToShortDateString();
+
+                        var fromDate = string.Empty;
+                        var toDate = string.Empty;
+                        var date = string.Empty;
+
+                        if (r.FromDate.HasValue)
+                        {
+                            fromDate = r.FromDate.Value.ToShortDateString();
+                            date = fromDate;
+                        }
+
+                        if (r.ToDate.HasValue)
+                        {
+                            toDate = r.ToDate.Value.ToShortDateString();
+                            date += " - " + toDate;
+                        }
+                        asset.Duration = date;
+
                         model.AssetDetails.Add(asset);
                     }
 
@@ -138,7 +158,24 @@ namespace CSE_5320.Controllers
                         asset.AssetId = r.Id;
                         asset.AssetName = r.Asset.Name;
                         asset.AssignedUserName = r.User.Name;
-                        asset.Duration = r.FromDate.ToShortDateString() + " - " + r.ToDate.ToShortDateString();
+
+                        var fromDate = string.Empty;
+                        var toDate = string.Empty;
+                        var date = string.Empty;
+
+                        if (r.FromDate.HasValue)
+                        {
+                            fromDate = r.FromDate.Value.ToShortDateString();
+                            date = fromDate;
+                        }
+
+                        if (r.ToDate.HasValue)
+                        {
+                            toDate = r.ToDate.Value.ToShortDateString();
+                            date += " - " + toDate;
+                        }
+                        asset.Duration = date;
+
                         model.AssetDetails.Add(asset);
                     }
 
@@ -191,7 +228,7 @@ namespace CSE_5320.Controllers
 
                         model.WarrantyStatus = request.Asset.Computer.Status.Name;
 
-                        if(request.statusId != 5)
+                        if (request.statusId != 5)
                         {
                             model.View = false;
                         }
@@ -203,10 +240,45 @@ namespace CSE_5320.Controllers
                     else
                     {
                         model.AssetType = "Software";
+                        model.CpuName = request.Asset.Software.Cpu.Name;
+                        model.CpuVersion = request.Asset.Software.Cpu.Version;
+                        model.Memory = request.Asset.Software.Memory.Name;
+                        model.OsName = request.Asset.Software.Os.Name + " " + request.Asset.Software.Os.Version;
+                        model.SerialNumber = request.Asset.Software.SerialNumber;
+
+                        if (request.Asset.Software.TechnicalContact.HasValue)
+                        {
+                            model.TechnicalContact = request.Asset.Software.Technical.Name;
+                        }
+
+                        model.WarrantyStatus = request.Asset.Software.Status.Name;
+
+                        if (request.statusId != 5)
+                        {
+                            model.View = false;
+                        }
+                        else
+                        {
+                            model.View = true;
+                        }
                     }
 
-                    model.RequestingUser = request.User.Name;
-                    model.Duration = request.FromDate.ToShortDateString() + " - " + request.ToDate.ToShortDateString();
+                    var fromDate = string.Empty;
+                    var toDate = string.Empty;
+                    var date = string.Empty;
+
+                    if (request.FromDate.HasValue)
+                    {
+                        fromDate = request.FromDate.Value.ToShortDateString();
+                        date = fromDate;
+                    }
+
+                    if (request.ToDate.HasValue)
+                    {
+                        toDate = request.ToDate.Value.ToShortDateString();
+                        date += " - " + toDate;
+                    }
+                    model.Duration = date;
                 }
             }
 
@@ -255,7 +327,7 @@ namespace CSE_5320.Controllers
                     return Json("'Success':'false'");
                 default:
                     return Json("'Success':'false'");
-            } 
+            }
         }
 
         [HttpPost]
@@ -334,7 +406,24 @@ namespace CSE_5320.Controllers
                         asset.AssetId = r.Id;
                         asset.AssetName = r.Asset.Name;
                         asset.AssignedUserName = r.User.Name;
-                        asset.Duration = r.FromDate.ToShortDateString() + " - " + r.ToDate.ToShortDateString();
+
+                        var fromDate = string.Empty;
+                        var toDate = string.Empty;
+                        var date = string.Empty;
+
+                        if (r.FromDate.HasValue)
+                        {
+                            fromDate = r.FromDate.Value.ToShortDateString();
+                            date = fromDate;
+                        }
+
+                        if (r.ToDate.HasValue)
+                        {
+                            toDate = r.ToDate.Value.ToShortDateString();
+                            date += " - " + toDate;
+                        }
+                        asset.Duration = date;
+
                         model.AssetDetails.Add(asset);
                     }
 
@@ -374,7 +463,24 @@ namespace CSE_5320.Controllers
                         asset.AssetId = r.Id;
                         asset.AssetName = r.Asset.Name;
                         asset.AssignedUserName = r.User.Name;
-                        asset.Duration = r.FromDate.ToShortDateString() + " - " + r.ToDate.ToShortDateString();
+
+                        var fromDate = string.Empty;
+                        var toDate = string.Empty;
+                        var date = string.Empty;
+
+                        if (r.FromDate.HasValue)
+                        {
+                            fromDate = r.FromDate.Value.ToShortDateString();
+                            date = fromDate;
+                        }
+
+                        if (r.ToDate.HasValue)
+                        {
+                            toDate = r.ToDate.Value.ToShortDateString();
+                            date += " - " + toDate;
+                        }
+                        asset.Duration = date;
+
                         model.AssetDetails.Add(asset);
                     }
 
@@ -414,7 +520,24 @@ namespace CSE_5320.Controllers
                         asset.AssetId = r.Id;
                         asset.AssetName = r.Asset.Name;
                         asset.AssignedUserName = r.User.Name;
-                        asset.Duration = r.FromDate.ToShortDateString() + " - " + r.ToDate.ToShortDateString();
+
+                        var fromDate = string.Empty;
+                        var toDate = string.Empty;
+                        var date = string.Empty;
+
+                        if (r.FromDate.HasValue)
+                        {
+                            fromDate = r.FromDate.Value.ToShortDateString();
+                            date = fromDate;
+                        }
+
+                        if (r.ToDate.HasValue)
+                        {
+                            toDate = r.ToDate.Value.ToShortDateString();
+                            date += " - " + toDate;
+                        }
+                        asset.Duration = date;
+
                         model.AssetDetails.Add(asset);
                     }
 
@@ -424,6 +547,47 @@ namespace CSE_5320.Controllers
             return PartialView("PartialViews/_assetRequestDeniedData", model);
         }
 
+        public async Task<JsonResult> RequestAsset(string assetId, string toDate)
+        {
+            var result = false;
+            try
+            {
+                var date = DateTime.Parse(toDate);
+                var model = new Request();
+                model.AssetId = int.Parse(assetId);
+                model.ToDate = date;
+                model.RequestedUser = int.Parse(Session["LoggedInUserId"].ToString());
+                model.FromDate = null;
+                model.statusId = 5;
+
+                var Baseurl = getURL();
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(Baseurl);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpResponseMessage Res = await client.PostAsJsonAsync("/api/Values/createAssetRequest", model);
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        result = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                
+            }
+            
+            switch (result)
+            {
+                case true:
+                    return Json("'Success':'true'");
+                case false:
+                    return Json("'Success':'false'");
+                default:
+                    return Json("'Success':'false'");
+            }
+        }
 
         //------- Helper Methods --------
         public string getURL()

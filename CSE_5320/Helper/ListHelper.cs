@@ -62,6 +62,11 @@ namespace CSE_5320.Helper
             status_10.Name = "Asset Return Denied";
             result.Add(status_10);
 
+            var status_11 = new Status();
+            status_11.Id = 11;
+            status_11.Name = "canceled";
+            result.Add(status_11);
+
             return result;
         }
 
@@ -241,8 +246,7 @@ namespace CSE_5320.Helper
             a1.TimesUsed = 0;
             a1.ComputerId = 1;
             a1.SoftwareId = null;
-            a1.ReturnDate = null;
-            a1.StatusId = 3;
+            a1.StatusId = 1;
             result.Add(a1);
 
             var a2 = new Asset();
@@ -251,8 +255,7 @@ namespace CSE_5320.Helper
             a2.TimesUsed = 0;
             a2.ComputerId = 2;
             a2.SoftwareId = null;
-            a2.ReturnDate = null;
-            a2.StatusId = 3;
+            a2.StatusId = 1;
             result.Add(a2);
 
             var a3 = new Asset();
@@ -261,8 +264,7 @@ namespace CSE_5320.Helper
             a3.TimesUsed = 0;
             a3.ComputerId = 2;
             a3.SoftwareId = null;
-            a3.ReturnDate = new DateTime(2018,12,12);
-            a3.StatusId = 3;
+            a3.StatusId = 1;
             result.Add(a3);
 
             return result;
@@ -340,7 +342,7 @@ namespace CSE_5320.Helper
             request_1.Id = 1;
             request_1.RequestedUser = 2;
             request_1.AssetId = 1;
-            request_1.FromDate = new DateTime(2018,1,1);
+            request_1.FromDate = null;
             request_1.ToDate = new DateTime(2018,8,12);
             request_1.statusId = 5;
             result.Add(request_1);
@@ -348,10 +350,10 @@ namespace CSE_5320.Helper
             var request_2 = new Request();
             request_2.Id = 2;
             request_2.RequestedUser = 3;
-            request_2.AssetId = 1;
+            request_2.AssetId = 2;
             request_2.FromDate = new DateTime(2018, 8, 12);
             request_2.ToDate = new DateTime(2018, 8, 20);
-            request_2.statusId = 5;
+            request_2.statusId = 6;
             result.Add(request_2);
 
             return result;

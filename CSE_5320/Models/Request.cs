@@ -19,9 +19,9 @@ namespace CSE_5320.Models
         [ForeignKey("User")]
         public int RequestedUser { get; set; }
 
-        public DateTime FromDate { get; set; }
+        public DateTime? FromDate { get; set; }
 
-        public DateTime ToDate { get; set; }
+        public DateTime? ToDate { get; set; }
 
         public int statusId { get; set; }
 

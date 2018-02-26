@@ -16,8 +16,6 @@ namespace CSE_5320.Models
         [ForeignKey("Status")]
         public int StatusId { get; set; } 
 
-        public DateTime? ReturnDate { get; set; }
-
         public virtual Computer Computer { get;set;}
 
         public virtual Software Software { get;set; }

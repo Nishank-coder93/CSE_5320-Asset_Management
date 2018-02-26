@@ -25,6 +25,8 @@ namespace CSE_5320.Models.ViewModels
 
         public string Status { get; set; }
 
+        public int StatusId { get; set; }
+
         public string TechnicalContact { get; set; }
 
         public string WarrantyStatus { get; set; }
@@ -34,6 +36,10 @@ namespace CSE_5320.Models.ViewModels
         public string Duration { get; set; }
 
         public bool View { get; set; }
+
+        public string FromDate { get; set; }
+
+        public string ToDate { get; set; }
     }
     
 }

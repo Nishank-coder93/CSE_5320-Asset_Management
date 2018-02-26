@@ -1,14 +1,12 @@
-﻿using CSE_5320.Models.Home;
-using CSE_5320.Models;
-using System.Collections.Generic;
-using System.Web.Http;
-using System.Linq;
-using System.Web.Mvc;
+﻿using CSE_5320.Models;
+using CSE_5320.Models.Dashboard;
 using CSE_5320.Models.Login;
 using CSE_5320.Models.ViewModels;
 using Newtonsoft.Json;
-using System.Web;
-using CSE_5320.Models.Dashboard;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http;
 
 namespace CSE_5320.Controllers
 {
@@ -41,7 +39,7 @@ namespace CSE_5320.Controllers
         public string getDashboard()
         {
             var db = new Context();
-            var assetRequestCount = db.Assets.Where(x => x.StatusId == 5).ToList().Count();
+            var assetRequestCount = db.Request.Where(x => x.statusId == 5).ToList().Count();
             var assetReturnConfirmationCount = db.Request.Where(x => x.statusId == 8).ToList().Count();
 
             var result = new DasboardViewModel();
@@ -89,21 +87,29 @@ namespace CSE_5320.Controllers
 
         //--------- API's related to User requests ---------
 
-        public string getAssetRequestsByUserId(string UserId)
+        public string getAssetRequestsByUserId(string Id)
         {
             var db = new Context();
-            var userId = int.Parse(UserId);
+            var userId = int.Parse(Id);
             var result = db.Request.Where(x => x.RequestedUser == userId).ToList();
             var response = JsonConvert.SerializeObject(result);
 
             return response;
         }
 
-        //--------- API's related to Asset requests ---------
-        public string getAssetRequestById(int Id)
+        public void createAssetRequest(Request request)
         {
             var db = new Context();
-            var result = db.Request.Where(x => x.Id == Id).FirstOrDefault();
+            db.Request.Add(request);
+            db.SaveChanges();
+        }
+
+        //--------- API's related to Asset requests ---------
+        public string getAssetRequestById(string Id)
+        {
+            var db = new Context();
+            int assetId = int.Parse(Id);
+            var result = db.Request.Where(x => x.AssetId == assetId).FirstOrDefault();
             var response = JsonConvert.SerializeObject(result);
 
             return response;
@@ -148,6 +154,7 @@ namespace CSE_5320.Controllers
 
             if (confirm != null)
             {
+                confirm.FromDate = DateTime.Now;
                 confirm.statusId = 6;
                 db.SaveChanges();
 

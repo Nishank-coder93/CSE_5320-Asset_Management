@@ -2,32 +2,37 @@
 
 @if (Model.UserAssets.Count > 0)
 {
-    <table class="table table-hover" style="border: none">
 
-        <thead>
-            <tr>
-                <th scope="col">Asset</th>
-                <th scope="col">Duration</th>
-                <th scope="col">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var a in Model.UserAssets)
-            {
-                <tr>
-                    <td scope="row">
-                        <button type="button" class="btn btn-outline-dark btn-sm" onclick="loadInfo(@a.AsserRequestId)">
-                            @a.AssetName
-                        </button>
-                    </td>
-                    <td>@a.Duration</td>
-                    <td>
-                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="cancelRequest(@a.AsserRequestId)">Cancel</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    foreach (var a in Model.UserAssets)
+    {
+        <button type="button" class="btn btn-outline-dark btn-sm" onclick="loadInfo(@a.AsserRequestId)">
+            @a.AssetName
+        </button>
+
+        //Requested
+        if (a.StatusId == 5)
+        {
+            <button type="button" class="btn btn-outline-danger btn-sm" onclick="cancelRequest(@a.AsserRequestId)">Cancel</button>
+        }
+
+        //Approved
+        if (a.StatusId == 6)
+        {
+            <button type="button" class="btn btn-outline-danger btn-sm" onclick="returnAsset(@a.AsserRequestId)">Return</button>
+        }
+
+        //Denied
+        if (a.StatusId == 7)
+        {
+
+        }
+
+        //Cancled
+        if (a.StatusId == 11)
+        {
+
+        }
+    }
 }
 else
 {

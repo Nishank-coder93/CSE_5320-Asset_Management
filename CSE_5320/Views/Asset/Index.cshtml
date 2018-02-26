@@ -4,40 +4,5 @@
 @model CSE_5320.Models.ViewModels.AssetViewModel
 
 <main role="main" class="container">
-    <div class="align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
-        <div class="float-right">
-            @Html.ActionLink("Back to Dashboard", "Index", "Dashboard", null, new { @class = "btn btn-outline-light float-right" })
-        </div>
-        <div class="lh-100">
-            <h6 class="mb-0 text-white lh-100">Asset Requests</h6>
-            <small>Below are a list of assets that have been requested</small>
-        </div>
-    </div>
 
-    <div class="my-3 p-3 bg-white rounded box-shadow">
-        <table class="table table-hover" style="border: none">
-            <thead>
-                <tr>
-                    <th scope="col">Asset</th>
-                    <th scope="col">user</th>
-                    <th scope="col">Return Date</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var a in Model.AssetDetails)
-                {
-                    <tr>
-                        <td scope="row">@a.AssetName</td>
-                        <td>@a.AssignedUserName</td>
-                        <td>@a.ReturnDate</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-success btn-block">Confirm</button>
-                            <button type="button" class="btn btn-outline-danger btn-block">Deny</button>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
 </main>

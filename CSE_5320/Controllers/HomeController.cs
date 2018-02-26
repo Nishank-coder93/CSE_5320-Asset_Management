@@ -79,9 +79,9 @@ namespace CSE_5320.Controllers
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var apiURL = "/api/Values/getAssetRequestsByUserId";
+                var apiURL = "/api/Values/getAssetRequestsByUserId/"+ UserId;
 
-                HttpResponseMessage Res = await client.PostAsJsonAsync(apiURL, UserId);
+                HttpResponseMessage Res = await client.GetAsync(apiURL);
                 if (Res.IsSuccessStatusCode)
                 {
                     var result = await Res.Content.ReadAsStringAsync();
@@ -94,9 +94,38 @@ namespace CSE_5320.Controllers
                     foreach (var r in requestList)
                     {
                         var asset = new AssetInformationViewModel();
-                        asset.AsserRequestId = r.Id;
+                        asset.AsserRequestId = r.AssetId;
                         asset.AssetName = r.Asset.Name;
-                        asset.Duration = r.FromDate.ToShortDateString() + " - " + r.ToDate.ToShortDateString();
+
+                        if (r.Asset.ComputerId.HasValue)
+                        {
+                            asset.AssetType = "Computer";
+                        }
+                        else if (r.Asset.SoftwareId.HasValue)
+                        {
+                            asset.AssetType = "Software";
+                        }
+                        
+                        var fromDate = string.Empty;
+                        var toDate = string.Empty;
+                        var date = string.Empty;
+
+                        if (r.FromDate.HasValue)
+                        {
+                            fromDate = r.FromDate.Value.ToShortDateString();
+                            date = fromDate;
+                            asset.FromDate = fromDate;
+                        }
+
+                        if (r.ToDate.HasValue)
+                        {
+                            toDate = r.ToDate.Value.ToShortDateString();
+                            date += " - " + toDate;
+                            asset.ToDate = toDate;
+                        }
+                        asset.Duration = date;
+                        asset.StatusId = r.statusId;
+
                         model.UserAssets.Add(asset);
                     }
 
@@ -104,6 +133,120 @@ namespace CSE_5320.Controllers
             }
 
             return PartialView("PartialViews/_assetData", model);
+        }
+
+        public async Task<JsonResult> Assetinfo(string id)
+        {
+            var model = new AssetInformationViewModel();
+
+            var Baseurl = getURL();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/getAssetRequestById/" + id;
+
+                HttpResponseMessage Res = await client.GetAsync(apiURL);
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = await Res.Content.ReadAsStringAsync();
+
+                    var response = new ResponseHelper();
+                    var output = response.fixResult(result);
+
+                    var request = JsonConvert.DeserializeObject<Request>(output);
+
+                    model.AsserRequestId = request.Id;
+                    model.AssetName = request.Asset.Name;
+
+                    if (request.Asset.ComputerId.HasValue)
+                    {
+                        model.AssetType = "Computer";
+                        model.CpuName = request.Asset.Computer.Cpu.Name;
+                        model.CpuVersion = request.Asset.Computer.Cpu.Version;
+                        model.Memory = request.Asset.Computer.Memory.Name;
+                        model.OsName = request.Asset.Computer.Os.Name + " " + request.Asset.Computer.Os.Version;
+                        model.SerialNumber = request.Asset.Computer.SerialNumber;
+
+                        if (request.Asset.Computer.TechnicalContact.HasValue)
+                        {
+                            model.TechnicalContact = request.Asset.Computer.Technical.Name;
+                        }
+
+                        model.WarrantyStatus = request.Asset.Computer.Status.Name;
+
+                        if (request.statusId != 5)
+                        {
+                            model.View = false;
+                        }
+                        else
+                        {
+                            model.View = true;
+                        }
+                    }
+                    else
+                    {
+                        model.AssetType = "Software";
+                        model.CpuName = request.Asset.Software.Cpu.Name;
+                        model.CpuVersion = request.Asset.Software.Cpu.Version;
+                        model.Memory = request.Asset.Software.Memory.Name;
+                        model.OsName = request.Asset.Software.Os.Name + " " + request.Asset.Software.Os.Version;
+                        model.SerialNumber = request.Asset.Software.SerialNumber;
+
+                        if (request.Asset.Software.TechnicalContact.HasValue)
+                        {
+                            model.TechnicalContact = request.Asset.Software.Technical.Name;
+                        }
+
+                        model.WarrantyStatus = request.Asset.Software.Status.Name;
+
+                        if (request.statusId != 5)
+                        {
+                            model.View = false;
+                        }
+                        else
+                        {
+                            model.View = true;
+                        }
+                    }
+
+                    var fromDate = string.Empty;
+                    var toDate = string.Empty;
+                    var date = string.Empty;
+
+                    if (request.FromDate.HasValue)
+                    {
+                        fromDate = request.FromDate.Value.ToShortDateString();
+                        date = fromDate;
+                    }
+
+                    if (request.ToDate.HasValue)
+                    {
+                        toDate = request.ToDate.Value.ToShortDateString();
+                        date += " - " + toDate;
+                    }
+
+                    if (request.statusId == 5)
+                    {
+                        model.Duration = toDate;
+                    }
+                    else
+                    {
+                        model.Duration = date;
+                    } 
+                    
+                }
+            }
+
+            return Json(new
+            {
+                LocationModal = RenderRazorViewToString("PartialViews/_assetModal", model)
+            },
+              JsonRequestBehavior.AllowGet
+            );
         }
 
         public async Task<JsonResult> loadAssets(string Type)
@@ -123,9 +266,11 @@ namespace CSE_5320.Controllers
                 switch (Type)
                 {
                     case "computer":
+                        model.AssetType = "Computers";
                         apiURL = "/api/Values/getComputers";
                         break;
                     case "software":
+                        model.AssetType = "Softwares";
                         apiURL = "/api/Values/getSoftwares";
                         break;
                 } 
@@ -133,14 +278,105 @@ namespace CSE_5320.Controllers
                 HttpResponseMessage Res = await client.GetAsync(apiURL);
                 if (Res.IsSuccessStatusCode)
                 {
-                    var result = await Res.Content.ReadAsStringAsync();
+                    try
+                    {
+                        var result = await Res.Content.ReadAsStringAsync();
 
-                    var response = new ResponseHelper();
-                    var output = response.fixListResult(result);
+                        var response = new ResponseHelper();
+                        var output = response.fixListResult(result);
 
-                    var request = JsonConvert.DeserializeObject<List<Request>>(output);
+                        var request = JsonConvert.DeserializeObject<List<Asset>>(output);
 
-                    
+                        foreach (var r in request)
+                        {
+                            var d = new Models.Home.AssetDetails();
+
+                            client.DefaultRequestHeaders.Clear();
+                            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                            // Check only if the Asset is active
+                            if (r.StatusId == 1)
+                            {
+                                var apiURL_request = "/api/Values/getAssetRequestById/" + r.Id;
+                                Res = await client.GetAsync(apiURL_request);
+                                if (Res.IsSuccessStatusCode)
+                                {
+                                    var result_asset = await Res.Content.ReadAsStringAsync();
+                                    var response_asset = new ResponseHelper();
+                                    var output_asset = response_asset.fixResult(result_asset);
+
+                                    if (output_asset == "{ul}")
+                                    {
+                                        d.Available = true;
+                                    }
+                                    else
+                                    {
+                                        var request_asset = JsonConvert.DeserializeObject<Request>(output_asset);
+
+                                        if (request_asset.statusId == 6)
+                                        {
+                                            d.Available = false;
+
+                                            if (request_asset.ToDate.HasValue)
+                                            {
+                                                d.AvailableFrom = request_asset.ToDate.Value.ToShortDateString();
+                                            }
+                                            else
+                                            {
+                                                d.AvailableFrom = "Contact the administrator";
+                                            }
+                                        }
+                                        else
+                                        {
+                                            d.Available = true;
+                                        }
+                                    }
+                                }
+                            } 
+
+                            if (r.ComputerId.HasValue)
+                            {
+                                d.AssetId = r.Id;
+                                d.AssetName = r.Name;
+
+                                d.CpuName = r.Computer.Cpu.Name;
+                                d.CpuVersion = r.Computer.Cpu.Version;
+                                d.Memory = r.Computer.Memory.Name;
+                                d.OsName = r.Computer.Os.Name + " " + r.Computer.Os.Version;
+                                d.SerialNumber = r.Computer.SerialNumber;
+
+                                d.WarrantyStatus = r.Computer.Status.Name;
+                            }
+                            else if (r.SoftwareId.HasValue)
+                            {
+                                d.AssetId = r.Id;
+                                d.AssetName = r.Name;
+
+                                d.CpuName = r.Software.Cpu.Name;
+                                d.CpuVersion = r.Software.Cpu.Version;
+                                d.Memory = r.Software.Memory.Name;
+                                d.OsName = r.Software.Os.Name + " " + r.Software.Os.Version;
+                                d.SerialNumber = r.Software.SerialNumber;
+
+                                d.WarrantyStatus = r.Software.Status.Name;
+                            }
+
+                            if (r.StatusId != 5)
+                            {
+                                d.View = false;
+                            }
+                            else
+                            {
+                                d.View = true;
+                            }
+
+                            model.AssetDetails.Add(d);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                    } 
                 }
             }
 

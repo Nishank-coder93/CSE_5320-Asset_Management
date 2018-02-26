@@ -28,8 +28,7 @@ namespace CSE_5320
                       "~/Scripts/light.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/dashboard").Include(
-                      "~/Scripts/dashboard.js",
-                      "~/Scripts/jquery.dataTables.js"));
+                      "~/Scripts/dashboard.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
@@ -38,8 +37,7 @@ namespace CSE_5320
             bundles.Add(new StyleBundle("~/Content/dashboard").Include(
                       "~/Content/bootstrap.min.css",
                       "~/Content/site.css",
-                      "~/Content/offcanvas.css",
-                      "~/Content/dataTables.bootstrap4.css"));
+                      "~/Content/offcanvas.css"));
         }
     }
 }
