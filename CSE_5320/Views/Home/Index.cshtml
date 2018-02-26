@@ -1,7 +1,91 @@
-﻿
+﻿@model CSE_5320.Models.Home.HomeModel
 @{
     ViewBag.Title = "Dashboard";
 }
 
-<h2>Index</h2>
+<main role="main" class="container">
+    <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
+        <div class="lh-100">
+            <h6 class="mb-0 text-white lh-100">Asset Management</h6>
+            <small>Inventory Management</small>
+        </div>
+    </div>
 
+    <div class="alert alert-success" id="confirmedAsset" role="alert">
+        Asset request confirmed
+    </div>
+
+    <div class="alert alert-warning" id="somethingWentWrong" role="alert">
+        Something went wrong
+    </div>
+
+    <button type="button" class="btn btn-outline-primary" onclick="loadAssets('computer')">Request Computer</button>
+    <button type="button" class="btn btn-outline-primary" onclick="loadAssets('software')">Request Software</button>
+
+    <div class="my-3 p-3 bg-white rounded box-shadow">
+        <div id="assetData_loader" class="loader"></div>
+        <div id="assetData">
+            @Html.Partial("PartialViews/_assetData", Model)
+        </div>
+    </div>
+
+</main>
+
+<script>
+    $(document).ready(function () {
+        hideMessages();
+        loadData();
+    });
+
+    function hideMessages() {
+        $("#confirmedAsset").hide();
+        $("#somethingWentWrong").hide();
+    }
+
+    function loadData() {
+        loadAssetRequests();
+    }
+
+    function loadAssetRequests() {
+        $("#assetData").hide();
+        $("#assetData_loader").show();
+
+        var src = "@Url.Action("getUserAssetRequests", "Home", new { area = "" })";
+
+        $.ajax({
+            url: src,
+            type: 'GET',
+            cache: false,
+            data: {}
+        }).done(function(result) {
+            $('#assetData').html(result);
+
+            $("#assetData_loader").hide();
+            $("#assetData").show();
+         });
+    }
+
+    function loadAssets(type) {
+        var src = '@Url.Action("loadAssets", "Home", new { area = "" })' + '?Type=' + type;
+
+      $.ajax({
+        type: "GET",
+        url: src,
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            hideMessages(); 
+            $('#assetsTable').DataTable();
+            $("#requestModalContainer").html(data.LocationModal);
+            $('#requestModal').modal('show');
+        },
+        Error: function (data) {
+            hideMessages();
+            $("#somethingWentWrong").show();
+            $('#requestModal').modal('hide');
+        }
+      });
+    }
+</script>
+
+<div id="requestModalContainer"></div>

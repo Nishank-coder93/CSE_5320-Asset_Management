@@ -62,10 +62,38 @@ namespace CSE_5320.Controllers
             return response;
         }
 
+        public string getComputers()
+        {
+            var db = new Context();
+            var result = db.Assets.Where(x=>x.ComputerId.HasValue && x.StatusId != 2).ToList();
+            var response = JsonConvert.SerializeObject(result); 
+            return response;
+        }
+
+        public string getSoftwares()
+        {
+            var db = new Context();
+            var result = db.Assets.Where(x => x.SoftwareId.HasValue && x.StatusId != 2).ToList();
+            var response = JsonConvert.SerializeObject(result);
+            return response;
+        }
+
         public string getAssetById(int Id)
         {
             var db = new Context();
             var result = db.Assets.Where(x => x.Id == Id).FirstOrDefault();
+            var response = JsonConvert.SerializeObject(result);
+
+            return response;
+        }
+
+        //--------- API's related to User requests ---------
+
+        public string getAssetRequestsByUserId(string UserId)
+        {
+            var db = new Context();
+            var userId = int.Parse(UserId);
+            var result = db.Request.Where(x => x.RequestedUser == userId).ToList();
             var response = JsonConvert.SerializeObject(result);
 
             return response;

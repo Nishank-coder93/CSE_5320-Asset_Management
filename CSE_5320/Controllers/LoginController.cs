@@ -1,16 +1,12 @@
 ﻿using CSE_5320.Helper;
 using CSE_5320.Models;
-using CSE_5320.Models.Home;
 using CSE_5320.Models.Login;
 using CSE_5320.Models.ViewModels;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CSE_5320.Controllers
