@@ -166,6 +166,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\AuthorizationFilter.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -351,10 +352,13 @@
     <Content Include="Views\Asset\PartialViews\_assetRequestData.cshtml" />
     <Content Include="Views\Asset\PartialViews\_assetRequestConfirmedData.cshtml" />
     <Content Include="Views\Asset\PartialViews\_assetRequestDeniedData.cshtml" />
+    <Content Include="Views\Asset\PartialViews\_assetReturnData.cshtml" />
+    <Content Include="Views\Asset\PartialViews\_assetReturnConfirmedData.cshtml" />
+    <Content Include="Views\Asset\PartialViews\_assetReturnDeniedData.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Home\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

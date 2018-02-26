@@ -26,6 +26,7 @@ namespace CSE_5320.Controllers
                 result.UserId = user.Id;
                 result.UserName = user.Username;
                 result.Name = user.Name;
+                result.Role = user.RoleId;
 
                 var response = JsonConvert.SerializeObject(result);
 
@@ -70,6 +71,7 @@ namespace CSE_5320.Controllers
             return response;
         }
 
+        //--------- API's related to Asset requests ---------
         public string getAssetRequestById(int Id)
         {
             var db = new Context();
@@ -82,7 +84,7 @@ namespace CSE_5320.Controllers
         public string getOpenAssetRequests()
         {
             var db = new Context();
-            var result = db.Request.Where(x=>x.statusId == 5).ToList();
+            var result = db.Request.Where(x => x.statusId == 5).ToList();
             var response = JsonConvert.SerializeObject(result);
 
             return response;
@@ -146,6 +148,34 @@ namespace CSE_5320.Controllers
             }
 
             return false;
+        }
+
+        //--------- API's related asset returns ----------
+        public string getOpenAssetReturnRequests()
+        {
+            var db = new Context();
+            var result = db.Request.Where(x => x.statusId == 8).ToList();
+            var response = JsonConvert.SerializeObject(result);
+
+            return response;
+        }
+
+        public string getConfirmedAssetReturnRequests()
+        {
+            var db = new Context();
+            var result = db.Request.Where(x => x.statusId == 9).ToList();
+            var response = JsonConvert.SerializeObject(result);
+
+            return response;
+        }
+
+        public string getDeniedAssetReturnRequests()
+        {
+            var db = new Context();
+            var result = db.Request.Where(x => x.statusId == 10).ToList();
+            var response = JsonConvert.SerializeObject(result);
+
+            return response;
         }
     }
 }

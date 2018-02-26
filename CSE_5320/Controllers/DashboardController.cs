@@ -1,4 +1,5 @@
-﻿using CSE_5320.Helper;
+﻿using CSE_5320.App_Start;
+using CSE_5320.Helper;
 using CSE_5320.Models.Dashboard;
 using Newtonsoft.Json;
 using System;
@@ -13,6 +14,7 @@ using System.Web.Mvc;
 
 namespace CSE_5320.Controllers
 {
+    [AuthorizationFilter]
     public class DashboardController : Controller
     {
         public async Task<ActionResult> Index()

@@ -1,17 +1,15 @@
-﻿using CSE_5320.Helper;
+﻿using CSE_5320.App_Start;
+using CSE_5320.Helper;
 using CSE_5320.Models;
 using CSE_5320.Models.Home;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CSE_5320.Controllers
 {
+    [AuthorizationFilter]
     public class HomeController : Controller
     {
 
@@ -21,9 +19,9 @@ namespace CSE_5320.Controllers
             {
                 Session["Login"] = false;
             }
-            
+
             var login = (bool)Session["Login"];
-             
+
             Context db = new Context();
             var dbCheck = db.Database.Exists();
             db.Database.CommandTimeout = int.MaxValue;
@@ -34,7 +32,7 @@ namespace CSE_5320.Controllers
                 db.Database.Create();
                 // Initializing the database
                 Initialize();
-            } 
+            }
 
             if (login)
             {
@@ -42,7 +40,7 @@ namespace CSE_5320.Controllers
                 var api = "api/Values/";
                 var method = "";
 
-                var url = uri + api+ method;
+                var url = uri + api + method;
 
                 using (var client = new HttpClient())
                 {
@@ -51,16 +49,27 @@ namespace CSE_5320.Controllers
                     {
                         var data = result.Content.ReadAsStringAsync().Result;
                         //var output = JsonConvert.DeserializeObject<HomeModel>(data);
-                        
+
                     }
                 }
 
-                return RedirectToAction("Index", "Dashboard");
+                // Check for role
+                if (int.Parse(Session["Role"].ToString()) == 1)
+                {
+                    //Admin
+                    return RedirectToAction("Index", "Dashboard");
+                }
+                else if (int.Parse(Session["Role"].ToString()) == 2)
+                {
+                    //Employee
+                    return View();
+                } 
             }
             else
             {
                 return RedirectToAction("Index", "Login");
             }
+            return RedirectToAction("Index", "Login");
         }
 
         private void Initialize()
@@ -140,7 +149,7 @@ namespace CSE_5320.Controllers
                 db.Request.Add(r);
             }
 
-            db.SaveChanges(); 
+            db.SaveChanges();
         }
     }
 }

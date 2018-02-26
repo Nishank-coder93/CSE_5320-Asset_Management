@@ -47,6 +47,21 @@ namespace CSE_5320.Helper
             status_7.Name = "Denied";
             result.Add(status_7);
 
+            var status_8 = new Status();
+            status_8.Id = 8;
+            status_8.Name = "Asset Return requested";
+            result.Add(status_8);
+
+            var status_9 = new Status();
+            status_9.Id = 9;
+            status_9.Name = "Asset Return Confirmed";
+            result.Add(status_9);
+
+            var status_10 = new Status();
+            status_10.Id = 10;
+            status_10.Name = "Asset Return Denied";
+            result.Add(status_10);
+
             return result;
         }
 

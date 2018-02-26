@@ -12,5 +12,7 @@ namespace CSE_5320.Models.ViewModels
         public string Name { get; set; }
 
         public string UserName { get; set; }
+
+        public int Role { get; set; }
     }
 }

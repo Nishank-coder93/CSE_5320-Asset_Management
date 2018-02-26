@@ -1,1 +1,233 @@
-﻿
+﻿@{
+    ViewBag.Title = "Asset management";
+}
+@model CSE_5320.Models.ViewModels.AssetViewModel
+
+<main role="main" class="container">
+    <div class="align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
+        <div class="float-right">
+            @Html.ActionLink("Back to Dashboard", "Index", "Dashboard", null, new { @class = "btn btn-outline-light float-right" })
+        </div>
+        <div class="lh-100">
+            <h6 class="mb-0 text-white lh-100">Asset Returns</h6>
+            <small>Below are a list of assets that have been requested to be returned. Click on the asset name to get information about the asset</small>
+        </div>
+    </div>
+
+
+    <div class="alert alert-success" id="confirmedAsset" role="alert">
+        Asset request confirmed
+    </div>
+
+    <div class="alert alert-danger" id="deniedAsset" role="alert">
+        Asset request denied
+    </div>
+
+    <div class="alert alert-warning" id="somethingWentWrong" role="alert">
+        Something went wrong
+    </div>
+
+
+    <div class="my-3 p-3 bg-white rounded box-shadow">
+        <div id="assetReturnData_loader" class="loader"></div>
+        <div id="assetReturnData">
+            @Html.Partial("PartialViews/_assetReturnData", Model)
+        </div>
+    </div>
+
+    <div class="align-items-center p-3 my-3 text-white-50 bg-info rounded box-shadow">
+        <div class="lh-100">
+            <h6 class="mb-0 text-white lh-100">Asset Returns Requests: Confirmed</h6>
+            <small>Below are a list of assets that have been Confirmed</small>
+        </div>
+    </div>
+
+    <div class="my-3 p-3 bg-white rounded box-shadow">
+        <div id="confirmedAssetsReturnData_loader" class="loader"></div>
+        <div id="confirmedAssetsReturnData">
+            @Html.Partial("PartialViews/_assetReturnConfirmedData", Model)
+        </div>
+    </div>
+
+    <div class="align-items-center p-3 my-3 text-white-50 bg-danger rounded box-shadow">
+        <div class="lh-100">
+            <h6 class="mb-0 text-white lh-100">Asset Returns Requests: Denied</h6>
+            <small>Below are a list of assets that have been denied</small>
+        </div>
+    </div>
+
+    <div class="my-3 p-3 bg-white rounded box-shadow">
+        <div id="deniedAssetsReturnsData_loader" class="loader"></div>
+        <div id="deniedAssetsReturnsData">
+            @Html.Partial("PartialViews/_assetReturnDeniedData", Model)
+        </div>
+    </div>
+</main>
+
+<script>
+
+    $(document).ready(function () {
+        hideMessages();
+
+        $("#assetReturnData_loader").hide();
+        $("#confirmedAssetsReturnData_loader").hide();
+        $("#deniedAssetsReturnsData_loader").hide();
+
+        loadTables();
+    });
+
+    function hideMessages() {
+        $("#confirmedAsset").hide();
+        $("#deniedAsset").hide();
+        $("#somethingWentWrong").hide();
+    }
+
+    function loadTables() {
+        loadReturnsTable();
+        loadConfirmedReturnsTable();
+        loadDeniedReturnsTable();
+    }
+
+    function loadReturnsTable() {
+
+        $("#assetReturnData").hide();
+        $("#assetReturnData_loader").show();
+
+        var src = "@Url.Action("getAssetReturnData", "Asset", new { area = "" })";
+
+        $.ajax({
+            url: src,
+            type: 'GET',
+            cache: false,
+            data: {}
+        }).done(function (result) {
+            $('#assetReturnData').html(result);
+
+            $("#assetReturnData_loader").hide();
+            $("#assetReturnData").show();
+         });
+
+    }
+
+    function loadConfirmedReturnsTable() {
+
+        $("#confirmedAssetsReturnData").hide();
+        $("#confirmedAssetsReturnData_loader").show();
+
+        var src = "@Url.Action("getAssetRequestReturnConfirmedData", "Asset", new { area = "" })";
+
+        $.ajax({
+            url: src,
+            type: 'GET',
+            cache: false,
+            data: {}
+        }).done(function(result) {
+            $('#confirmedAssetsReturnData').html(result);
+
+            $("#confirmedAssetsReturnData_loader").hide();
+            $("#confirmedAssetsReturnData").show();
+         });
+
+    }
+
+    function loadDeniedReturnsTable() {
+
+        $("#deniedAssetsReturnsData").hide();
+        $("#deniedAssetsReturnsData_loader").show();
+
+        var src = "@Url.Action("getAssetRequestReturnDeniedData", "Asset", new { area = "" })";
+
+        $.ajax({
+            url: src,
+            type: 'GET',
+            cache: false,
+            data: {}
+        }).done(function(result) {
+            $('#deniedAssetsReturnsData').html(result);
+
+
+            $("#deniedAssetsReturnsData_loader").hide();
+            $("#deniedAssetsReturnsData").show();
+         });
+
+    }
+
+    function confirmRequest(Id) {
+      var src = '@Url.Action("ConfirmRequest", "Asset", new { area = "" })';
+
+      var data = {
+          Id: Id
+      };
+
+      $.ajax({
+          type: "POST",
+          url: src,
+          content: "application/json; charset=utf-8",
+          dataType: "json",
+          data: data,
+          success: function (d) {
+              hideMessages();
+              $("#confirmedAsset").show();
+              $('#assetModal').modal('hide');
+              loadTables();
+          },
+          error: function (xhr, textStatus, errorThrown) {
+              hideMessages();
+              $("#somethingWentWrong").show();
+              $('#assetModal').modal('hide');
+          }
+      });
+
+    };
+
+    function denyRequest(Id) {
+      var src = '@Url.Action("DenyRequest", "Asset", new { area = "" })';
+
+      var data = {
+          Id: Id
+      };
+
+      $.ajax({
+          type: "POST",
+          url: src,
+          content: "application/json; charset=utf-8",
+          dataType: "json",
+          data: data,
+          success: function (d) {
+              hideMessages();
+              $("#deniedAsset").show();
+              $('#assetModal').modal('hide');
+              loadTables();
+          },
+          error: function (xhr, textStatus, errorThrown) {
+              hideMessages();
+              $("#somethingWentWrong").show();
+              $('#assetModal').modal('hide');
+          }
+      });
+    };
+
+    function loadInfo(Id) {
+      var src = '@Url.Action("Assetinfo", "Asset", new { area = "" })'+ '?Id='+Id;
+
+      $.ajax({
+        type: "GET",
+        url: src,
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            hideMessages();
+            $("#assetModalContainer").html(data.LocationModal);
+            $('#assetModal').modal('show');
+        },
+        Error: function (data) {
+            hideMessages();
+            $("#somethingWentWrong").show();
+            $('#assetModal').modal('hide');
+        }
+      });
+    }
+
+</script>
+
+<div id="assetModalContainer"></div>

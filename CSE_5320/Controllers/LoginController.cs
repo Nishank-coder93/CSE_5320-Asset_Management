@@ -59,6 +59,7 @@ namespace CSE_5320.Controllers
                                 Session["LoggedInUserId"] = user.UserId;
                                 Session["LoggedInName"] = user.Name;
                                 Session["LoggedInUsername"] = user.UserName;
+                                Session["Role"] = user.Role;
 
                                 return RedirectToAction("Index", "Home");
                             }
