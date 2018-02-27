@@ -94,7 +94,7 @@ namespace CSE_5320.Controllers
                     foreach (var r in requestList)
                     {
                         var asset = new AssetInformationViewModel();
-                        asset.AsserRequestId = r.AssetId;
+                        asset.AsserRequestId = r.Id;
                         asset.AssetName = r.Asset.Name;
 
                         if (r.Asset.ComputerId.HasValue)
@@ -147,7 +147,7 @@ namespace CSE_5320.Controllers
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var apiURL = "/api/Values/getAssetRequestById/" + id;
+                var apiURL = "/api/Values/getAssetRequestById?Id=" + id;
 
                 HttpResponseMessage Res = await client.GetAsync(apiURL);
                 if (Res.IsSuccessStatusCode)

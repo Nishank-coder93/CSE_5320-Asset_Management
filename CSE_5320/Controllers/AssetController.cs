@@ -197,7 +197,7 @@ namespace CSE_5320.Controllers
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var apiURL = "/api/Values/getAssetRequestById/" + id;
+                var apiURL = "/api/Values/getAssetRequestById?Id=" + id;
 
                 HttpResponseMessage Res = await client.GetAsync(apiURL);
                 if (Res.IsSuccessStatusCode)
@@ -211,7 +211,7 @@ namespace CSE_5320.Controllers
 
                     model.AsserRequestId = request.Id;
                     model.AssetName = request.Asset.Name;
-
+                    model.RequestingUser = request.User.Name;
                     if (request.Asset.ComputerId.HasValue)
                     {
                         model.AssetType = "Computer";
@@ -278,7 +278,8 @@ namespace CSE_5320.Controllers
                         toDate = request.ToDate.Value.ToShortDateString();
                         date += " - " + toDate;
                     }
-                    model.Duration = date;
+                    //model.Duration = date;
+                    model.Duration = toDate;
                 }
             }
 
@@ -575,9 +576,9 @@ namespace CSE_5320.Controllers
             }
             catch (Exception ex)
             {
-                
+
             }
-            
+
             switch (result)
             {
                 case true:
@@ -589,6 +590,46 @@ namespace CSE_5320.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<JsonResult> ReturnAsset(string assetId)
+        {
+            var result = false;
+
+            var Baseurl = getURL();
+
+            var model = new AssetViewModel();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/returnAsset";
+
+                var parameters = new Dictionary<string, string>();
+                parameters["Id"] = assetId;
+
+                var content = new StringContent(JsonConvert.SerializeObject(parameters), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage Res = await client.PostAsync(apiURL, content);
+                if (Res.IsSuccessStatusCode)
+                {
+                    result = true;
+                }
+            }
+
+            switch (result)
+            {
+                case true:
+                    return Json("'Success':'true'");
+                case false:
+                    return Json("'Success':'false'");
+                default:
+                    return Json("'Success':'false'");
+            }
+        }
+        
         //------- Helper Methods --------
         public string getURL()
         {

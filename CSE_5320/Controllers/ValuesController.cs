@@ -1,4 +1,5 @@
-﻿using CSE_5320.Models;
+﻿using CSE_5320.Helper;
+using CSE_5320.Models;
 using CSE_5320.Models.Dashboard;
 using CSE_5320.Models.Login;
 using CSE_5320.Models.ViewModels;
@@ -108,8 +109,8 @@ namespace CSE_5320.Controllers
         public string getAssetRequestById(string Id)
         {
             var db = new Context();
-            int assetId = int.Parse(Id);
-            var result = db.Request.Where(x => x.AssetId == assetId).FirstOrDefault();
+            int reqId = int.Parse(Id);
+            var result = db.Request.Where(x => x.Id == reqId).FirstOrDefault();
             var response = JsonConvert.SerializeObject(result);
 
             return response;
@@ -211,6 +212,23 @@ namespace CSE_5320.Controllers
             var response = JsonConvert.SerializeObject(result);
 
             return response;
+        }
+
+        [System.Web.Mvc.HttpPost]
+        public void returnAsset()
+        {
+            var request = Request.Content.ReadAsStringAsync().Result;
+            var request_parse = JsonConvert.DeserializeObject<Dictionary<string, string>>(request);
+
+            var Id = int.Parse(request_parse.FirstOrDefault().Value);
+            var db = new Context();
+            var asset = db.Request.Where(x => x.AssetId == Id).FirstOrDefault();
+            if (asset != null)
+            {
+                asset.statusId = 8; 
+            }
+
+            db.SaveChanges();
         }
     }
 }

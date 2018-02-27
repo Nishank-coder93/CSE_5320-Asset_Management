@@ -15,6 +15,10 @@
         Asset request Sent
     </div>
 
+    <div class="alert alert-success" id="returnRequestSent" role="alert">
+        Asset return request sent. Please wait for the Admin to approve
+    </div>
+
     <div class="alert alert-warning" id="somethingWentWrong" role="alert">
         Something went wrong
     </div>
@@ -22,30 +26,9 @@
     <button type="button" class="btn btn-outline-primary" onclick="loadAssets('computer')">Request Computer</button>
     <button type="button" class="btn btn-outline-primary" onclick="loadAssets('software')">Request Software</button>
 
-    <div class="align-items-center p-3 my-3 text-white-50 bg-primary rounded box-shadow">
-        <div class="lh-100">
-            <h6 class="mb-0 text-white lh-100">Assets Assigned</h6>
-            <small>Below are a list of assets that have been assigned to you</small>
-        </div>
-    </div>
-
     <div class="my-3 p-3 bg-white rounded box-shadow">
         <div id="assetData_loader" class="loader"></div>
         <div id="assetData">
-            @Html.Partial("PartialViews/_assetData", Model)
-        </div>
-    </div>
-
-    <div class="align-items-center p-3 my-3 text-white-50 bg-dark rounded box-shadow">
-        <div class="lh-100">
-            <h6 class="mb-0 text-white lh-100">Assets History</h6>
-            <small>Below is the history of asset requests</small>
-        </div>
-    </div>
-
-    <div class="my-3 p-3 bg-white rounded box-shadow">
-        <div id="assetDataHistory_loader" class="loader"></div>
-        <div id="assetDataHistory">
             @Html.Partial("PartialViews/_assetData", Model)
         </div>
     </div>
@@ -60,6 +43,7 @@
 
     function hideMessages() {
         $("#requestSent").hide();
+        $("#returnRequestSent").hide(); 
         $("#somethingWentWrong").hide();
     }
 
@@ -148,6 +132,25 @@
               }
           }
     }
+
+    function returnAsset(assetId) {
+        var src = '@Url.Action("ReturnAsset", "Asset", new { area = "" })' + '?assetId=' + assetId;
+        $.ajax({
+            type: "POST",
+            url: src,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $('#returnRequestSent').show();
+                loadData();
+            },
+            Error: function (data) {
+                hideMessages();
+                $("#somethingWentWrong").show();
+            }
+        });
+    }
+
 
     function loadInfo(Id) {
       var src = '@Url.Action("Assetinfo", "Home", new { area = "" })'+ '?Id='+Id;
