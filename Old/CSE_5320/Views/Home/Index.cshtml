@@ -4,7 +4,11 @@
 }
 
 <main role="main" class="container">
-    <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
+    <div class="align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
+        <div class="float-right">
+            <button type="button" class="btn btn-outline-light " onclick="loadAssets('computer')">Request a Computer asset</button>
+            <button type="button" class="btn btn-outline-light" onclick="loadAssets('software')">Request a Software asset</button>
+        </div>
         <div class="lh-100">
             <h6 class="mb-0 text-white lh-100">Asset Management</h6>
             <small>Inventory Management</small>
@@ -25,12 +29,14 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div id="assetData_loader" class="loader"></div>
+            <div id="assetData_loader_border" class="my-3 p-3 bg-white rounded box-shadow">
+                <div id="assetData_loader" class="loader"></div>
+            </div> 
             <div id="assetData">
                 @Html.Partial("PartialViews/_assetData", Model)
             </div>
         </div>
-    </div> 
+    </div>
 
 </main>
 
@@ -53,6 +59,8 @@
     function loadAssetRequests() {
         $("#assetData").hide();
         $("#assetData_loader").show();
+        $("#assetData_loader_border").show(); 
+        
 
         var src = "@Url.Action("getUserAssetRequests", "Home", new { area = "" })";
 
@@ -65,6 +73,7 @@
             $('#assetData').html(result);
 
             $("#assetData_loader").hide();
+            $("#assetData_loader_border").hide(); 
             $("#assetData").show();
          });
     }

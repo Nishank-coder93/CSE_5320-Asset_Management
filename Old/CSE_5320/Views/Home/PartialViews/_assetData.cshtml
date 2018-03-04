@@ -1,62 +1,79 @@
 ﻿@model CSE_5320.Models.Home.HomeModel
 
-<button type="button" class="btn btn-outline-primary" onclick="loadAssets('computer')">Computer</button>
-<button type="button" class="btn btn-outline-primary" onclick="loadAssets('software')">Software</button>
+<div class="my-3 p-3 bg-white rounded box-shadow">
 
-@if (Model.UserAssets.Count > 0)
-{
-    foreach (var a in Model.UserAssets)
+    @if (Model.UserAssets.Count > 0)
     {
-
-        <button type="button" class="btn btn-outline-dark btn-sm" onclick="loadInfo(@a.AsserRequestId)">
+        foreach (var a in Model.UserAssets)
+        {
             @a.AssetName
-        </button>
 
-        @*Requested*@
-        if (a.StatusId == 5)
-        {
-            <button type="button" class="btn btn-outline-danger btn-sm" onclick="cancelRequest(@a.AsserRequestId)">Cancel</button>
-        }
 
-        @*Approved*@
-        if (a.StatusId == 6)
-        {
-            <button type="button" class="btn btn-outline-danger btn-sm" onclick="returnAsset(@a.AsserRequestId)">Return</button>
+            <button type="button" class="btn btn-outline-dark btn-sm" onclick="loadInfo(@a.AsserRequestId)">
+                Click for info
+            </button>
+            @*Requested*@
+            if (a.StatusId == 5)
+            {
+                <button type="button" class="btn btn-outline-danger btn-sm" onclick="cancelRequest(@a.AsserRequestId)">Cancel</button>
+            }
+
+            @*Approved*@
+            if (a.StatusId == 6)
+            {
+                <button type="button" class="btn btn-outline-danger btn-sm" onclick="returnAsset(@a.AsserRequestId)">Return</button>
+            }
+            <br />
         }
     }
-}
-else
-{
-    <div class="alert alert-warning" role="alert">
-        There are no requests
-    </div>
-}
-
-@if (Model.UserAssetsHistory.Count > 0)
-{
-    foreach (var a in Model.UserAssetsHistory)
+    else
     {
+        <div class="alert alert-warning" role="alert">
+            There are no requests
+        </div>
+    }
+</div>
 
-        <button type="button" class="btn btn-outline-dark btn-sm" onclick="loadInfo(@a.AsserRequestId)">
-            @a.AssetName
-        </button>
+<div class="align-items-center p-3 my-3 text-white-50 bg-dark rounded box-shadow">
+    <div class="lh-100">
+        <h6 class="mb-0 text-white lh-100">History</h6>
+        <small>History of all the assets are shown below. Click on the Asset to view its details.</small>
+    </div>
+</div>
 
-        @*Denied*@
-        if (a.StatusId == 7)
+<div class="my-3 p-3 bg-white rounded box-shadow">
+    @if (Model.UserAssetsHistory.Count > 0)
+    {
+        foreach (var a in Model.UserAssetsHistory)
         {
 
-        }
+            <button type="button" class="btn btn-outline-dark btn-sm" onclick="loadInfo(@a.AsserRequestId)">
+                @a.AssetName
+            </button>
 
-        @*Cancled*@
-        if (a.StatusId == 11)
-        {
+            @*Denied*@
+            if (a.StatusId == 7)
+            {
 
+            }
+
+            @*Cancled*@
+            if (a.StatusId == 11)
+            {
+
+            }
         }
     }
-}
-else
-{
-    <div class="alert alert-warning" role="alert">
-        There are no requests
-    </div>
-}
+    else
+    {
+        <div class="alert alert-warning" role="alert">
+            There are no requests
+        </div>
+    }
+</div>
+
+
+
+
+
+

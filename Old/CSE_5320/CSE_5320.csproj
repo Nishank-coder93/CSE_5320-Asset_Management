@@ -362,6 +362,7 @@
     <Content Include="Views\Home\PartialViews\_requestModal.cshtml" />
     <Content Include="Scripts\jquery.dataTables.js" />
     <Content Include="Views\Home\PartialViews\_assetModal.cshtml" />
+    <Content Include="Views\Home\PartialViews\_assetData - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
