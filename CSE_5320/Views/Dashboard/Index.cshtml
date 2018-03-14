@@ -1,0 +1,89 @@
+﻿@model CSE_5320.Models.Dashboard.DasboardViewModel
+
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<main role="main" class="container">
+    <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
+        <div class="lh-100">
+            <h6 class="mb-0 text-white lh-100">Admin Console</h6>
+            <small>Inventory Management</small>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="bg-white rounded box-shadow">
+                <div class="card-body">
+
+                    @if (Model.AssetRequestCount > 0)
+                    {
+                        <h5 class="card-title">Asset requests <span class="badge badge-pill badge-warning float-right">@Model.AssetRequestCount</span></h5>
+                    }
+                    else
+                    {
+                        <h5 class="card-title">Asset requests <span class="badge badge-pill badge-warning float-right">Nothing new</span></h5>
+                    }
+
+                    <p class="card-text">Add some description</p>
+                    @Html.ActionLink("Show requests", "Requests", "Asset", new { }, new { @class = "btn btn-outline-primary" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="bg-white rounded box-shadow">
+                <div class="card-body">
+
+                    @if (Model.AssetReturnConfirmationCount > 0)
+                    {
+                        <h5 class="card-title">Asset returns <span class="badge badge-pill badge-warning float-right">@Model.AssetReturnConfirmationCount</span></h5>
+                    }
+                    else
+                    {
+                        <h5 class="card-title">Asset returns <span class="badge badge-pill badge-warning float-right">Nothing new</span></h5>
+                    }
+
+                    <p class="card-text">Add some description</p>
+                    @Html.ActionLink("Show returns", "Return", "Asset", new { }, new { @class = "btn btn-outline-primary" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="bg-white rounded box-shadow">
+                <div class="card-body">
+                    <h5 class="card-title">List of Assets</h5>
+                    <div id="assetList_loader" class="loader"></div>
+                    <div id="assetList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+$(document).ready(function () {
+    loadData();
+});
+
+
+function loadData() {
+    $("#assetList_loader").show();
+
+    var src = '@Url.Action("loadAssets", "Dashboard", new { area = "" })';
+
+    $.ajax({
+        url: src,
+        type: 'GET',
+        cache: false,
+        data: {}
+    }).done(function (result) {
+        $('#assetList').html(result); 
+        $("#assetList_loader").hide();
+        $("#assetList").show();
+    });
+}
+</script>
