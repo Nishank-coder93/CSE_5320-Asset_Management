@@ -294,7 +294,7 @@ namespace CSE_5320.Helper
             var user_1 = new User();
             user_1.Id = 1;
             user_1.Name = "Admin";
-            user_1.Username = "Admin";
+            user_1.Username = "admin";
             user_1.Password = PasswordHash("Admin");
             user_1.RoleId = 1;
             result.Add(user_1);
@@ -303,7 +303,7 @@ namespace CSE_5320.Helper
             user_2.Id = 2;
             user_2.Name = "Neil";
             user_2.Username = "Neil";
-            user_2.Password = PasswordHash("Neil");
+            user_2.Password = "neil";
             user_2.RoleId = 2;
             result.Add(user_2);
 
@@ -311,7 +311,7 @@ namespace CSE_5320.Helper
             user_3.Id = 3;
             user_3.Name = "Nishank";
             user_3.Username = "Nishank";
-            user_3.Password = PasswordHash("Nishank");
+            user_3.Password = "nishank";
             user_3.RoleId = 2;
             result.Add(user_3);
 
@@ -319,7 +319,7 @@ namespace CSE_5320.Helper
             user_4.Id = 4;
             user_4.Name = "Sid";
             user_4.Username = "Sid";
-            user_4.Password = PasswordHash("Sid");
+            user_4.Password = "sid";
             user_4.RoleId = 2;
             result.Add(user_4);
 
@@ -327,7 +327,7 @@ namespace CSE_5320.Helper
             user_5.Id = 5;
             user_5.Name = "Vibhor";
             user_5.Username = "Vibhor";
-            user_5.Password = PasswordHash("Vibhor");
+            user_5.Password = "vibhor";
             user_5.RoleId = 2;
             result.Add(user_5);
 

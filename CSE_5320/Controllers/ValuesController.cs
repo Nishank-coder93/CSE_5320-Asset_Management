@@ -6,7 +6,10 @@ using CSE_5320.Models.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web.Http;
 
 namespace CSE_5320.Controllers
@@ -16,20 +19,29 @@ namespace CSE_5320.Controllers
         public string login(LoginModel model)
         {
             var db = new Context();
-            var user = db.Users.Where(x => x.Username == model.Username && x.Password == model.Password).FirstOrDefault();
+
+            var user = db.Users.Where(x => x.Username == model.Username).FirstOrDefault();
 
             if (user != null)
             {
-                var result = new UserViewModel();
+                var code = "teamseven";
+                var hashKey = PasswordHelper.GetHashKey(code);
+                var decrypt = PasswordHelper.Decrypt(hashKey, user.Password);
+                if (decrypt == model.Password)
+                {
+                    var result = new UserViewModel();
 
-                result.UserId = user.Id;
-                result.UserName = user.Username;
-                result.Name = user.Name;
-                result.Role = user.RoleId;
+                    result.UserId = user.Id;
+                    result.UserName = user.Username;
+                    result.Name = user.Name;
+                    result.Role = user.RoleId;
 
-                var response = JsonConvert.SerializeObject(result);
+                    var response = JsonConvert.SerializeObject(result);
 
-                return response;
+                    return response;
+                }
+
+                return null;                
             }
             else
             {
@@ -230,5 +242,6 @@ namespace CSE_5320.Controllers
 
             db.SaveChanges();
         }
+        
     }
 }

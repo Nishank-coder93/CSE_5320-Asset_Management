@@ -1,27 +1,75 @@
 ﻿@model CSE_5320.Models.Home.HomeModel
 
+<div class="align-items-center p-3 my-3 text-white-50 bg-dark rounded box-shadow">
+    <div class="lh-100">
+        <h6 class="mb-0 text-white lh-100">Asset requests</h6>
+        <small>Shows the list of assets requested</small>
+    </div>
+</div>
+
 <div class="my-3 p-3 bg-white rounded box-shadow">
 
     @if (Model.UserAssets.Count > 0)
     {
         foreach (var a in Model.UserAssets)
         {
-            @a.AssetName
-
-
-            <button type="button" class="btn btn-outline-dark btn-sm" onclick="loadInfo(@a.AsserRequestId)">
-                Click for info
-            </button>
             @*Requested*@
             if (a.StatusId == 5)
             {
+                @a.AssetName
+
+                <button type="button" class="btn btn-outline-dark btn-sm" onclick="loadInfo(@a.AsserRequestId)">
+                    Click for info
+                </button>
+
                 <button type="button" class="btn btn-outline-danger btn-sm" onclick="cancelRequest(@a.AsserRequestId)">Cancel</button>
             }
+            else
+            {
+                <div class="alert alert-warning" role="alert">
+                    There are no assets
+                </div>
+            }
+            <br />
+        }
+    }
+    else
+    {
+        <div class="alert alert-warning" role="alert">
+            There are no requests
+        </div>
+    }
+</div>
 
+<div class="align-items-center p-3 my-3 text-white-50 bg-dark rounded box-shadow">
+    <div class="lh-100">
+        <h6 class="mb-0 text-white lh-100">Asset List</h6>
+        <small>Shows the list of assets currently assigned to the user</small>
+    </div>
+</div>
+
+<div class="my-3 p-3 bg-white rounded box-shadow">
+
+    @if (Model.UserAssets.Count > 0)
+    {
+        foreach (var a in Model.UserAssets)
+        {
             @*Approved*@
             if (a.StatusId == 6)
             {
+                @a.AssetName
+
+                <button type="button" class="btn btn-outline-dark btn-sm" onclick="loadInfo(@a.AsserRequestId)">
+                    Click for info
+                </button>
+
                 <button type="button" class="btn btn-outline-danger btn-sm" onclick="returnAsset(@a.AsserRequestId)">Return</button>
+            }
+            else
+            {
+                <div class="alert alert-warning" role="alert">
+                    There are no assets
+                </div>
             }
             <br />
         }

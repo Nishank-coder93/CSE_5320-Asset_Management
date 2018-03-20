@@ -208,6 +208,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\ListHelper.cs" />
+    <Compile Include="Helper\PasswordHelper.cs" />
     <Compile Include="Helper\ResponseHelper.cs" />
     <Compile Include="Models\Asset.cs" />
     <Compile Include="Models\Base.cs" />

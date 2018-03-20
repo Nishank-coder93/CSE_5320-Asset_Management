@@ -132,6 +132,11 @@ namespace CSE_5320.Controllers
             var users = helper.UserHelper();
             foreach (var u in users)
             {
+                var code = "teamseven";
+                var hashKey = PasswordHelper.GetHashKey(code);
+                var encrypt = PasswordHelper.Encrypt(hashKey, u.Password);
+
+                u.Password = encrypt;
                 db.Users.Add(u);
             }
 

@@ -239,7 +239,7 @@ namespace CSE_5320.Controllers
 
                     if (request.statusId == 5)
                     {
-                        model.Duration = toDate;
+                        model.Duration = "Requested till "+toDate;
                     }
                     else
                     {
