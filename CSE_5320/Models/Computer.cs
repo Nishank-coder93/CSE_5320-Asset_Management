@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
 namespace CSE_5320.Models
 {
-    public class Computer : Base
+    public class Computer
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
+        public int Id { get; set; }
+
         public string SerialNumber { get; set; }
 
         [ForeignKey("Category")]

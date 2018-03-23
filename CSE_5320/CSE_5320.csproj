@@ -366,6 +366,9 @@
     <Content Include="Views\Home\PartialViews\_assetModal.cshtml" />
     <Content Include="Views\Dashboard\PartialViews\_assetList.cshtml" />
     <Content Include="Views\Dashboard\PartialViews\_newAssetModal.cshtml" />
+    <Content Include="Views\Dashboard\PartialViews\_assetInfo.cshtml" />
+    <Content Include="Views\Dashboard\PartialViews\_editComputer.cshtml" />
+    <Content Include="Views\Dashboard\PartialViews\_editSoftware.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

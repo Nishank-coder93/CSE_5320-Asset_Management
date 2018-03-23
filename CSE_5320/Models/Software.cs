@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
 namespace CSE_5320.Models
 {
-    public class Software : Base
+    public class Software
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
+        public int Id { get; set; }
+
         public string SerialNumber { get; set; }
 
         [ForeignKey("Category")]
@@ -22,16 +27,11 @@ namespace CSE_5320.Models
         [ForeignKey("Cpu")]
         public int CpuId { get; set; }
 
-        [ForeignKey("Status")]
-        public int StatusId { get; set; }
-
-        public DateTime? ExpiryDate { get; set; }        
+        public DateTime? ExpiryDate { get; set; }
 
         public virtual Category Category { get; set; }
 
         public virtual User Assigned { get; set; }
-
-        public virtual Status Status { get; set; }
 
         public virtual Os Os { get; set; }
 

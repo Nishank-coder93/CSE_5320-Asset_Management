@@ -237,8 +237,6 @@ namespace CSE_5320.Controllers
                         model.OsName = request.Asset.Software.Os.Name;
                         model.SerialNumber = request.Asset.Software.SerialNumber;
 
-                        model.WarrantyStatus = request.Asset.Software.Status.Name;
-
                         if (request.statusId != 5)
                         {
                             model.View = false;

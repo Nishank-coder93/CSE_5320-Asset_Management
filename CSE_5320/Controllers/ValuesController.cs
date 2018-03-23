@@ -41,7 +41,7 @@ namespace CSE_5320.Controllers
                     return response;
                 }
 
-                return null;                
+                return null;
             }
             else
             {
@@ -76,8 +76,8 @@ namespace CSE_5320.Controllers
         public string getComputers()
         {
             var db = new Context();
-            var result = db.Assets.Where(x=>x.ComputerId.HasValue && x.StatusId != 2).ToList();
-            var response = JsonConvert.SerializeObject(result); 
+            var result = db.Assets.Where(x => x.ComputerId.HasValue && x.StatusId != 2).ToList();
+            var response = JsonConvert.SerializeObject(result);
             return response;
         }
 
@@ -183,29 +183,155 @@ namespace CSE_5320.Controllers
             var request = Request.Content.ReadAsStringAsync().Result;
             var request_parse = JsonConvert.DeserializeObject<Dictionary<string, string>>(request);
 
+            var db = new Context();
+            var asset = new Asset();
+
+            var cpuId = 0;
+            var osId = 0;
+            var memoryId = 0;
+            int? computerId = null;
+            int? softwareId = null;
+
+            DateTime? expiryDate = null;
+            var serialNumber = string.Empty;
+
             foreach (var r in request_parse)
             {
                 switch (r.Key)
                 {
                     case "Name":
+                        asset.Name = r.Value;
                         break;
                     case "CPU":
+                        var cpu = db.Cpu.Where(x => x.Name == r.Key).FirstOrDefault();
+                        if (cpu != null)
+                        {
+                            cpuId = cpu.Id;
+                        }
+                        else
+                        {
+                            var newCpu = new Cpu();
+                            newCpu.Name = r.Key;
+                            db.Cpu.Add(newCpu);
+                            db.SaveChanges();
+
+                            cpuId = newCpu.Id;
+                        }
                         break;
                     case "OS":
+                        var os = db.Os.Where(x => x.Name == r.Key).FirstOrDefault();
+                        if (os != null)
+                        {
+                            osId = os.Id;
+                        }
+                        else
+                        {
+                            var newOs = new Os();
+                            newOs.Name = r.Key;
+                            db.Os.Add(newOs);
+                            db.SaveChanges();
+
+                            osId = newOs.Id;
+                        }
                         break;
                     case "Memory":
+                        var memory = db.Memory.Where(x => x.Name == r.Key).FirstOrDefault();
+                        if (memory != null)
+                        {
+                            memoryId = memory.Id;
+                        }
+                        else
+                        {
+                            var newMemory = new Memory();
+                            newMemory.Name = r.Key;
+                            db.Memory.Add(newMemory);
+                            db.SaveChanges();
+
+                            memoryId = newMemory.Id;
+                        }
                         break;
                     case "Date":
-                        break;
-                    case "Category":
+                        if (r.Value != null)
+                        {
+                            expiryDate = DateTime.Parse(r.Key);
+                        }
                         break;
                     case "SerialNumber":
+                        serialNumber = r.Value;
                         break;
-                } 
+                    case "Category":
+                        switch (r.Value)
+                        {
+                            case "1":
+                                var Computer = new Computer();
+                                Computer.SerialNumber = serialNumber;
+                                Computer.MemoryId = memoryId;
+                                Computer.OsId = osId;
+                                Computer.CategoryId = 1;
+                                Computer.CpuId = cpuId;
+
+                                db.Computer.Add(Computer);
+                                db.SaveChanges();
+
+                                computerId = Computer.Id;
+
+                                break;
+                            case "2":
+                                var Software = new Software();
+                                Software.MemoryId = memoryId;
+                                Software.OsId = osId;
+                                Software.CpuId = cpuId;
+                                Software.CategoryId = 2;
+                                Software.ExpiryDate = expiryDate;
+
+                                db.Software.Add(Software);
+                                db.SaveChanges();
+
+                                softwareId = Software.Id;
+                                break;
+                        }
+                        break;
+                }
             }
 
-            return false;
-        } 
+            asset.ComputerId = computerId;
+            asset.SoftwareId = softwareId;
+            asset.StatusId = 1;
+
+            db.Assets.Add(asset);
+            db.SaveChanges();
+
+            return true;
+        }
+
+        [System.Web.Http.HttpPost]
+        public bool deleteAsset()
+        {
+            var request = Request.Content.ReadAsStringAsync().Result;
+            var request_parse = JsonConvert.DeserializeObject<Dictionary<string, string>>(request);
+            var id = 0;
+            foreach (var r in request_parse)
+            {
+                switch (r.Key)
+                {
+                    case "Id":
+                        id = int.Parse(r.Value);
+                        break;
+
+                }
+            }
+
+            var db = new Context();
+            var asset = db.Assets.Where(x => x.Id == id).FirstOrDefault();
+            if (asset != null)
+            {
+                asset.StatusId = 2;
+            }
+
+            db.SaveChanges();
+
+            return true;
+        }
 
         [System.Web.Mvc.HttpPost]
         public bool denyRequests()
@@ -267,7 +393,7 @@ namespace CSE_5320.Controllers
             var asset = db.Request.Where(x => x.AssetId == Id).FirstOrDefault();
             if (asset != null)
             {
-                asset.statusId = 8; 
+                asset.statusId = 8;
             }
 
             db.SaveChanges();

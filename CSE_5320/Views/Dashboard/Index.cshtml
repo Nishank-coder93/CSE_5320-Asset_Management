@@ -56,8 +56,20 @@
             <div class="bg-white rounded box-shadow">
                 <div class="card-body">
                     <button type="button" class="btn btn-outline-primary float-right" onclick="addAsset()">Add an asset</button>
+
+                    @if (Model.SuccessMessage)
+                    {
+                        <div class="alert alert-success" role="alert">
+                            Asset successfully added
+                        </div>
+                    }
+
+                    <div class="alert alert-danger" id="assetDelete" role="alert">
+                        Asset successfully deleted
+                    </div>
+
                     <h3 class="card-title">List of Assets</h3>
-                    <hr />
+
                     <div id="assetList_loader" class="loader"></div>
                     <div id="assetList"></div>
                 </div>
@@ -69,6 +81,7 @@
 <script>
 $(document).ready(function () {
     loadData();
+    $("#assetDelete").hide(); 
 });
 
 
@@ -90,6 +103,8 @@ function loadData() {
     }
 
     function addAsset() {
+        $("#assetDelete").hide(); 
+
         var src = '@Url.Action("newAsset", "Dashboard", new { area = "" })';
 
       $.ajax({
@@ -106,6 +121,48 @@ function loadData() {
         }
       });
     }
+
+        function loadInfo(Id) {
+              var src = '@Url.Action("Assetinfo", "Dashboard", new { area = "" })'+ '?Id='+Id;
+
+              $.ajax({
+                type: "GET",
+                url: src,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $("#assetModalContainer").html(data.LocationModal);
+                    $('#assetInfoModal').modal('show');
+                },
+                Error: function (data) {
+                    $('#assetInfoModal').modal('hide');
+                }
+              });
+        }
+
+        function deleteAsset(Id) {
+            var x = confirm("Are you sure you want to delete this asset?");
+            if (x) {
+                var src = '@Url.Action("DeleteAsset", "Dashboard", new { area = "" })'+ '?Id='+Id;
+
+                  $.ajax({
+                    type: "POST",
+                    url: src,
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $("#assetDelete").show();
+                        loadData();
+                    },
+                    Error: function (data) {
+
+                    }
+                  });
+                }
+                else
+                    return false;
+            }
 </script>
 
+<div id="assetModalContainer"></div>
 <div id="newAssetModalContainer"></div>

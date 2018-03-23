@@ -194,9 +194,7 @@ namespace CSE_5320.Controllers
                         model.Memory = request.Asset.Software.Memory.Name;
                         model.OsName = request.Asset.Software.Os.Name;
                         model.SerialNumber = request.Asset.Software.SerialNumber;
-
-                        model.WarrantyStatus = request.Asset.Software.Status.Name;
-
+                        
                         if (request.statusId != 5)
                         {
                             model.View = false;
@@ -348,8 +346,6 @@ namespace CSE_5320.Controllers
                                 d.Memory = r.Software.Memory.Name;
                                 d.OsName = r.Software.Os.Name;
                                 d.SerialNumber = r.Software.SerialNumber;
-
-                                d.WarrantyStatus = r.Software.Status.Name;
                             }
 
                             if (r.StatusId != 5)

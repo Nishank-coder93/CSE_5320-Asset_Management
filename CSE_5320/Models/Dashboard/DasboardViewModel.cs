@@ -17,6 +17,11 @@ namespace CSE_5320.Models.Dashboard
         public int AssetReturnConfirmationCount { get; set; }
 
         public List<AssetInformation> AssetInformation { get; set; }
+
+        public bool SuccessMessage { get; set; }
+
+        public bool DeleteSuccessMessage { get; set; }
+
     }
 
     public class AssetInformation

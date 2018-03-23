@@ -12,6 +12,8 @@ namespace CSE_5320.Models.Dashboard
             CpuData = new List<Cpu>();
             OsData = new List<Os>();
             MemoryData = new List<Memory>();
+
+            Category = true;
         }
 
         public List<Cpu> CpuData { get; set; }

@@ -185,7 +185,6 @@ namespace CSE_5320.Helper
             var result = new List<Computer>();
 
             var c1 = new Computer();
-            c1.Name = "Dell 15";
             c1.Id = 1;
             c1.SerialNumber = serialNumberGenerator();
             c1.MemoryId = 8;
@@ -195,7 +194,6 @@ namespace CSE_5320.Helper
             result.Add(c1);
 
             var c2 = new Computer();
-            c2.Name = "Mac";
             c2.Id = 2;
             c2.SerialNumber = serialNumberGenerator();
             c2.MemoryId = 6;
@@ -213,12 +211,10 @@ namespace CSE_5320.Helper
 
             var s1 = new Software();
             s1.Id = 1;
-            s1.Name = "Adobe Photoshop";
             s1.MemoryId = 1;
             s1.OsId = 1;
             s1.CpuId = 1;
             s1.CategoryId = 2;
-            s1.StatusId = 1;
             s1.ExpiryDate = null;
             result.Add(s1);
 
@@ -232,7 +228,7 @@ namespace CSE_5320.Helper
 
             var a1 = new Asset();
             a1.Id = 1;
-            a1.Name = AssetCodeGenerator();
+            a1.Name = "Dell 15r2";
             a1.TimesUsed = 0;
             a1.ComputerId = 1;
             a1.SoftwareId = null;
@@ -241,7 +237,7 @@ namespace CSE_5320.Helper
 
             var a2 = new Asset();
             a2.Id = 2;
-            a2.Name = AssetCodeGenerator();
+            a2.Name = "Dell XPS";
             a2.TimesUsed = 0;
             a2.ComputerId = 2;
             a2.SoftwareId = null;
@@ -250,12 +246,21 @@ namespace CSE_5320.Helper
 
             var a3 = new Asset();
             a3.Id = 3;
-            a3.Name = AssetCodeGenerator();
+            a3.Name = "HP";
             a3.TimesUsed = 0;
             a3.ComputerId = 2;
             a3.SoftwareId = null;
             a3.StatusId = 1;
             result.Add(a3);
+
+            var a4 = new Asset();
+            a4.Id = 4;
+            a4.Name = "Adobe Photoshop";
+            a4.TimesUsed = 0;
+            a4.ComputerId = null;
+            a4.SoftwareId = 1;
+            a4.StatusId = 1;
+            result.Add(a4);
 
             return result;
         }
