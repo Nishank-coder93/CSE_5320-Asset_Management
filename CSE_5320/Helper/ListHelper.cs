@@ -192,8 +192,6 @@ namespace CSE_5320.Helper
             c1.OsId = 1;
             c1.CategoryId = 1;
             c1.CpuId = 3;
-            c1.WarrantyStatus = 1;
-            c1.TechnicalContact = 2;
             result.Add(c1);
 
             var c2 = new Computer();
@@ -204,8 +202,6 @@ namespace CSE_5320.Helper
             c2.OsId = 2;
             c2.CategoryId = 1;
             c2.CpuId = 2;
-            c2.WarrantyStatus = 3;
-            c2.TechnicalContact = 2;
             result.Add(c2);
 
             return result;
@@ -217,12 +213,11 @@ namespace CSE_5320.Helper
 
             var s1 = new Software();
             s1.Id = 1;
-            s1.Name = "";
+            s1.Name = "Adobe Photoshop";
             s1.MemoryId = 1;
             s1.OsId = 1;
             s1.CpuId = 1;
             s1.CategoryId = 2;
-            s1.TechnicalContact = 2;
             s1.StatusId = 1;
             s1.ExpiryDate = null;
             result.Add(s1);
@@ -290,7 +285,7 @@ namespace CSE_5320.Helper
             user_1.Id = 1;
             user_1.Name = "Admin";
             user_1.Username = "admin";
-            user_1.Password = PasswordHash("Admin");
+            user_1.Password = "admin";
             user_1.RoleId = 1;
             result.Add(user_1);
 

@@ -178,6 +178,36 @@ namespace CSE_5320.Controllers
         }
 
         [System.Web.Mvc.HttpPost]
+        public bool createAsset()
+        {
+            var request = Request.Content.ReadAsStringAsync().Result;
+            var request_parse = JsonConvert.DeserializeObject<Dictionary<string, string>>(request);
+
+            foreach (var r in request_parse)
+            {
+                switch (r.Key)
+                {
+                    case "Name":
+                        break;
+                    case "CPU":
+                        break;
+                    case "OS":
+                        break;
+                    case "Memory":
+                        break;
+                    case "Date":
+                        break;
+                    case "Category":
+                        break;
+                    case "SerialNumber":
+                        break;
+                } 
+            }
+
+            return false;
+        } 
+
+        [System.Web.Mvc.HttpPost]
         public bool denyRequests()
         {
             var request = Request.Content.ReadAsStringAsync().Result;
@@ -251,9 +281,9 @@ namespace CSE_5320.Controllers
 
             var db = new Context();
 
-            result.Cpu = db.Cpu.ToList();
-            result.Os = db.Os.ToList();
-            result.Memory = db.Memory.ToList();
+            result.CpuData = db.Cpu.ToList();
+            result.OsData = db.Os.ToList();
+            result.MemoryData = db.Memory.ToList();
 
             var response = JsonConvert.SerializeObject(result);
 

@@ -13,35 +13,87 @@
             </div>
             <div class="modal-body">
 
-                <div class="text-center">
-                    <form action="#" method="post">
-                        <div class="form-group row">
-                            <label for="cpu" class="col-2 col-form-label">CPU</label>
-                            <div class="col-10">
-                                <input type="text" class="form-control" id="cpu" placeholder="Enter the CPU configuration">
+                @using (Html.BeginForm("CreateAsset", "Dashboard", FormMethod.Post, new { @class = "" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="CPU">Name</label>
+                                @Html.TextBoxFor(l => l.Name, new { @id = "Name", @class = "form-control", @placeholder = "Enter the name of the asset" })
+                            </div>
+
+                            <div class="form-group">
+                                <label for="assetType">Type of Asset: </label>
+                                <div id="assetType" class="btn-group btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn btn-secondary" onclick="showComputer()">
+                                        Computer
+                                        @Html.RadioButtonFor(m => m.Category, true, new { @id = "Software", @autocomplete = "off" })
+                                    </label>
+                                    <label class="btn btn-secondary" onclick="showSoftware()">
+                                        Software
+                                        @Html.RadioButtonFor(m => m.Category, false, new { @id = "Software", @autocomplete = "off" })
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="additional_computer_details">
+
+                            </div>
+
+                            <div id="additional_software_details">
+                                <div class="form-group">
+                                    <label for="SerialNumber">Serial number</label>
+                                    @Html.TextBoxFor(l => l.SerialNumber, new { @id = "SerialNumber", @class = "form-control", @placeholder = "Enter the Key / Serial Number" })
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="expirationDate">Does it Expire? : </label>
+                                    <div id="expirationDate" class="btn-group btn-group-toggle" data-toggle="buttons">
+                                        <label class="btn btn-secondary" onclick="showDate()">
+                                            Yes
+                                            @Html.RadioButtonFor(m => m.ExpirationDateStatus, true, new { @id = "Yes", @autocomplete = "off" })
+                                        </label>
+                                        <label class="btn btn-secondary" onclick="hideDate()">
+                                            No
+                                            @Html.RadioButtonFor(m => m.ExpirationDateStatus, false, new { @id = "No", @autocomplete = "off" })
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" id="expirationDateDiv">
+                                    <label for="ExpirationDate">Expiration Date</label>
+                                    @Html.TextBoxFor(model => model.ExpirationDate, new { @id = "ExpirationDate", @type = "date", @class = "form-control" })
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="CPU">CPU</label>
+                                @Html.TextBoxFor(l => l.CPU, new { @id = "cpu", @class = "form-control", @placeholder = "Enter the CPU configuration" })
                                 <div id="cpuContainer" style="display:block; position: relative" />
                             </div>
-                        </div>
 
-                        <div class="form-group row">
-                            <label for="memory" class="col-2 col-form-label">Memory</label>
-                            <div class="col-10">
-                                <input type="text" class="form-control" id="memory" placeholder="Enter the Memory configuration">
+                            <div class="form-group">
+                                <label for="Memory">Memory</label>
+                                @Html.TextBoxFor(l => l.Memory, new { @id = "memory", @class = "form-control", @placeholder = "Enter the Memory configuration" })
                                 <div id="memoryContainer" style="display:block; position: relative" />
                             </div>
-                        </div>
 
-                        <div class="form-group row">
-                            <label for="os" class="col-2 col-form-label">OS</label>
-                            <div class="col-10">
-                                <input type="text" class="form-control" id="os" placeholder="Enter the Operating system">
+                            <div class="form-group">
+                                <label for="OS">OS</label>
+                                @Html.TextBoxFor(l => l.OS, new { @id = "os", @class = "form-control", @placeholder = "Enter the Operating system" })
                                 <div id="osContainer" style="display:block; position: relative" />
                             </div>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                    <hr />
+                    <button class="btn btn-lg btn-outline-dark btn-block" type="submit">Create Asset</button>
+                }
 
             </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
             </div>
@@ -50,6 +102,30 @@
 </div>
 
 <script>
+    $(document).ready(function () {
+        $("#additional_computer_details").hide();
+        $("#additional_software_details").hide();
+        hideDate();
+    });
+
+    function showComputer() {
+        $("#additional_computer_details").show();
+        $("#additional_software_details").hide();
+    }
+
+    function showSoftware() {
+        $("#additional_computer_details").hide();
+        $("#additional_software_details").show();
+    }
+
+    function showDate() {
+        $("#expirationDateDiv").show();
+    }
+
+    function hideDate() {
+        $("#expirationDateDiv").hide();
+    }
+
     var cpuList = @Html.Raw(Model.CpuList);
 
     $("#cpu").autocomplete({

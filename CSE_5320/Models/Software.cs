@@ -25,16 +25,11 @@ namespace CSE_5320.Models
         [ForeignKey("Status")]
         public int StatusId { get; set; }
 
-        [ForeignKey("Technical")]
-        public int? TechnicalContact { get; set; }
-
         public DateTime? ExpiryDate { get; set; }        
 
         public virtual Category Category { get; set; }
 
         public virtual User Assigned { get; set; }
-
-        public virtual User Technical { get; set; }
 
         public virtual Status Status { get; set; }
 

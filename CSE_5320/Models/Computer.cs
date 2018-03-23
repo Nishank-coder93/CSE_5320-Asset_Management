@@ -21,20 +21,10 @@ namespace CSE_5320.Models
 
         [ForeignKey("Cpu")]
         public int CpuId { get; set; }
-        
-        [ForeignKey("Status")]
-        public int WarrantyStatus { get; set; }
-
-        [ForeignKey("Technical")]
-        public int? TechnicalContact { get; set; }
 
         public virtual Category Category { get; set; }
 
         public virtual User Assigned { get; set; }
-
-        public virtual User Technical { get; set; }
-
-        public virtual Status Status { get;set;}
 
         public virtual Os Os { get; set; }
 

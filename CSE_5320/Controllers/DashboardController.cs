@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -45,7 +46,55 @@ namespace CSE_5320.Controllers
             return View(model);
         }
 
-        public async Task<ActionResult> loadAssets()
+        [HttpPost]
+        public async Task<ActionResult> CreateAsset(NewAssetModel model)
+        {
+            var Baseurl = getURL();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/createAsset";
+
+                var parameters = new Dictionary<string, string>();
+                parameters["Name"] = model.Name;
+                parameters["CPU"] = model.CPU;
+                parameters["OS"] = model.OS;
+                parameters["Memory"] = model.Memory;
+                parameters["Date"] = null;
+                if (model.ExpirationDateStatus)
+                {
+                    parameters["Date"] = model.ExpirationDate;
+                }
+
+                switch (model.Category)
+                {
+                    case true:
+                        parameters["Category"] = "1";
+                        break; 
+                    case false:
+                        parameters["Category"] = "2";
+                        break;
+                }
+
+                parameters["SerialNumber"] = model.SerialNumber;
+
+                var content = new StringContent(JsonConvert.SerializeObject(parameters), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage Res = await client.PostAsync(apiURL, content);
+                if (Res.IsSuccessStatusCode)
+                {
+                    
+                }
+            }
+
+            return RedirectToAction("Index", "Dashboard");
+        }
+
+        public ActionResult loadAssets()
         {
             var model = new DasboardViewModel();
 
@@ -81,17 +130,17 @@ namespace CSE_5320.Controllers
             var result_os = new List<string>();
             var result_memory = new List<string>();
 
-            foreach (var c in model.Cpu)
+            foreach (var c in model.CpuData)
             {
                 result_cpu.Add(c.Name);
             }
 
-            foreach (var o in model.Os)
+            foreach (var o in model.OsData)
             {
                 result_os.Add(o.Name);
             }
 
-            foreach (var m in model.Memory)
+            foreach (var m in model.MemoryData)
             {
                 result_memory.Add(m.Name);
             }

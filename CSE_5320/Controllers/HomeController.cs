@@ -178,13 +178,6 @@ namespace CSE_5320.Controllers
                         model.OsName = request.Asset.Computer.Os.Name;
                         model.SerialNumber = request.Asset.Computer.SerialNumber;
 
-                        if (request.Asset.Computer.TechnicalContact.HasValue)
-                        {
-                            model.TechnicalContact = request.Asset.Computer.Technical.Name;
-                        }
-
-                        model.WarrantyStatus = request.Asset.Computer.Status.Name;
-
                         if (request.statusId != 5)
                         {
                             model.View = false;
@@ -201,11 +194,6 @@ namespace CSE_5320.Controllers
                         model.Memory = request.Asset.Software.Memory.Name;
                         model.OsName = request.Asset.Software.Os.Name;
                         model.SerialNumber = request.Asset.Software.SerialNumber;
-
-                        if (request.Asset.Software.TechnicalContact.HasValue)
-                        {
-                            model.TechnicalContact = request.Asset.Software.Technical.Name;
-                        }
 
                         model.WarrantyStatus = request.Asset.Software.Status.Name;
 
@@ -350,7 +338,6 @@ namespace CSE_5320.Controllers
                                 d.OsName = r.Computer.Os.Name;
                                 d.SerialNumber = r.Computer.SerialNumber;
 
-                                d.WarrantyStatus = r.Computer.Status.Name;
                             }
                             else if (r.SoftwareId.HasValue)
                             {
