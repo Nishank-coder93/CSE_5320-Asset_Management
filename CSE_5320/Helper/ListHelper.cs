@@ -215,7 +215,6 @@ namespace CSE_5320.Helper
             s1.OsId = 1;
             s1.CpuId = 1;
             s1.CategoryId = 2;
-            s1.ExpiryDate = null;
             result.Add(s1);
 
 

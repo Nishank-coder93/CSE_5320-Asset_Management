@@ -20,6 +20,8 @@ namespace CSE_5320.Models.Dashboard
 
         public bool SuccessMessage { get; set; }
 
+        public bool EditSuccessMessage { get; set; }
+
         public bool DeleteSuccessMessage { get; set; }
 
     }

@@ -50,6 +50,12 @@ namespace CSE_5320.Controllers
                 model.SuccessMessage = true;
             }
 
+            if (TempData["EditSuccess"] != null && bool.Parse(TempData["EditSuccess"].ToString()) == true)
+            {
+                model.EditSuccessMessage = true;
+            }
+           
+
             return View(model);
         }
 
@@ -71,12 +77,6 @@ namespace CSE_5320.Controllers
                 parameters["CPU"] = model.CPU;
                 parameters["OS"] = model.OS;
                 parameters["Memory"] = model.Memory;
-                parameters["Date"] = null;
-                if (model.ExpirationDateStatus)
-                {
-                    parameters["Date"] = model.ExpirationDate;
-                }
-
                 parameters["SerialNumber"] = model.SerialNumber;
 
                 switch (model.Category)
@@ -95,6 +95,39 @@ namespace CSE_5320.Controllers
                 if (Res.IsSuccessStatusCode)
                 {
                     TempData["Success"] = true;
+                }
+            }
+
+            return RedirectToAction("Index", "Dashboard");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> EditAsset(EditAssetModel model)
+        {
+            var Baseurl = getURL();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/editAsset";
+
+                var parameters = new Dictionary<string, string>();
+
+                parameters["Id"] = model.AssetId.ToString();
+                parameters["SerialNumber"] = model.SerialNumber;
+                parameters["CPU"] = model.Cpu;
+                parameters["OS"] = model.OS;
+                parameters["Memory"] = model.Memory;
+
+                var content = new StringContent(JsonConvert.SerializeObject(parameters), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage Res = await client.PostAsync(apiURL, content);
+                if (Res.IsSuccessStatusCode)
+                {
+                    TempData["EditSuccess"] = true;
                 }
             }
 
@@ -167,7 +200,7 @@ namespace CSE_5320.Controllers
 
             foreach (var r in result_model)
             {
-                if(r.StatusId != 2)
+                if (r.StatusId != 2)
                 {
                     var asset = new AssetInformation();
                     asset.AssetId = r.Id;
@@ -175,7 +208,7 @@ namespace CSE_5320.Controllers
 
                     model.AssetInformation.Add(asset);
                 }
-                
+
             }
 
             return PartialView("PartialViews/_assetList", model);
@@ -232,6 +265,98 @@ namespace CSE_5320.Controllers
             return Json(new
             {
                 LocationModal = RenderRazorViewToString("PartialViews/_newAssetModal", model)
+            },
+              JsonRequestBehavior.AllowGet
+            );
+        }
+
+        public async Task<ActionResult> editAsset(string Id)
+        {
+            var model = new EditAssetModel();
+            var Baseurl = getURL();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/getNewAsset";
+
+                HttpResponseMessage Res = await client.GetAsync(apiURL);
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = await Res.Content.ReadAsStringAsync();
+
+                    var response = new ResponseHelper();
+                    var output = response.fixResult(result);
+
+                    model = JsonConvert.DeserializeObject<EditAssetModel>(output);
+                }
+            }
+
+            var result_cpu = new List<string>();
+            var result_os = new List<string>();
+            var result_memory = new List<string>();
+
+            foreach (var c in model.CpuData)
+            {
+                result_cpu.Add(c.Name);
+            }
+
+            foreach (var o in model.OsData)
+            {
+                result_os.Add(o.Name);
+            }
+
+            foreach (var m in model.MemoryData)
+            {
+                result_memory.Add(m.Name);
+            }
+
+            model.CpuList = JsonConvert.SerializeObject(result_cpu);
+            model.OsList = JsonConvert.SerializeObject(result_os);
+            model.MemoryList = JsonConvert.SerializeObject(result_memory);
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/getAssetById/" + Id;
+
+                HttpResponseMessage Res = await client.GetAsync(apiURL);
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = await Res.Content.ReadAsStringAsync();
+
+                    var response = new ResponseHelper();
+                    var output = response.fixResult(result);
+                    var asset = JsonConvert.DeserializeObject<Asset>(output);
+
+                    model.AssetId = asset.Id;
+                    model.AssetName = asset.Name;
+                    if (asset.ComputerId.HasValue)
+                    {
+                        model.SerialNumber = asset.Computer.SerialNumber;
+                        model.Cpu = asset.Computer.Cpu.Name;
+                        model.OS = asset.Computer.Os.Name;
+                        model.Memory = asset.Computer.Memory.Name;
+                    }
+                    else
+                    {
+                        model.SerialNumber = asset.Software.SerialNumber;
+                        model.Cpu = asset.Software.Cpu.Name;
+                        model.OS = asset.Software.Os.Name;
+                        model.Memory = asset.Software.Memory.Name;
+                    }
+                }
+            }
+
+            return Json(new
+            {
+                LocationModal = RenderRazorViewToString("PartialViews/_assetEdit", model)
             },
               JsonRequestBehavior.AllowGet
             );

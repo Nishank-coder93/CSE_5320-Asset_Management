@@ -47,27 +47,27 @@
                             <div id="additional_software_details">
                                 <div class="form-group">
                                     <label for="SerialNumber">Serial number</label>
-                                    @Html.TextBoxFor(l => l.SerialNumber, new { @id = "SerialNumber", @class = "form-control", @placeholder = "Enter the Key / Serial Number" })
+                                    @Html.TextBoxFor(l => l.SerialNumber, new { @id = "SerialNumber", @class = "form-control", @placeholder = "Enter the Activation Key" })
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="expirationDate">Does it Expire? : </label>
-                                    <div id="expirationDate" class="btn-group btn-group-toggle" data-toggle="buttons">
-                                        <label class="btn btn-secondary" onclick="showDate()">
-                                            Yes
-                                            @Html.RadioButtonFor(m => m.ExpirationDateStatus, true, new { @id = "Yes", @autocomplete = "off" })
-                                        </label>
-                                        <label class="btn btn-secondary" onclick="hideDate()">
-                                            No
-                                            @Html.RadioButtonFor(m => m.ExpirationDateStatus, false, new { @id = "No", @autocomplete = "off" })
-                                        </label>
+                                @*<div class="form-group">
+                                        <label for="expirationDate">Does it Expire? : </label>
+                                        <div id="expirationDate" class="btn-group btn-group-toggle" data-toggle="buttons">
+                                            <label class="btn btn-secondary" onclick="showDate()">
+                                                Yes
+                                                @Html.RadioButtonFor(m => m.ExpirationDateStatus, true, new { @id = "Yes", @autocomplete = "off" })
+                                            </label>
+                                            <label class="btn btn-secondary" onclick="hideDate()">
+                                                No
+                                                @Html.RadioButtonFor(m => m.ExpirationDateStatus, false, new { @id = "No", @autocomplete = "off" })
+                                            </label>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="form-group" id="expirationDateDiv">
-                                    <label for="ExpirationDate">Expiration Date</label>
-                                    @Html.TextBoxFor(model => model.ExpirationDate, new { @id = "ExpirationDate", @type = "date", @class = "form-control" })
-                                </div>
+                                    <div class="form-group" id="expirationDateDiv">
+                                        <label for="ExpirationDate">Expiration Date</label>
+                                        @Html.TextBoxFor(model => model.ExpirationDate, new { @id = "ExpirationDate", @type = "date", @class = "form-control" })
+                                    </div>*@
                             </div>
 
                         </div>
@@ -92,13 +92,14 @@
                         </div>
                     </div>
                     <hr />
-                    <button class="btn btn-lg btn-outline-dark btn-block" type="submit">Create Asset</button>
+
+                    <div class="float-right">
+                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-outline-success" type="submit">Create Asset</button>
+                    </div>
+
                 }
 
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

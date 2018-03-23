@@ -55,12 +55,18 @@
         <div class="col-md-12">
             <div class="bg-white rounded box-shadow">
                 <div class="card-body">
-                    <button type="button" class="btn btn-outline-primary float-right" onclick="addAsset()">Add an asset</button>
 
                     @if (Model.SuccessMessage)
                     {
-                        <div class="alert alert-success" role="alert">
+                        <div class="alert alert-success" id="assetSuccess" role="alert">
                             Asset successfully added
+                        </div>
+                    }
+
+                    @if (Model.EditSuccessMessage)
+                    {
+                        <div class="alert alert-success" id="assetEditSuccess" role="alert">
+                            Asset successfully Edited
                         </div>
                     }
 
@@ -68,6 +74,7 @@
                         Asset successfully deleted
                     </div>
 
+                    <button type="button" class="btn btn-outline-primary float-right" onclick="addAsset()">Add an asset</button>
                     <h3 class="card-title">List of Assets</h3>
 
                     <div id="assetList_loader" class="loader"></div>
@@ -81,7 +88,7 @@
 <script>
 $(document).ready(function () {
     loadData();
-    $("#assetDelete").hide(); 
+    $("#assetDelete").hide();
 });
 
 
@@ -103,7 +110,7 @@ function loadData() {
     }
 
     function addAsset() {
-        $("#assetDelete").hide(); 
+        $("#assetDelete").hide();
 
         var src = '@Url.Action("newAsset", "Dashboard", new { area = "" })';
 
@@ -122,8 +129,28 @@ function loadData() {
       });
     }
 
-        function loadInfo(Id) {
-              var src = '@Url.Action("Assetinfo", "Dashboard", new { area = "" })'+ '?Id='+Id;
+    function editAsset(Id) {
+        $("#assetDelete").hide();
+
+        var src = '@Url.Action("editAsset", "Dashboard", new { area = "" })' + '?Id=' + Id;
+
+      $.ajax({
+        type: "GET",
+        url: src,
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            $("#editAssetModalContainer").html(data.LocationModal);
+            $('#editAssetModal').modal('show');
+        },
+        Error: function (data) {
+            $('#editAssetModal').modal('hide');
+        }
+      });
+    }
+
+    function loadInfo(Id) {
+        var src = '@Url.Action("Assetinfo", "Dashboard", new { area = "" })'+ '?Id='+Id;
 
               $.ajax({
                 type: "GET",
@@ -150,7 +177,9 @@ function loadData() {
                     url: src,
                     dataType: "json",
                     contentType: "application/json; charset=utf-8",
-                    success: function (data) {
+                    success: function (data) { 
+                        $("#assetEditSuccess").hide();
+                        $("#assetSuccess").hide();
                         $("#assetDelete").show();
                         loadData();
                     },
@@ -166,3 +195,4 @@ function loadData() {
 
 <div id="assetModalContainer"></div>
 <div id="newAssetModalContainer"></div>
+<div id="editAssetModalContainer"></div>

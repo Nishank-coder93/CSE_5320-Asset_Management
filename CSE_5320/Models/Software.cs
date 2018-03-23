@@ -27,8 +27,6 @@ namespace CSE_5320.Models
         [ForeignKey("Cpu")]
         public int CpuId { get; set; }
 
-        public DateTime? ExpiryDate { get; set; }
-
         public virtual Category Category { get; set; }
 
         public virtual User Assigned { get; set; }

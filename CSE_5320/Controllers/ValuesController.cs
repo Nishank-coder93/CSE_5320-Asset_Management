@@ -191,8 +191,6 @@ namespace CSE_5320.Controllers
             var memoryId = 0;
             int? computerId = null;
             int? softwareId = null;
-
-            DateTime? expiryDate = null;
             var serialNumber = string.Empty;
 
             foreach (var r in request_parse)
@@ -211,7 +209,7 @@ namespace CSE_5320.Controllers
                         else
                         {
                             var newCpu = new Cpu();
-                            newCpu.Name = r.Key;
+                            newCpu.Name = r.Value;
                             db.Cpu.Add(newCpu);
                             db.SaveChanges();
 
@@ -227,7 +225,7 @@ namespace CSE_5320.Controllers
                         else
                         {
                             var newOs = new Os();
-                            newOs.Name = r.Key;
+                            newOs.Name = r.Value;
                             db.Os.Add(newOs);
                             db.SaveChanges();
 
@@ -243,17 +241,11 @@ namespace CSE_5320.Controllers
                         else
                         {
                             var newMemory = new Memory();
-                            newMemory.Name = r.Key;
+                            newMemory.Name = r.Value;
                             db.Memory.Add(newMemory);
                             db.SaveChanges();
 
                             memoryId = newMemory.Id;
-                        }
-                        break;
-                    case "Date":
-                        if (r.Value != null)
-                        {
-                            expiryDate = DateTime.Parse(r.Key);
                         }
                         break;
                     case "SerialNumber":
@@ -282,7 +274,6 @@ namespace CSE_5320.Controllers
                                 Software.OsId = osId;
                                 Software.CpuId = cpuId;
                                 Software.CategoryId = 2;
-                                Software.ExpiryDate = expiryDate;
 
                                 db.Software.Add(Software);
                                 db.SaveChanges();
@@ -302,6 +293,117 @@ namespace CSE_5320.Controllers
             db.SaveChanges();
 
             return true;
+        }
+
+        [System.Web.Mvc.HttpPost]
+        public bool editAsset()
+        {
+            var request = Request.Content.ReadAsStringAsync().Result;
+            var request_parse = JsonConvert.DeserializeObject<Dictionary<string, string>>(request);
+
+            var db = new Context();
+            var asset = new Asset();
+
+            var cpuId = 0;
+            var osId = 0;
+            var memoryId = 0;
+            var serialNumber = string.Empty;
+            var assetId = 0;
+
+            foreach (var r in request_parse)
+            {
+                switch (r.Key)
+                {
+                    case "Id":
+                        assetId = int.Parse(r.Value);
+                        break;
+                    case "CPU":
+                        var cpu = db.Cpu.Where(x => x.Name == r.Key).FirstOrDefault();
+                        if (cpu != null)
+                        {
+                            cpuId = cpu.Id;
+                        }
+                        else
+                        {
+                            var newCpu = new Cpu();
+                            newCpu.Name = r.Value;
+                            db.Cpu.Add(newCpu);
+                            db.SaveChanges();
+
+                            cpuId = newCpu.Id;
+                        }
+                        break;
+                    case "OS":
+                        var os = db.Os.Where(x => x.Name == r.Key).FirstOrDefault();
+                        if (os != null)
+                        {
+                            osId = os.Id;
+                        }
+                        else
+                        {
+                            var newOs = new Os();
+                            newOs.Name = r.Value;
+                            db.Os.Add(newOs);
+                            db.SaveChanges();
+
+                            osId = newOs.Id;
+                        }
+                        break;
+                    case "Memory":
+                        var memory = db.Memory.Where(x => x.Name == r.Key).FirstOrDefault();
+                        if (memory != null)
+                        {
+                            memoryId = memory.Id;
+                        }
+                        else
+                        {
+                            var newMemory = new Memory();
+                            newMemory.Name = r.Value;
+                            db.Memory.Add(newMemory);
+                            db.SaveChanges();
+
+                            memoryId = newMemory.Id;
+                        }
+                        break;
+                    case "SerialNumber":
+                        serialNumber = r.Value;
+                        break;
+                }
+            }
+
+            var editAsset = db.Assets.Where(x => x.Id == assetId).FirstOrDefault();
+            if (editAsset != null)
+            {
+                if (editAsset.ComputerId.HasValue)
+                {
+                    var editComputer = db.Computer.Where(x => x.Id == editAsset.ComputerId.Value).FirstOrDefault();
+                    if(editComputer != null)
+                    {
+                        editComputer.CpuId = cpuId;
+                        editComputer.OsId = osId;
+                        editComputer.SerialNumber = serialNumber;
+                        editComputer.MemoryId = memoryId;
+                    }
+                }
+                else
+                {
+                    var editSoftware = db.Software.Where(x => x.Id == editAsset.SoftwareId.Value).FirstOrDefault();
+                    if (editSoftware != null)
+                    {
+                        editSoftware.CpuId = cpuId;
+                        editSoftware.OsId = osId;
+                        editSoftware.SerialNumber = serialNumber;
+                        editSoftware.MemoryId = memoryId;
+                    }
+                }
+
+                db.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         [System.Web.Http.HttpPost]
