@@ -216,9 +216,8 @@ namespace CSE_5320.Controllers
                     {
                         model.AssetType = "Computer";
                         model.CpuName = request.Asset.Computer.Cpu.Name;
-                        model.CpuVersion = request.Asset.Computer.Cpu.Version;
                         model.Memory = request.Asset.Computer.Memory.Name;
-                        model.OsName = request.Asset.Computer.Os.Name + " " + request.Asset.Computer.Os.Version;
+                        model.OsName = request.Asset.Computer.Os.Name;
                         model.SerialNumber = request.Asset.Computer.SerialNumber;
 
                         if (request.Asset.Computer.TechnicalContact.HasValue)
@@ -241,9 +240,8 @@ namespace CSE_5320.Controllers
                     {
                         model.AssetType = "Software";
                         model.CpuName = request.Asset.Software.Cpu.Name;
-                        model.CpuVersion = request.Asset.Software.Cpu.Version;
                         model.Memory = request.Asset.Software.Memory.Name;
-                        model.OsName = request.Asset.Software.Os.Name + " " + request.Asset.Software.Os.Version;
+                        model.OsName = request.Asset.Software.Os.Name;
                         model.SerialNumber = request.Asset.Software.SerialNumber;
 
                         if (request.Asset.Software.TechnicalContact.HasValue)

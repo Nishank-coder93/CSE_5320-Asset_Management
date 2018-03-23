@@ -7,6 +7,6 @@ namespace CSE_5320.Models
 {
     public class Cpu : Base
     {
-        public string Version { get; set; }
+
     }
 }

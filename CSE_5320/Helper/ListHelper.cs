@@ -100,14 +100,12 @@ namespace CSE_5320.Helper
 
             var os_1 = new Os();
             os_1.Id = 1;
-            os_1.Name = "Windows";
-            os_1.Version = "10";
+            os_1.Name = "Windows 10";
             result.Add(os_1);
 
             var os_2 = new Os();
             os_2.Id = 2;
-            os_2.Name = "Mac";
-            os_2.Version = "X";
+            os_2.Name = "Mac X";
             result.Add(os_2);
 
             return result;
@@ -119,20 +117,17 @@ namespace CSE_5320.Helper
 
             var cpu_1 = new Cpu();
             cpu_1.Id = 1;
-            cpu_1.Name = "Intel";
-            cpu_1.Version = "Core i3";
+            cpu_1.Name = "Intel Core i3";
             result.Add(cpu_1);
 
             var cpu_2 = new Cpu();
             cpu_2.Id = 2;
-            cpu_2.Name = "Intel";
-            cpu_2.Version = "Core i5";
+            cpu_2.Name = "Intel Core i5";
             result.Add(cpu_2);
 
             var cpu_3 = new Cpu();
             cpu_3.Id = 3;
-            cpu_3.Name = "Intel";
-            cpu_3.Version = "Core i7";
+            cpu_3.Name = "Intel Core i7";
             result.Add(cpu_3);
 
             return result;

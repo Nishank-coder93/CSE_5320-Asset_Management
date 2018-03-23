@@ -217,6 +217,7 @@
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\Cpu.cs" />
     <Compile Include="Models\Dashboard\DasboardViewModel.cs" />
+    <Compile Include="Models\Dashboard\NewAssetModel.cs" />
     <Compile Include="Models\Department.cs" />
     <Compile Include="Models\Error\ErrorModel.cs" />
     <Compile Include="Models\Home\HomeModel.cs" />
@@ -363,8 +364,8 @@
     <Content Include="Views\Home\PartialViews\_requestModal.cshtml" />
     <Content Include="Scripts\jquery.dataTables.js" />
     <Content Include="Views\Home\PartialViews\_assetModal.cshtml" />
-    <Content Include="Views\Home\PartialViews\_assetData - Copy.cshtml" />
     <Content Include="Views\Dashboard\PartialViews\_assetList.cshtml" />
+    <Content Include="Views\Dashboard\PartialViews\_newAssetModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

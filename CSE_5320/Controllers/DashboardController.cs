@@ -52,6 +52,62 @@ namespace CSE_5320.Controllers
             return PartialView("PartialViews/_assetList", model);
         }
 
+        public async Task<ActionResult> newAsset()
+        {
+            var model = new NewAssetModel();
+            var Baseurl = getURL();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/getNewAsset";
+
+                HttpResponseMessage Res = await client.GetAsync(apiURL);
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = await Res.Content.ReadAsStringAsync();
+
+                    var response = new ResponseHelper();
+                    var output = response.fixResult(result);
+
+                    model = JsonConvert.DeserializeObject<NewAssetModel>(output);
+                }
+            }
+
+            var result_cpu = new List<string>();
+            var result_os = new List<string>();
+            var result_memory = new List<string>();
+
+            foreach (var c in model.Cpu)
+            {
+                result_cpu.Add(c.Name);
+            }
+
+            foreach (var o in model.Os)
+            {
+                result_os.Add(o.Name);
+            }
+
+            foreach (var m in model.Memory)
+            {
+                result_memory.Add(m.Name);
+            }
+
+            model.CpuList = JsonConvert.SerializeObject(result_cpu);
+            model.OsList = JsonConvert.SerializeObject(result_os);
+            model.MemoryList = JsonConvert.SerializeObject(result_memory);
+
+            return Json(new
+            {
+                LocationModal = RenderRazorViewToString("PartialViews/_newAssetModal", model)
+            },
+              JsonRequestBehavior.AllowGet
+            );
+        }
+
         public string getURL()
         {
             var result = Request.Url.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped);

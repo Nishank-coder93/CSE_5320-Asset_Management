@@ -55,7 +55,9 @@
         <div class="col-md-12">
             <div class="bg-white rounded box-shadow">
                 <div class="card-body">
-                    <h5 class="card-title">List of Assets</h5>
+                    <button type="button" class="btn btn-outline-primary float-right" onclick="addAsset()">Add an asset</button>
+                    <h3 class="card-title">List of Assets</h3>
+                    <hr />
                     <div id="assetList_loader" class="loader"></div>
                     <div id="assetList"></div>
                 </div>
@@ -81,9 +83,29 @@ function loadData() {
         cache: false,
         data: {}
     }).done(function (result) {
-        $('#assetList').html(result); 
+        $('#assetList').html(result);
         $("#assetList_loader").hide();
         $("#assetList").show();
     });
-}
+    }
+
+    function addAsset() {
+        var src = '@Url.Action("newAsset", "Dashboard", new { area = "" })';
+
+      $.ajax({
+        type: "GET",
+        url: src,
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            $("#newAssetModalContainer").html(data.LocationModal);
+            $('#newAssetModal').modal('show');
+        },
+        Error: function (data) {
+            $('#newAssetModal').modal('hide');
+        }
+      });
+    }
 </script>
+
+<div id="newAssetModalContainer"></div>

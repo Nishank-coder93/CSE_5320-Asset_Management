@@ -242,6 +242,24 @@ namespace CSE_5320.Controllers
 
             db.SaveChanges();
         }
-        
+
+        //-----------API for a new Asset------------------
+
+        public string getNewAsset()
+        {
+            var result = new NewAssetModel();
+
+            var db = new Context();
+
+            result.Cpu = db.Cpu.ToList();
+            result.Os = db.Os.ToList();
+            result.Memory = db.Memory.ToList();
+
+            var response = JsonConvert.SerializeObject(result);
+
+            return response;
+        }
+
+
     }
 }
