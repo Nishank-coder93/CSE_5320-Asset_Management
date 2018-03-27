@@ -327,6 +327,7 @@
     <Content Include="Views\Dashboard\PartialViews\_data.cshtml" />
     <Content Include="Views\Dashboard\PartialViews\_updateQuantity.cshtml" />
     <Content Include="Views\Home\PartialViews\_report.cshtml" />
+    <Content Include="Views\Dashboard\PartialViews\_missingQuantity.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

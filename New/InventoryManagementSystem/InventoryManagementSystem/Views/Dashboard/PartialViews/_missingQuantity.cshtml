@@ -1,0 +1,30 @@
+﻿@model InventoryManagementSystem.Models.ViewModels.DashboardViewModel
+
+<div class="modal" id="missingModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    How many resources are missing? 
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="Quantity">Quantity</label>
+                        <input type="text" class="form-control" id="quantity_missing" aria-describedby="quantity" placeholder="Enter the Quantity">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="float-right">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-outline-success" onclick="markAsMissing(@Model.Id)">Mark as missing</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

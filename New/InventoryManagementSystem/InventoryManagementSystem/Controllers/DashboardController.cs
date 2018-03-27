@@ -129,6 +129,18 @@ namespace InventoryManagementSystem.Controllers
             );
         }
 
+        public async Task<ActionResult> MissingQuantity(string Id)
+        {
+            var model = new DashboardViewModel();
+            model.Id = int.Parse(Id);
+            return Json(new
+            {
+                LocationModal = RenderRazorViewToString("PartialViews/_missingQuantity", model)
+            },
+              JsonRequestBehavior.AllowGet
+            );
+        }
+
         [HttpPost]
         public async Task<JsonResult> Update(string data)
         {
@@ -226,9 +238,28 @@ namespace InventoryManagementSystem.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> MissingQuantity(string Id)
+        public async Task<JsonResult> MarkAsMissing(string data)
         {
             var result = false;
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            var obj = serializer.Deserialize<Dictionary<string, object>>(data);
+
+            var id = string.Empty;
+            var quantity = string.Empty;
+
+            foreach (var o in obj)
+            {
+                switch (o.Key)
+                {
+                    case "Id":
+                        id = o.Value.ToString();
+                        break;
+                    case "quantity":
+                        quantity = o.Value.ToString();
+                        break;
+                }
+            }
 
             var Baseurl = GetURL();
             using (var client = new HttpClient())
@@ -240,7 +271,8 @@ namespace InventoryManagementSystem.Controllers
                 var apiURL = "/api/Values/MissingResource";
 
                 var parameters = new Dictionary<string, string>();
-                parameters["Id"] = Id;
+                parameters["Id"] = id;
+                parameters["Quantity"] = quantity;
                 parameters["UserId"] = Session["LoggedInUserId"].ToString();
 
                 var content = new StringContent(JsonConvert.SerializeObject(parameters), Encoding.UTF8, "application/json");

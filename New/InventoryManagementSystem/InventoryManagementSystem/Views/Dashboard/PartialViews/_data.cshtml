@@ -1,7 +1,7 @@
 ﻿@model InventoryManagementSystem.Models.ViewModels.DashboardViewModel
 @{
     ViewBag.Title = "_data";
-} 
+}
 
 @if (Model.FacilityReport.Count > 0)
 {
@@ -62,11 +62,12 @@ else
 }
 
 <div id="updateModalContainer"></div>
+<div id="missingModalContainer"></div>
 
 <script>
 
     $(document).ready(function () {
-        
+
     });
 
     function updateQuantity(Id) {
@@ -83,6 +84,24 @@ else
             },
             Error: function (data) {
                 $('#updateModal').modal('hide');
+            }
+        });
+    }
+
+    function missingQuantity(Id) {
+        var src = "@Url.Action("MissingQuantity", "Dashboard", new { area = "" })"+"?Id="+Id;
+
+        $.ajax({
+            type: "GET",
+            url: src,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#missingModalContainer").html(data.LocationModal);
+                $('#missingModal').modal('show');
+            },
+            Error: function (data) {
+                $('#missingModal').modal('hide');
             }
         });
     }
@@ -108,25 +127,27 @@ else
         }
     }
 
-    function missingQuantity(Id)
+    function markAsMissing(id)
     {
-        var result = confirm("Are you sure you want mark the asset as missing?");
-        if (result)
-        {
-            var src = "@Url.Action("MissingQuantity", "Dashboard", new { area = "" })"+"?Id="+Id;
+        var quantity = document.getElementById("quantity_missing").value; 
 
-            $.ajax({
-                type: "POST",
-                url: src,
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                success: function (data) {
-                    loadData();
-                },
-                Error: function (data) {
+        var data = { Id: id, quantity: quantity}
+        var send_to_controller = JSON.stringify(data);
+        var src = '@Url.Action("MarkAsMissing", "Dashboard", new { area = "" })' + '?data=' + send_to_controller;
 
-                }
-            });
-        }
+        $.ajax({
+            url: src,
+            type: "post",
+            data: send_to_controller,
+            dataType: "json",
+            contentType: "application/json",
+            success: function (data) {
+                loadData();
+                $('#missingModal').modal('hide');
+            },
+            error: function () {
+                $('#missingModal').modal('hide');
+            }
+        });
     }
 </script>

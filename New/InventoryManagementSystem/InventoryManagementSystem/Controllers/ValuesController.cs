@@ -638,6 +638,7 @@ namespace InventoryManagementSystem.Controllers
             var name = string.Empty;
             var resourceId = 0;
             var UserId = 0;
+            var Quantity = 0;
 
             foreach (var r in request_parse)
             {
@@ -645,6 +646,10 @@ namespace InventoryManagementSystem.Controllers
                 {
                     case "Id":
                         resourceId = int.Parse(r.Value);
+                        break;
+
+                    case "Quantity":
+                        Quantity = int.Parse(r.Value);
                         break;
 
                     case "UserId":
@@ -658,7 +663,7 @@ namespace InventoryManagementSystem.Controllers
             {
                 res_report.Verify = false;
                 res_report.Missing = true;
-
+                res_report.MissingQuantity = Quantity;
                 if (UserId > 0)
                 {
                     res_report.UpdatedBy = UserId;
