@@ -317,6 +317,7 @@ namespace InventoryManagementSystem.Controllers
                     return Json("'Success':'false'");
             }
         }
+
         [HttpPost]
         public async Task<JsonResult> CreateFacility(string data)
         {

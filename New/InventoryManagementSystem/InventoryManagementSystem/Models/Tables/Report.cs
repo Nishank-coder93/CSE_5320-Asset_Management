@@ -20,6 +20,11 @@ namespace InventoryManagementSystem.Models.Tables
 
         public bool Missing { get; set; }
 
+        public int? QuantityChange { get; set; }
+
+        public int UpdatedBy { get; set; }
+
         public Resource Resource { get; set; }
+        
     }
 }

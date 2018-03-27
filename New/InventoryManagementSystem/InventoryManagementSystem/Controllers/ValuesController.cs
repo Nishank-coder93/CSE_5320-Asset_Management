@@ -191,9 +191,28 @@ namespace InventoryManagementSystem.Controllers
         {
             var FacilityId = int.Parse(Id);
             var db = new Context();
+
+            var model = new List<ResourceReport>();
             var result = db.Report.Where(x => x.Resource.FacilityId == FacilityId).ToList();
 
-            var response = JsonConvert.SerializeObject(result);
+            foreach(var r in result)
+            {
+                var resource = new ResourceReport(); 
+                resource.Verified = r.Verify;
+                resource.Missing = r.Missing;
+                resource.ResourceId = r.ResourceId;
+
+                var res = db.Resource.Where(x=>x.Id == r.ResourceId).FirstOrDefault();
+                if (res != null)
+                {
+                    resource.Quantity = res.Quantity;
+                    resource.ResourceName = res.Name;
+                }
+
+                model.Add(resource);
+            }
+
+            var response = JsonConvert.SerializeObject(model);
             return response;
         }
 
@@ -510,9 +529,7 @@ namespace InventoryManagementSystem.Controllers
             var name = string.Empty;
             var quantity = string.Empty;
             var resourceId = 0;
-
-            var facilities = new ArrayList();
-            var roles = new ArrayList();
+            var UserId = 0;
 
             foreach (var r in request_parse)
             {
@@ -527,13 +544,27 @@ namespace InventoryManagementSystem.Controllers
                     case "quantity":
                         quantity = r.Value;
                         break;
+                    case "UserId":
+                        UserId = int.Parse(r.Value);
+                        break;
                 }
             }
 
             var res = db.Resource.Where(x => x.Id == resourceId).FirstOrDefault();
+            int? difference = null;
+
             if (res != null)
             {
-                res.Name = name;
+                if (!string.IsNullOrEmpty(name))
+                {
+                    res.Name = name;
+                }
+
+                var oldQuantity = res.Quantity;
+                var newQuantity = int.Parse(quantity);
+
+                difference = newQuantity - oldQuantity; 
+
                 res.Quantity = int.Parse(quantity);
             }
 
@@ -543,6 +574,95 @@ namespace InventoryManagementSystem.Controllers
             if (res_report != null)
             {
                 res_report.Verify = false;
+                if (UserId > 0)
+                {
+                    res_report.QuantityChange = difference;
+                    res_report.UpdatedBy = UserId;
+                }
+            }
+            db.SaveChanges();
+
+            return true;
+        }
+
+        [HttpPost]
+        public bool ConfirmResource()
+        {
+            var request = Request.Content.ReadAsStringAsync().Result;
+            var request_parse = JsonConvert.DeserializeObject<Dictionary<string, string>>(request);
+
+            var db = new Context();
+
+            var name = string.Empty;
+            var resourceId = 0;
+            var UserId = 0;
+
+            foreach (var r in request_parse)
+            {
+                switch (r.Key)
+                {
+                    case "Id":
+                        resourceId = int.Parse(r.Value);
+                        break;
+
+                    case "UserId":
+                        UserId = int.Parse(r.Value);
+                        break;
+                }
+            }
+
+            var res_report = db.Report.Where(x => x.ResourceId == resourceId).FirstOrDefault();
+            if (res_report != null)
+            {
+                res_report.Verify = true;
+                res_report.Missing = false;
+
+                if (UserId > 0)
+                {
+                    res_report.UpdatedBy = UserId;
+                }
+            }
+            db.SaveChanges();
+
+            return true;
+        }
+
+        [HttpPost]
+        public bool MissingResource()
+        {
+            var request = Request.Content.ReadAsStringAsync().Result;
+            var request_parse = JsonConvert.DeserializeObject<Dictionary<string, string>>(request);
+
+            var db = new Context();
+
+            var name = string.Empty;
+            var resourceId = 0;
+            var UserId = 0;
+
+            foreach (var r in request_parse)
+            {
+                switch (r.Key)
+                {
+                    case "Id":
+                        resourceId = int.Parse(r.Value);
+                        break;
+
+                    case "UserId":
+                        UserId = int.Parse(r.Value);
+                        break;
+                }
+            }
+
+            var res_report = db.Report.Where(x => x.ResourceId == resourceId).FirstOrDefault();
+            if (res_report != null)
+            {
+                res_report.Verify = false;
+                res_report.Missing = true;
+
+                if (UserId > 0)
+                {
+                    res_report.UpdatedBy = UserId;
+                }
             }
             db.SaveChanges();
 

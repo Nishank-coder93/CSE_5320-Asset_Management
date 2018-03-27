@@ -325,9 +325,12 @@
     <Content Include="Views\Home\PartialViews\Resource_Management\_editResourceModal.cshtml" />
     <Content Include="Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Dashboard\PartialViews\_data.cshtml" />
+    <Content Include="Views\Dashboard\PartialViews\_updateQuantity.cshtml" />
+    <Content Include="Views\Home\PartialViews\_report.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Home\PartialViews\Report\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

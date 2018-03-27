@@ -1,7 +1,132 @@
-﻿
+﻿@model InventoryManagementSystem.Models.ViewModels.DashboardViewModel
 @{
     ViewBag.Title = "_data";
+} 
+
+@if (Model.FacilityReport.Count > 0)
+{
+    foreach (var f in Model.FacilityReport)
+    {
+        <div class="card">
+            <h5 class="card-header">Resources for: @f.FacilityName</h5>
+            <div class="card-body">
+
+                @if (f.ResourceReport.Count > 0)
+                {
+                    <table class="table" style="table-layout : fixed;">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var r in f.ResourceReport)
+                            {
+                                <tr>
+                                    <th scope="row">@r.ResourceName</th>
+                                    <td>@r.Quantity</td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-info" onclick="updateQuantity(@r.ResourceId)">
+                                            Update Quantity
+                                        </button>
+                                        <button type="button" class="btn btn-outline-success" onclick="confirmQuantity(@r.ResourceId)">
+                                            Confirm Quantity
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger" onclick="missingQuantity(@r.ResourceId)">
+                                            Mark as Missing
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-warning" role="alert">
+                        All the resources have been verified
+                    </div>
+                }
+            </div>
+        </div>
+        <br />
+    }
+}
+else
+{
+    <div class="alert alert-warning" role="alert">
+        You are not assigned to any facility as the resource checker
+    </div>
 }
 
-<h2>_data</h2>
+<div id="updateModalContainer"></div>
 
+<script>
+
+    $(document).ready(function () {
+        
+    });
+
+    function updateQuantity(Id) {
+        var src = "@Url.Action("UpdateQuantity", "Dashboard", new { area = "" })"+"?Id="+Id;
+
+        $.ajax({
+            type: "GET",
+            url: src,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#updateModalContainer").html(data.LocationModal);
+                $('#updateModal').modal('show');
+            },
+            Error: function (data) {
+                $('#updateModal').modal('hide');
+            }
+        });
+    }
+
+    function confirmQuantity(Id) {
+        var result = confirm("Are you sure you want to confirm?");
+        if (result)
+        {
+            var src = "@Url.Action("ConfirmQuantity", "Dashboard", new { area = "" })"+"?Id="+Id;
+
+            $.ajax({
+                type: "POST",
+                url: src,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    loadData();
+                },
+                Error: function (data) {
+
+                }
+            });
+        }
+    }
+
+    function missingQuantity(Id)
+    {
+        var result = confirm("Are you sure you want mark the asset as missing?");
+        if (result)
+        {
+            var src = "@Url.Action("MissingQuantity", "Dashboard", new { area = "" })"+"?Id="+Id;
+
+            $.ajax({
+                type: "POST",
+                url: src,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    loadData();
+                },
+                Error: function (data) {
+
+                }
+            });
+        }
+    }
+</script>

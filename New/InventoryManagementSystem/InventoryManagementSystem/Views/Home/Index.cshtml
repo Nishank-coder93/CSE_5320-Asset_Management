@@ -13,10 +13,13 @@
                 <li class="nav-item">
                     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#facilityManagement" role="tab" aria-controls="profile" aria-selected="false">Facility Management</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="report-tab" data-toggle="tab" href="#report" role="tab" aria-controls="report" aria-selected="false">Report</a>
+                </li>
             </ul>
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="userManagement" role="tabpanel" aria-labelledby="home-tab"> 
-                    @Html.Partial("PartialViews/_userManagement", Model) 
+                <div class="tab-pane fade show active" id="userManagement" role="tabpanel" aria-labelledby="home-tab">
+                    @Html.Partial("PartialViews/_userManagement", Model)
                 </div>
 
                 <div class="tab-pane fade" id="facilityManagement" role="tabpanel" aria-labelledby="profile-tab">
@@ -28,7 +31,10 @@
                             @Html.Partial("PartialViews/_resourceManagement", Model)
                         </div>
                     </div>
-                    
+                </div>
+
+                <div class="tab-pane fade show" id="report" role="tabpanel" aria-labelledby="report-tab">
+                    @Html.Partial("PartialViews/_report", Model)
                 </div>
             </div>
         </div>
