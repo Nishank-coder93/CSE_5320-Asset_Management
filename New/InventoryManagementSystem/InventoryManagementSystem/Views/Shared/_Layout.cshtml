@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
 
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
     @Styles.Render("~/Content/dashboard")
     @Scripts.Render("~/bundles/jquery")
-
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 </head>
 <body class="bg-light">
 
@@ -37,8 +36,10 @@
         </nav>
     </div>
 
-    <div style="padding-top:30px">
-        @RenderBody()
+    <div style="padding:30px">
+        <main role="main" class="">
+            @RenderBody()
+        </main>
     </div>
 
     @Scripts.Render("~/bundles/bootstrap")

@@ -133,6 +133,12 @@ namespace InventoryManagementSystem.Controllers
                 db.UserRole.Add(r);
             }
 
+            var facilities = listHelper.FacilityList();
+            foreach (var f in facilities)
+            {
+                db.Facility.Add(f);
+            }
+
             db.SaveChanges();
         }
     }

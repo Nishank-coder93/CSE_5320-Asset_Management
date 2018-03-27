@@ -47,5 +47,27 @@ namespace InventoryManagementSystem.Helpers
 
             return result;
         }
+
+        public List<Facility> FacilityList()
+        {
+            var result = new List<Facility>();
+
+            var facility_1 = new Facility();
+            facility_1.Id = 1;
+            facility_1.Name = "Facility 1";
+            result.Add(facility_1);
+
+            var facility_2 = new Facility();
+            facility_2.Id = 2;
+            facility_2.Name = "Facility 2";
+            result.Add(facility_2);
+
+            var facility_3 = new Facility();
+            facility_3.Id = 3;
+            facility_3.Name = "Facility 3";
+            result.Add(facility_3);
+
+            return result;
+        }
     }
 }

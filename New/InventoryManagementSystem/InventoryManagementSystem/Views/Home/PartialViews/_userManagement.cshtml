@@ -1,0 +1,111 @@
+﻿
+<div style="padding-top:20px">
+
+    <div class="card">
+        <div class="card-header">
+            <button type="button" class="btn btn-outline-primary float-right" onclick="addUser()">Add a new user</button>
+            <h4>Add / Manage users</h4>
+        </div>
+        <div class="card-body">
+            <div id="UmTable_loader" class="loader"></div>
+            <div id="UmTableData"></div>
+        </div>
+    </div>
+</div>
+
+<div id="newUserModalContainer"></div>
+
+<script>
+    var list_facilities = [];
+    $(document).ready(function () {
+        loadUserManagementTable();
+    });
+
+    function intialize() {
+        list_facilities = [];
+        list_roles = [];
+        list_roles.push(1);
+    };
+
+    function createUser() {
+        var name = document.getElementById("name").value;
+        var email = document.getElementById("email").value;
+
+        console.log(list_roles);
+        console.log(list_facilities);
+
+        var data = { name: name, email: email, list_facilities: list_facilities, list_roles: list_roles }
+        var send_to_controller = JSON.stringify(data);
+        var src = '@Url.Action("CreateUser", "Home", new { area = "" })' + '?data=' + send_to_controller;
+
+        $.ajax({
+            url: src,
+            type: "post",
+            data: send_to_controller,
+            dataType: "json",
+            contentType: "application/json",
+            success: function (data) {
+                loadUserManagementTable();
+                $('#newUserModal').modal('hide');
+            },
+            error: function () {
+                $('#newUserModal').modal('hide');
+            }
+        });
+    }
+
+    function Role_List(id) {
+        list_roles = [];
+        list_roles.push(id);
+        console.log(list_roles);
+    }
+
+    function Facility_List(id) {
+        var check = $.inArray(id, list_facilities);
+        if (check == -1) {
+            list_facilities.push(id);
+        }
+        else {
+            list_facilities = list_facilities.filter(item => item !== id)
+        }
+    }
+
+    function loadUserManagementTable() {
+        intialize();
+
+        $("#UmTableData").hide();
+        $("#UmTable_loader").show();
+
+        var src = "@Url.Action("LoadUserManagement", "Home", new { area = "" })";
+
+        $.ajax({
+            url: src,
+            type: 'GET',
+            cache: false,
+            data: {}
+        }).done(function (result) {
+            $('#UmTableData').html(result);
+            $("#UmTable_loader").hide();
+            $("#UmTableData").show();
+         });
+    }
+
+    function addUser() {
+
+        var src = "@Url.Action("NewUser", "Home", new { area = "" })";
+
+        $.ajax({
+            type: "GET",
+            url: src,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#newUserModalContainer").html(data.LocationModal);
+                $('#newUserModal').modal('show');
+            },
+            Error: function (data) {
+                $('#newUserModal').modal('hide');
+            }
+        });
+    }
+</script>

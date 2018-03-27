@@ -66,6 +66,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
@@ -202,6 +203,7 @@
     <Compile Include="Models\Tables\User.cs" />
     <Compile Include="Models\Tables\UserFacility.cs" />
     <Compile Include="Models\Tables\UserRole.cs" />
+    <Compile Include="Models\ViewModels\HomeViewModel.cs" />
     <Compile Include="Models\ViewModels\LoginViewModel.cs" />
     <Compile Include="Models\ViewModels\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -215,6 +217,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\floating-labels.css" />
+    <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\offcanvas.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -305,6 +308,10 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Shared\_LoginLayout.cshtml" />
+    <Content Include="Views\Home\PartialViews\_userManagement.cshtml" />
+    <Content Include="Views\Home\PartialViews\_facilityManagement.cshtml" />
+    <Content Include="Views\Home\PartialViews\User_Management\_data.cshtml" />
+    <Content Include="Views\Home\PartialViews\User_Management\_newUserModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
