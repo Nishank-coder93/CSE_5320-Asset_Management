@@ -1,0 +1,75 @@
+﻿<div style="padding-top:20px">
+    <div id="RmTable_loader" class="loader"></div>
+    <div id="RmTableData">
+        <div class="alert alert-warning" role="alert">
+            Select a Facility to view the associated resources
+        </div>
+    </div>
+</div>
+
+<div id="newResourceModalContainer"></div>
+<div id="editResourceModalContainer"></div>
+
+<script>
+    function editResource(Id) {
+        var src = "@Url.Action("EditResource", "Home", new { area = "" })"+"?Id="+Id;
+
+        $.ajax({
+            type: "GET",
+            url: src,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#editResourceModalContainer").html(data.LocationModal);
+                $('#editResourceModal').modal('show');
+            },
+            Error: function (data) {
+                $('#editResourceModal').modal('hide');
+            }
+        });
+    }
+
+    function createResource(Id) {
+        var name = document.getElementById("name").value;
+        var quantity = document.getElementById("quantity").value;
+        var facilityId = Id;
+
+
+        var data = { name: name, quantity: quantity, facilityId: facilityId}
+        var send_to_controller = JSON.stringify(data);
+        var src = '@Url.Action("CreateResource", "Home", new { area = "" })' + '?data=' + send_to_controller;
+
+        $.ajax({
+            url: src,
+            type: "post",
+            data: send_to_controller,
+            dataType: "json",
+            contentType: "application/json",
+            success: function (data) {
+                viewFacility(facilityId);
+                $('#newResourceModal').modal('hide');
+            },
+            error: function () {
+                $('#newResourceModal').modal('hide');
+            }
+        });
+    }
+
+    function addResource(Id) {
+        var src = "@Url.Action("NewResource", "Home", new { area = "" })"+"?FacilityId="+Id;
+
+        $.ajax({
+            type: "GET",
+            url: src,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#newResourceModalContainer").html(data.LocationModal);
+                $('#newResourceModal').modal('show');
+            },
+            Error: function (data) {
+                $('#newResourceModal').modal('hide');
+            }
+        });
+    }
+</script>

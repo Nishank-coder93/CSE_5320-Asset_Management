@@ -19,7 +19,26 @@
 <script>
     $(document).ready(function () {
         loadFacilityManagementTable();
+        $("#RmTable_loader").hide();
     });
+
+    function viewFacility(Id) {
+        $("#RmTableData").hide();
+        $("#RmTable_loader").show();
+
+        var src = "@Url.Action("LoadResources", "Home", new { area = "" })"+"?FacilityId="+Id;
+
+        $.ajax({
+            url: src,
+            type: 'GET',
+            cache: false,
+            data: {}
+        }).done(function (result) {
+            $('#RmTableData').html(result);
+            $("#RmTable_loader").hide();
+            $("#RmTableData").show();
+         });
+    }
 
     function loadFacilityManagementTable() {
         intialize();

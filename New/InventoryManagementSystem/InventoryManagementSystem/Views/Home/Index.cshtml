@@ -20,7 +20,15 @@
                 </div>
 
                 <div class="tab-pane fade" id="facilityManagement" role="tabpanel" aria-labelledby="profile-tab">
-                    @Html.Partial("PartialViews/_facilityManagement", Model)
+                    <div class="row">
+                        <div class="col-md-6">
+                            @Html.Partial("PartialViews/_facilityManagement", Model)
+                        </div>
+                        <div class="col-md-6">
+                            @Html.Partial("PartialViews/_resourceManagement", Model)
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>

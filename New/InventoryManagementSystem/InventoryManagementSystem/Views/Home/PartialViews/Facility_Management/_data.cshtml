@@ -19,8 +19,14 @@
                     <td scope="row">@d.Name</td>
                     <td>@d.Location</td>
                     <td>
-                        <button type="button" class="btn btn-outline-warning" onclick="editFacility(@d.Id)">
+                        <button type="button" class="btn btn-sm btn-outline-info" onclick="viewFacility(@d.Id)">
+                            View Resources
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-warning" onclick="editFacility(@d.Id)">
                             Edit
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="disableFacility(@d.Id)">
+                            Delete
                         </button>
                     </td>
                 </tr>

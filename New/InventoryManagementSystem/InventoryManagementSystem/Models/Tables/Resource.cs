@@ -11,6 +11,8 @@ namespace InventoryManagementSystem.Models.Tables
 
         public string Name { get; set; }
 
+        public int Quantity { get; set; }
+
         [ForeignKey("Facility")]
         public int FacilityId { get; set; }
 

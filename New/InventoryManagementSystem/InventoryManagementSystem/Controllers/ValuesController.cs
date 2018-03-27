@@ -61,7 +61,7 @@ namespace InventoryManagementSystem.Controllers
 
             var users = db.User.ToList();
 
-            foreach(var u in users)
+            foreach (var u in users)
             {
                 var user = new UserManagementModel();
                 user.Id = u.Id;
@@ -71,15 +71,15 @@ namespace InventoryManagementSystem.Controllers
 
                 var roles = db.UserRole.Where(x => x.UserId == u.Id).ToList();
 
-                foreach(var r in roles)
+                foreach (var r in roles)
                 {
-                    if(user.Roles == string.Empty)
+                    if (user.Roles == string.Empty)
                     {
                         user.Roles = r.Role.Name;
                     }
                     else
                     {
-                        user.Roles += ", "+r.Role.Name;
+                        user.Roles += ", " + r.Role.Name;
                     }
                 }
 
@@ -123,13 +123,13 @@ namespace InventoryManagementSystem.Controllers
 
             var response = JsonConvert.SerializeObject(result);
             return response;
-        } 
+        }
 
         public string GetUser(string Id)
         {
             var db = new Context();
             var userId = int.Parse(Id);
-            var result = db.User.Where(x=>x.Id == userId).FirstOrDefault();
+            var result = db.User.Where(x => x.Id == userId).FirstOrDefault();
 
             var response = JsonConvert.SerializeObject(result);
             return response;
@@ -150,6 +150,27 @@ namespace InventoryManagementSystem.Controllers
             var db = new Context();
             var userId = int.Parse(Id);
             var result = db.UserRole.Where(x => x.UserId == userId).ToList();
+
+            var response = JsonConvert.SerializeObject(result);
+            return response;
+        }
+
+        public string GetResourcesByFacilityId(string Id)
+        {
+            var db = new Context();
+
+            var facilityId = int.Parse(Id);
+            var result = db.Resource.Where(x => x.FacilityId == facilityId).ToList();
+
+            var response = JsonConvert.SerializeObject(result);
+            return response;
+        }
+
+        public string GetResourceById(string Id)
+        {
+            var ResourceId = int.Parse(Id);
+            var db = new Context();
+            var result = db.Resource.Where(x=>x.Id == ResourceId).FirstOrDefault();
 
             var response = JsonConvert.SerializeObject(result);
             return response;
@@ -178,7 +199,7 @@ namespace InventoryManagementSystem.Controllers
                         user.Email = r.Value;
                         break;
                     case "facilityList":
-                        facilities = JsonConvert.DeserializeObject<ArrayList>(r.Value); 
+                        facilities = JsonConvert.DeserializeObject<ArrayList>(r.Value);
                         break;
                     case "roleList":
                         roles = JsonConvert.DeserializeObject<ArrayList>(r.Value);
@@ -186,9 +207,9 @@ namespace InventoryManagementSystem.Controllers
                 }
             }
 
-            user.Password = GeneratePassword(); 
+            user.Password = GeneratePassword();
             db.User.Add(user);
-            SendEmail(user.Email,user.Password);
+            SendEmail(user.Email, user.Password);
 
             foreach (var f in facilities)
             {
@@ -280,13 +301,13 @@ namespace InventoryManagementSystem.Controllers
                 }
             }
 
-            var user = db.User.Where(x=>x.Id == userId).FirstOrDefault();
+            var user = db.User.Where(x => x.Id == userId).FirstOrDefault();
             user.Name = name;
             user.Email = email;
-            
+
             db.SaveChanges();
 
-            var facilities_delete = db.UserFacility.Where(x=>x.UserId == userId);
+            var facilities_delete = db.UserFacility.Where(x => x.UserId == userId);
             foreach (var fd in facilities_delete)
             {
                 db.UserFacility.Remove(fd);
@@ -355,17 +376,91 @@ namespace InventoryManagementSystem.Controllers
             }
 
             var faciliy = db.Facility.Where(x => x.Id == facilityId).FirstOrDefault();
-            if(faciliy != null)
+            if (faciliy != null)
             {
                 faciliy.Name = name;
                 faciliy.Location = location;
             }
 
-            db.SaveChanges(); 
+            db.SaveChanges();
 
             return true;
-        } 
-        
+        }
+
+        [HttpPost]
+        public bool NewResource()
+        {
+            var request = Request.Content.ReadAsStringAsync().Result;
+            var request_parse = JsonConvert.DeserializeObject<Dictionary<string, string>>(request);
+
+            var db = new Context();
+
+            var resource = new Resource();
+            foreach (var r in request_parse)
+            {
+                switch (r.Key)
+                {
+                    case "name":
+                        resource.Name = r.Value;
+                        break;
+                    case "quantity":
+                        resource.Quantity = int.Parse(r.Value);
+                        break;
+                    case "facilityId":
+                        resource.FacilityId = int.Parse(r.Value);
+                        break;
+                }
+            }
+
+            db.Resource.Add(resource);
+            db.SaveChanges();
+
+            return true;
+        }
+
+        [HttpPost]
+        public bool UpdateResource()
+        {
+            var request = Request.Content.ReadAsStringAsync().Result;
+            var request_parse = JsonConvert.DeserializeObject<Dictionary<string, string>>(request);
+
+            var db = new Context();
+
+            var name = string.Empty;
+            var quantity = string.Empty;
+            var resourceId = 0;
+
+            var facilities = new ArrayList();
+            var roles = new ArrayList();
+
+            foreach (var r in request_parse)
+            {
+                switch (r.Key)
+                {
+                    case "Id":
+                        resourceId = int.Parse(r.Value);
+                        break;
+                    case "name":
+                        name = r.Value;
+                        break;
+                    case "quantity":
+                        quantity = r.Value;
+                        break;
+                }
+            }
+
+            var res = db.Resource.Where(x => x.Id == resourceId).FirstOrDefault();
+            if (res != null)
+            {
+                res.Name = name;
+                res.Quantity = int.Parse(quantity);
+            }
+
+            db.SaveChanges();
+
+            return true;
+        }
+
         private string GeneratePassword()
         {
             var result = string.Empty;

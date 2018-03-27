@@ -541,6 +541,243 @@ namespace InventoryManagementSystem.Controllers
             }
         }
 
+        public async Task<ActionResult> LoadResources(string FacilityId)
+        {
+            var model = new HomeViewModel();
+            model.FacilityId = int.Parse(FacilityId);
+            var Baseurl = GetURL();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/GetFacilityById/" + FacilityId;
+
+                HttpResponseMessage Res = await client.GetAsync(apiURL);
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = await Res.Content.ReadAsStringAsync();
+
+                    var response = new ResponseHelper();
+                    var output = response.fixResult(result);
+
+                    var data = JsonConvert.DeserializeObject<Facility>(output);
+
+                    model.FacilityName = data.Name;
+                }
+            }
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/GetResourcesByFacilityId/"+ FacilityId;
+
+                HttpResponseMessage Res = await client.GetAsync(apiURL);
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = await Res.Content.ReadAsStringAsync();
+
+                    var response = new ResponseHelper();
+                    var output = response.fixListResult(result);
+
+                    var data = JsonConvert.DeserializeObject<List<Resource>>(output);
+
+                    foreach (var d in data)
+                    {
+                        var res = new ResourceModel();
+                        res.Id = d.Id;
+                        res.Name = d.Name;
+                        res.Quantity = d.Quantity;
+                        res.FacilityId = d.FacilityId; 
+
+                        model.ResourceManagmentData.Add(res);
+                    }
+                }
+            }
+
+            return PartialView("PartialViews/Resource_Management/_data", model);
+        }
+
+        public ActionResult NewResource(string FacilityId)
+        {
+            var model = new ResourceModel();
+            model.FacilityId = int.Parse(FacilityId);
+            return Json(new
+            {
+                LocationModal = RenderRazorViewToString("PartialViews/Resource_Management/_newResourceModal", model)
+            },
+              JsonRequestBehavior.AllowGet
+            );
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> CreateResource(string data)
+        {
+            var result = false;
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            var obj = serializer.Deserialize<Dictionary<string, object>>(data);
+
+            var name = string.Empty;
+            var quantity = string.Empty;
+            var facilityId = string.Empty;
+
+            foreach (var o in obj)
+            {
+                switch (o.Key)
+                {
+                    case "name":
+                        name = o.Value.ToString();
+                        break;
+                    case "quantity":
+                        quantity = o.Value.ToString();
+                        break;
+                    case "facilityId":
+                        facilityId = o.Value.ToString();
+                        break;
+                }
+            }
+
+            var Baseurl = GetURL();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/NewResource";
+
+                var parameters = new Dictionary<string, string>();
+                parameters["name"] = name;
+                parameters["quantity"] = quantity;
+                parameters["facilityId"] = facilityId;
+
+                var content = new StringContent(JsonConvert.SerializeObject(parameters), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage Res = await client.PostAsync(apiURL, content);
+                if (Res.IsSuccessStatusCode)
+                {
+                    result = true;
+                }
+            }
+
+            switch (result)
+            {
+                case true:
+                    return Json("'Success':'true'");
+                case false:
+                    return Json("'Success':'false'");
+                default:
+                    return Json("'Success':'false'");
+            }
+        }
+
+        public async Task<ActionResult> EditResource(string Id)
+        {
+            var model = new ResourceModel();
+            var Baseurl = GetURL();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/GetResourceById/"+Id;
+
+                HttpResponseMessage Res = await client.GetAsync(apiURL);
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = await Res.Content.ReadAsStringAsync();
+
+                    var response = new ResponseHelper();
+                    var output = response.fixResult(result);
+
+                    var data = JsonConvert.DeserializeObject<Resource>(output);
+                    model.Name = data.Name;
+                    model.Quantity = data.Quantity;
+                    model.Id = data.Id;
+                    model.FacilityId = data.FacilityId;
+                }
+            }
+            
+
+            return Json(new
+            {
+                LocationModal = RenderRazorViewToString("PartialViews/Resource_Management/_editResourceModal", model)
+            },
+              JsonRequestBehavior.AllowGet
+            );
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> UpdateResource(string data)
+        {
+            var result = false;
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            var obj = serializer.Deserialize<Dictionary<string, object>>(data);
+
+            var id = string.Empty;
+            var name = string.Empty;
+            var quantity = string.Empty;
+
+
+            foreach (var o in obj)
+            {
+                switch (o.Key)
+                {
+                    case "Id":
+                        id = o.Value.ToString();
+                        break;
+                    case "name":
+                        name = o.Value.ToString();
+                        break;
+                    case "quantity":
+                        quantity = o.Value.ToString();
+                        break;
+                }
+            }
+
+            var Baseurl = GetURL();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/UpdateResource";
+
+                var parameters = new Dictionary<string, string>();
+                parameters["Id"] = id;
+                parameters["name"] = name;
+                parameters["quantity"] = quantity;
+
+                var content = new StringContent(JsonConvert.SerializeObject(parameters), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage Res = await client.PostAsync(apiURL, content);
+                if (Res.IsSuccessStatusCode)
+                {
+                    result = true;
+                }
+            }
+
+            switch (result)
+            {
+                case true:
+                    return Json("'Success':'true'");
+                case false:
+                    return Json("'Success':'false'");
+                default:
+                    return Json("'Success':'false'");
+            }
+        }
+
         public string GetURL()
         {
             var result = Request.Url.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped);

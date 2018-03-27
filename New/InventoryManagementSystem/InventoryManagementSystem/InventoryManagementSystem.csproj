@@ -316,6 +316,10 @@
     <Content Include="Views\Home\PartialViews\Facility_Management\_data.cshtml" />
     <Content Include="Views\Home\PartialViews\Facility_Management\_newFacilityModal.cshtml" />
     <Content Include="Views\Home\PartialViews\Facility_Management\_editFacilityModal.cshtml" />
+    <Content Include="Views\Home\PartialViews\_resourceManagement.cshtml" />
+    <Content Include="Views\Home\PartialViews\Resource_Management\_data.cshtml" />
+    <Content Include="Views\Home\PartialViews\Resource_Management\_newResourceModal.cshtml" />
+    <Content Include="Views\Home\PartialViews\Resource_Management\_editResourceModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
