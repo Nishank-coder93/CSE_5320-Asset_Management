@@ -114,6 +114,17 @@ namespace InventoryManagementSystem.Controllers
             return response;
         }
 
+        public string GetFacilityById(string Id)
+        {
+            var db = new Context();
+
+            var facilityId = int.Parse(Id);
+            var result = db.Facility.Where(x => x.Id == facilityId).FirstOrDefault();
+
+            var response = JsonConvert.SerializeObject(result);
+            return response;
+        } 
+
         public string GetUser(string Id)
         {
             var db = new Context();
@@ -203,6 +214,36 @@ namespace InventoryManagementSystem.Controllers
         }
 
         [HttpPost]
+        public bool Newfacility()
+        {
+            var request = Request.Content.ReadAsStringAsync().Result;
+            var request_parse = JsonConvert.DeserializeObject<Dictionary<string, string>>(request);
+
+            var db = new Context();
+
+            var facility = new Facility();
+
+            foreach (var r in request_parse)
+            {
+                switch (r.Key)
+                {
+                    case "name":
+                        facility.Name = r.Value;
+                        break;
+                    case "location":
+                        facility.Location = r.Value;
+                        break;
+                }
+            }
+
+            db.Facility.Add(facility);
+
+            db.SaveChanges();
+
+            return true;
+        }
+
+        [HttpPost]
         public bool UpdateUser()
         {
             var request = Request.Content.ReadAsStringAsync().Result;
@@ -282,6 +323,49 @@ namespace InventoryManagementSystem.Controllers
             return true;
         }
 
+        [HttpPost]
+        public bool UpdateFacility()
+        {
+            var request = Request.Content.ReadAsStringAsync().Result;
+            var request_parse = JsonConvert.DeserializeObject<Dictionary<string, string>>(request);
+
+            var db = new Context();
+
+            var name = string.Empty;
+            var location = string.Empty;
+            var facilityId = 0;
+
+            var facilities = new ArrayList();
+            var roles = new ArrayList();
+
+            foreach (var r in request_parse)
+            {
+                switch (r.Key)
+                {
+                    case "Id":
+                        facilityId = int.Parse(r.Value);
+                        break;
+                    case "name":
+                        name = r.Value;
+                        break;
+                    case "location":
+                        location = r.Value;
+                        break;
+                }
+            }
+
+            var faciliy = db.Facility.Where(x => x.Id == facilityId).FirstOrDefault();
+            if(faciliy != null)
+            {
+                faciliy.Name = name;
+                faciliy.Location = location;
+            }
+
+            db.SaveChanges(); 
+
+            return true;
+        } 
+        
         private string GeneratePassword()
         {
             var result = string.Empty;

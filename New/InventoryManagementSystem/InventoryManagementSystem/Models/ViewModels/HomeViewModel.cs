@@ -54,8 +54,17 @@ namespace InventoryManagementSystem.Models.ViewModels
         public List<int> SelectedRoles { get; set; }
     }
 
+    public class NewFacilityModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Location { get; set;}
+    }
+
     public class FacilityManagementModel
     {
-
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Location { get; set; }
     }
 }

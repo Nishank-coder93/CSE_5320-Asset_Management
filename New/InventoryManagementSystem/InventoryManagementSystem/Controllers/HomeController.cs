@@ -56,6 +56,35 @@ namespace InventoryManagementSystem.Controllers
             return PartialView("PartialViews/User_Management/_data", model);
         }
 
+        public async Task<ActionResult> LoadFacilityManagement()
+        {
+            var model = new HomeViewModel();
+
+            var Baseurl = GetURL();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/GetFacilities";
+
+                HttpResponseMessage Res = await client.GetAsync(apiURL);
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = await Res.Content.ReadAsStringAsync();
+
+                    var response = new ResponseHelper();
+                    var output = response.fixListResult(result);
+
+                    model.FacilityManagementData = JsonConvert.DeserializeObject<List<FacilityManagementModel>>(output);
+                }
+            }
+
+            return PartialView("PartialViews/Facility_Management/_data", model);
+        }
+
         public async Task<ActionResult> NewUser()
         {
             var model = new NewUserModel();
@@ -84,6 +113,18 @@ namespace InventoryManagementSystem.Controllers
             return Json(new
             {
                 LocationModal = RenderRazorViewToString("PartialViews/User_Management/_newUserModal", model)
+            },
+              JsonRequestBehavior.AllowGet
+            );
+        }
+
+        public ActionResult NewFacility()
+        {
+            var model = new NewFacilityModel();
+
+            return Json(new
+            {
+                LocationModal = RenderRazorViewToString("PartialViews/Facility_Management/_newFacilityModal", model)
             },
               JsonRequestBehavior.AllowGet
             );
@@ -196,6 +237,106 @@ namespace InventoryManagementSystem.Controllers
             },
               JsonRequestBehavior.AllowGet
             );
+        }
+
+        public async Task<ActionResult> EditFacility(string Id)
+        {
+            var model = new NewFacilityModel();
+            var Baseurl = GetURL();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/GetFacilityById/" + Id;
+
+                HttpResponseMessage Res = await client.GetAsync(apiURL);
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = await Res.Content.ReadAsStringAsync();
+
+                    var response = new ResponseHelper();
+                    var output = response.fixResult(result);
+
+                    var details = JsonConvert.DeserializeObject<Facility>(output);
+                    model.Id = details.Id;
+                    model.Name = details.Name;
+                    if (details.Location == null)
+                    {
+                        model.Location = string.Empty;
+                    }
+                    else
+                    {
+                        model.Location = details.Location;
+                    }
+                }
+            }
+
+            return Json(new
+            {
+                LocationModal = RenderRazorViewToString("PartialViews/Facility_Management/_editFacilityModal", model)
+            },
+              JsonRequestBehavior.AllowGet
+            );
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> CreateFacility(string data)
+        {
+            var result = false;
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            var obj = serializer.Deserialize<Dictionary<string, object>>(data);
+
+            var name = string.Empty;
+            var location = string.Empty;
+
+            foreach (var o in obj)
+            {
+                switch (o.Key)
+                {
+                    case "name":
+                        name = o.Value.ToString();
+                        break;
+                    case "location":
+                        location = o.Value.ToString();
+                        break;
+                }
+            }
+
+            var Baseurl = GetURL();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/NewFacility";
+
+                var parameters = new Dictionary<string, string>();
+                parameters["name"] = name;
+                parameters["location"] = location;
+
+                var content = new StringContent(JsonConvert.SerializeObject(parameters), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage Res = await client.PostAsync(apiURL, content);
+                if (Res.IsSuccessStatusCode)
+                {
+                    result = true;
+                }
+            }
+
+            switch (result)
+            {
+                case true:
+                    return Json("'Success':'true'");
+                case false:
+                    return Json("'Success':'false'");
+                default:
+                    return Json("'Success':'false'");
+            }
         }
 
         [HttpPost]
@@ -316,6 +457,69 @@ namespace InventoryManagementSystem.Controllers
                 parameters["email"] = email;
                 parameters["roleList"] = JsonConvert.SerializeObject(roleList);
                 parameters["facilityList"] = JsonConvert.SerializeObject(facilityList);
+
+                var content = new StringContent(JsonConvert.SerializeObject(parameters), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage Res = await client.PostAsync(apiURL, content);
+                if (Res.IsSuccessStatusCode)
+                {
+                    result = true;
+                }
+            }
+
+            switch (result)
+            {
+                case true:
+                    return Json("'Success':'true'");
+                case false:
+                    return Json("'Success':'false'");
+                default:
+                    return Json("'Success':'false'");
+            }
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> UpdateFacility(string data)
+        {
+            var result = false;
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            var obj = serializer.Deserialize<Dictionary<string, object>>(data);
+
+            var id = string.Empty;
+            var name = string.Empty;
+            var location = string.Empty;
+            
+
+            foreach (var o in obj)
+            {
+                switch (o.Key)
+                {
+                    case "Id":
+                        id = o.Value.ToString();
+                        break;
+                    case "name":
+                        name = o.Value.ToString();
+                        break;
+                    case "location":
+                        location = o.Value.ToString();
+                        break;
+                }
+            }
+
+            var Baseurl = GetURL();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/UpdateFacility";
+
+                var parameters = new Dictionary<string, string>();
+                parameters["Id"] = id;
+                parameters["name"] = name;
+                parameters["location"] = location;
 
                 var content = new StringContent(JsonConvert.SerializeObject(parameters), Encoding.UTF8, "application/json");
 

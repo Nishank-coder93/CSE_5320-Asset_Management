@@ -313,6 +313,9 @@
     <Content Include="Views\Home\PartialViews\User_Management\_data.cshtml" />
     <Content Include="Views\Home\PartialViews\User_Management\_newUserModal.cshtml" />
     <Content Include="Views\Home\PartialViews\User_Management\_editUserModal.cshtml" />
+    <Content Include="Views\Home\PartialViews\Facility_Management\_data.cshtml" />
+    <Content Include="Views\Home\PartialViews\Facility_Management\_newFacilityModal.cshtml" />
+    <Content Include="Views\Home\PartialViews\Facility_Management\_editFacilityModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

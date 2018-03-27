@@ -1,8 +1,103 @@
-﻿
-<h2>_facilityManagement</h2>
+﻿<div style="padding-top:20px">
+
+    <div class="card">
+        <div class="card-header">
+            <button type="button" class="btn btn-outline-primary float-right" onclick="addFacility()">Add a new facility</button>
+            <h4>Add / Manage facilities</h4>
+        </div>
+        <div class="card-body">
+            <div id="FmTable_loader" class="loader"></div>
+            <div id="FmTableData"></div>
+        </div>
+    </div>
+</div>
+
+<div id="newFacilityModalContainer"></div>
+<div id="editFacilityModalContainer"></div>
+
 
 <script>
     $(document).ready(function () {
-        
+        loadFacilityManagementTable();
     });
+
+    function loadFacilityManagementTable() {
+        intialize();
+
+        $("#FmTableData").hide();
+        $("#FmTable_loader").show();
+
+        var src = "@Url.Action("LoadFacilityManagement", "Home", new { area = "" })";
+
+        $.ajax({
+            url: src,
+            type: 'GET',
+            cache: false,
+            data: {}
+        }).done(function (result) {
+            $('#FmTableData').html(result);
+            $("#FmTable_loader").hide();
+            $("#FmTableData").show();
+         });
+    }
+
+    function addFacility() {
+        var src = "@Url.Action("NewFacility", "Home", new { area = "" })";
+
+        $.ajax({
+            type: "GET",
+            url: src,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#newFacilityModalContainer").html(data.LocationModal);
+                $('#newFacilityModal').modal('show');
+            },
+            Error: function (data) {
+                $('#newFacilityModal').modal('hide');
+            }
+        });
+    }
+
+    function createFacility() {
+        var name = document.getElementById("name").value;
+        var location = document.getElementById("location").value;
+
+        var data = { name: name, location: location}
+        var send_to_controller = JSON.stringify(data);
+        var src = '@Url.Action("CreateFacility", "Home", new { area = "" })' + '?data=' + send_to_controller;
+
+        $.ajax({
+            url: src,
+            type: "post",
+            data: send_to_controller,
+            dataType: "json",
+            contentType: "application/json",
+            success: function (data) {
+                loadFacilityManagementTable();
+                $('#newFacilityModal').modal('hide');
+            },
+            error: function () {
+                $('#newFacilityModal').modal('hide');
+            }
+        });
+    }
+
+    function editFacility(id) {
+        var src = "@Url.Action("EditFacility", "Home", new { area = "" })"+"?Id="+id;
+
+        $.ajax({
+            type: "GET",
+            url: src,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#editFacilityModalContainer").html(data.LocationModal);
+                $('#editFacilityModal').modal('show');
+            },
+            Error: function (data) {
+                $('#editFacilityModal').modal('hide');
+            }
+        });
+    }
 </script>

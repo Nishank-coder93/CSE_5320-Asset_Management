@@ -1,0 +1,37 @@
+﻿@model InventoryManagementSystem.Models.ViewModels.HomeViewModel
+
+
+
+@if (Model.FacilityManagementData.Count > 0)
+{
+    <table class="table" style="table-layout : fixed;">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Location</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var d in Model.FacilityManagementData)
+            {
+                <tr>
+                    <td scope="row">@d.Name</td>
+                    <td>@d.Location</td>
+                    <td>
+                        <button type="button" class="btn btn-outline-warning" onclick="editFacility(@d.Id)">
+                            Edit
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning" role="alert">
+        There is no data to be shown
+    </div>
+}
+
