@@ -13,6 +13,8 @@ namespace InventoryManagementSystem.Models.Tables
 
         public int Quantity { get; set; }
 
+        public bool Verfied { get; set; }
+
         [ForeignKey("Facility")]
         public int FacilityId { get; set; }
 

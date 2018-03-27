@@ -187,6 +187,16 @@ namespace InventoryManagementSystem.Controllers
             return response;
         }
 
+        public string GetResourceVerificationByFacilityId(string Id)
+        {
+            var FacilityId = int.Parse(Id);
+            var db = new Context();
+            var result = db.Report.Where(x => x.Resource.FacilityId == FacilityId).ToList();
+
+            var response = JsonConvert.SerializeObject(result);
+            return response;
+        }
+
         [HttpPost]
         public bool NewUser()
         {
@@ -479,6 +489,13 @@ namespace InventoryManagementSystem.Controllers
             db.Resource.Add(resource);
             db.SaveChanges();
 
+
+            var report = new Report();
+            report.ResourceId = resource.Id;
+
+            db.Report.Add(report);
+            db.SaveChanges();
+
             return true;
         }
 
@@ -522,6 +539,13 @@ namespace InventoryManagementSystem.Controllers
 
             db.SaveChanges();
 
+            var res_report = db.Report.Where(x=>x.ResourceId == resourceId).FirstOrDefault();
+            if (res_report != null)
+            {
+                res_report.Verify = false;
+            }
+            db.SaveChanges();
+
             return true;
         }
 
@@ -548,6 +572,14 @@ namespace InventoryManagementSystem.Controllers
         {
             var db = new Context();
             var ResourceId = int.Parse(Id);
+
+            var res_report = db.Report.Where(x => x.ResourceId == ResourceId).FirstOrDefault();
+            if (res_report != null)
+            {
+                db.Report.Remove(res_report);
+            }
+
+            db.SaveChanges();
 
             var res = db.Resource.Where(x => x.Id == ResourceId).FirstOrDefault();
 

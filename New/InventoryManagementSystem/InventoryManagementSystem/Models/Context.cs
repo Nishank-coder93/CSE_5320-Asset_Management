@@ -19,6 +19,8 @@ namespace InventoryManagementSystem.Models
         public virtual DbSet<UserFacility> UserFacility { get; set; }
 
         public virtual DbSet<Resource> Resource { get; set; }
+        public virtual DbSet<Report> Report { get; set; }
+        
         public IEnumerable<object> Users { get; internal set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

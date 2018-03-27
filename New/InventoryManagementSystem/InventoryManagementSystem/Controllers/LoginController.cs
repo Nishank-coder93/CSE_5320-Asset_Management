@@ -69,7 +69,14 @@ namespace InventoryManagementSystem.Controllers
                                 Session["LoggedInUsername"] = user.UserName;
                                 Session["Role"] = user.RoleId;
 
-                                return RedirectToAction("Index", "Home");
+                                if (int.Parse(Session["Role"].ToString()) == 1)
+                                {
+                                    return RedirectToAction("Index", "Home");
+                                }
+                                else
+                                {
+                                    return RedirectToAction("Index", "Dashboard");
+                                }                                
                             }
                         }
                     }

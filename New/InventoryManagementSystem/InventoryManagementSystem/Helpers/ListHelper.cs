@@ -20,6 +20,14 @@ namespace InventoryManagementSystem.Helpers
             user_1.Active = true;
             result.Add(user_1);
 
+            var user_2 = new User();
+            user_2.Id = 2;
+            user_2.Name = "Neil";
+            user_2.UserName = "neil";
+            user_2.Password = "neil";
+            user_2.Active = true;
+            result.Add(user_2);
+
             return result;
         }
 
@@ -49,6 +57,12 @@ namespace InventoryManagementSystem.Helpers
             userRole_1.UserId = 1;
             userRole_1.RoleId = 1;
             result.Add(userRole_1);
+
+            var userRole_2 = new UserRole();
+            userRole_2.Id = 2;
+            userRole_2.UserId = 2;
+            userRole_2.RoleId = 2;
+            result.Add(userRole_2);
 
             return result;
         }

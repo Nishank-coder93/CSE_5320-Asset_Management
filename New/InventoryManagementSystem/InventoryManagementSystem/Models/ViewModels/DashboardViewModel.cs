@@ -1,0 +1,36 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace InventoryManagementSystem.Models.ViewModels
+{
+    public class DashboardViewModel
+    {
+        public DashboardViewModel()
+        {
+            FacilityReport = new List<FacilityReport>();
+        }
+
+        public List<FacilityReport> FacilityReport { get; set; }
+    }
+
+    public class FacilityReport
+    {
+        public FacilityReport()
+        {
+            ResourceReport = new List<ResourceReport>();
+        }
+
+        public int FacilityId { get; set; }
+        public List<ResourceReport> ResourceReport { get; set; }
+
+    }
+
+    public class ResourceReport
+    {
+        public int ResourceId { get; set; }
+        public bool Verified { get; set; }
+        public bool Missing { get; set; }
+    }
+}

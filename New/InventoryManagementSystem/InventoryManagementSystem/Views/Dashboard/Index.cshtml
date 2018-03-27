@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Resource Cheking Dashboard";
+}
+
+
+<div class="card">
+    <div class="card-header">
+        <h4>Resource Verification</h4>
+    </div>
+    <div class="card-body">
+        <div id="Table_loader" class="loader"></div>
+        <div id="TableData"></div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        loadData();
+    });
+
+    function loadData() {
+        //intialize();
+
+        $("#TableData").hide();
+        $("#Table_loader").show();
+
+        var src = "@Url.Action("LoadResourcesByFacility", "Dashboard", new { area = "" })";
+
+        $.ajax({
+            url: src,
+            type: 'GET',
+            cache: false,
+            data: {}
+        }).done(function (result) {
+            $('#TableData').html(result);
+            $("#Table_loader").hide();
+            $("#TableData").show();
+         });
+    }
+</script>
