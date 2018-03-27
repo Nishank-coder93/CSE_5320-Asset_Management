@@ -14,6 +14,7 @@
 </div>
 
 <div id="newUserModalContainer"></div>
+<div id="editUserModalContainer"></div>
 
 <script>
     var list_facilities = [];
@@ -105,6 +106,25 @@
             },
             Error: function (data) {
                 $('#newUserModal').modal('hide');
+            }
+        });
+    }
+
+    function editUser(id) {
+
+        var src = "@Url.Action("EditUser", "Home", new { area = "" })"+"?Id="+id;
+
+        $.ajax({
+            type: "GET",
+            url: src,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#editUserModalContainer").html(data.LocationModal);
+                $('#editUserModal').modal('show');
+            },
+            Error: function (data) {
+                $('#editUserModal').modal('hide');
             }
         });
     }

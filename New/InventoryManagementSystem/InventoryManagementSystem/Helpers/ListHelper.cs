@@ -32,6 +32,11 @@ namespace InventoryManagementSystem.Helpers
             role_1.Name = "Admin";
             result.Add(role_1);
 
+            var role_2 = new Role();
+            role_2.Id = 2;
+            role_2.Name = "Recource Checker";
+            result.Add(role_2); 
+            
             return result;
         }
 

@@ -114,6 +114,36 @@ namespace InventoryManagementSystem.Controllers
             return response;
         }
 
+        public string GetUser(string Id)
+        {
+            var db = new Context();
+            var userId = int.Parse(Id);
+            var result = db.User.Where(x=>x.Id == userId).FirstOrDefault();
+
+            var response = JsonConvert.SerializeObject(result);
+            return response;
+        }
+
+        public string GetUserFacilitiesByUserId(string Id)
+        {
+            var db = new Context();
+            var userId = int.Parse(Id);
+            var result = db.UserFacility.Where(x => x.UserId == userId).ToList();
+
+            var response = JsonConvert.SerializeObject(result);
+            return response;
+        }
+
+        public string GetUserRolesByUserId(string Id)
+        {
+            var db = new Context();
+            var userId = int.Parse(Id);
+            var result = db.UserRole.Where(x => x.UserId == userId).ToList();
+
+            var response = JsonConvert.SerializeObject(result);
+            return response;
+        }
+
         [HttpPost]
         public bool NewUser()
         {
@@ -158,6 +188,86 @@ namespace InventoryManagementSystem.Controllers
                 db.UserFacility.Add(uf);
             }
 
+            foreach (var r in roles)
+            {
+                var ur = new UserRole();
+                ur.UserId = user.Id;
+                ur.RoleId = int.Parse(r.ToString());
+
+                db.UserRole.Add(ur);
+            }
+
+            db.SaveChanges();
+
+            return true;
+        }
+
+        [HttpPost]
+        public bool UpdateUser()
+        {
+            var request = Request.Content.ReadAsStringAsync().Result;
+            var request_parse = JsonConvert.DeserializeObject<Dictionary<string, string>>(request);
+
+            var db = new Context();
+
+            var name = string.Empty;
+            var email = string.Empty;
+            var userId = 0;
+
+            var facilities = new ArrayList();
+            var roles = new ArrayList();
+
+            foreach (var r in request_parse)
+            {
+                switch (r.Key)
+                {
+                    case "Id":
+                        userId = int.Parse(r.Value);
+                        break;
+                    case "name":
+                        name = r.Value;
+                        break;
+                    case "email":
+                        email = r.Value;
+                        break;
+                    case "facilityList":
+                        facilities = JsonConvert.DeserializeObject<ArrayList>(r.Value);
+                        break;
+                    case "roleList":
+                        roles = JsonConvert.DeserializeObject<ArrayList>(r.Value);
+                        break;
+                }
+            }
+
+            var user = db.User.Where(x=>x.Id == userId).FirstOrDefault();
+            user.Name = name;
+            user.Email = email;
+            
+            db.SaveChanges();
+
+            var facilities_delete = db.UserFacility.Where(x=>x.UserId == userId);
+            foreach (var fd in facilities_delete)
+            {
+                db.UserFacility.Remove(fd);
+            }
+
+            db.SaveChanges();
+            foreach (var f in facilities)
+            {
+                var uf = new UserFacility();
+                uf.UserId = user.Id;
+                uf.FacilityId = int.Parse(f.ToString());
+
+                db.UserFacility.Add(uf);
+            }
+
+            var roles_delete = db.UserRole.Where(x => x.UserId == userId);
+            foreach (var rd in roles_delete)
+            {
+                db.UserRole.Remove(rd);
+            }
+
+            db.SaveChanges();
             foreach (var r in roles)
             {
                 var ur = new UserRole();

@@ -1,5 +1,6 @@
 ﻿using InventoryManagementSystem.Models.Tables;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -40,11 +41,17 @@ namespace InventoryManagementSystem.Models.ViewModels
         public NewUserModel()
         {
             Facilities = new List<Facility>();
+            SelectedFacilities = new List<int>();
+            SelectedRoles = new List<int>();
         }
 
+        public int Id { get; set; }
         public string Name { get; set;}
         public string Email { get; set; }
+        public int RoleId { get; set; }
         public List<Facility> Facilities { get; set; }
+        public List<int> SelectedFacilities { get; set; }
+        public List<int> SelectedRoles { get; set; }
     }
 
     public class FacilityManagementModel

@@ -89,6 +89,115 @@ namespace InventoryManagementSystem.Controllers
             );
         }
 
+        public async Task<ActionResult> EditUser(string Id)
+        {
+            var model = new NewUserModel();
+            var Baseurl = GetURL();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/GetFacilities";
+
+                HttpResponseMessage Res = await client.GetAsync(apiURL);
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = await Res.Content.ReadAsStringAsync();
+
+                    var response = new ResponseHelper();
+                    var output = response.fixListResult(result);
+
+                    model.Facilities = JsonConvert.DeserializeObject<List<Facility>>(output);
+                }
+            }
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/GetUser/"+Id;
+
+                HttpResponseMessage Res = await client.GetAsync(apiURL);
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = await Res.Content.ReadAsStringAsync();
+
+                    var response = new ResponseHelper();
+                    var output = response.fixResult(result);
+
+                    var userDetails = JsonConvert.DeserializeObject<User>(output);
+                    model.Id = userDetails.Id;
+                    model.Email = userDetails.Email;
+                    model.Name = userDetails.Name;
+                }
+            }
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/GetUserFacilitiesByUserId/" + Id;
+
+                HttpResponseMessage Res = await client.GetAsync(apiURL);
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = await Res.Content.ReadAsStringAsync();
+
+                    var response = new ResponseHelper();
+                    var output = response.fixListResult(result);
+
+                    var userDetails = JsonConvert.DeserializeObject<List<UserFacility>>(output);
+                    foreach (var u in userDetails)
+                    {
+                        model.SelectedFacilities.Add(u.FacilityId);
+                    } 
+                }
+            }
+
+            //model.SelectedFacilities_json = JsonConvert.SerializeObject(model.SelectedFacilities);
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/GetUserRolesByUserId/" + Id;
+
+                HttpResponseMessage Res = await client.GetAsync(apiURL);
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = await Res.Content.ReadAsStringAsync();
+
+                    var response = new ResponseHelper();
+                    var output = response.fixListResult(result);
+
+                    var userDetails = JsonConvert.DeserializeObject<List<UserRole>>(output);
+                    foreach (var u in userDetails)
+                    {
+                        model.SelectedRoles.Add(u.RoleId);
+                        model.RoleId = u.RoleId;
+                    }
+                }
+            }
+
+            //model.SelectedRoles_json = JsonConvert.SerializeObject(model.SelectedRoles);
+
+            return Json(new
+            {
+                LocationModal = RenderRazorViewToString("PartialViews/User_Management/_editUserModal", model)
+            },
+              JsonRequestBehavior.AllowGet
+            );
+        }
+
         [HttpPost]
         public async Task<JsonResult> CreateUser(string data)
         {
@@ -131,6 +240,78 @@ namespace InventoryManagementSystem.Controllers
                 var apiURL = "/api/Values/NewUser";
 
                 var parameters = new Dictionary<string, string>();
+                parameters["name"] = name;
+                parameters["email"] = email;
+                parameters["roleList"] = JsonConvert.SerializeObject(roleList);
+                parameters["facilityList"] = JsonConvert.SerializeObject(facilityList);
+
+                var content = new StringContent(JsonConvert.SerializeObject(parameters), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage Res = await client.PostAsync(apiURL, content);
+                if (Res.IsSuccessStatusCode)
+                {
+                    result = true;
+                }
+            }
+
+            switch (result)
+            {
+                case true:
+                    return Json("'Success':'true'");
+                case false:
+                    return Json("'Success':'false'");
+                default:
+                    return Json("'Success':'false'");
+            }
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> UpdateUser(string data)
+        {
+            var result = false;
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            var obj = serializer.Deserialize<Dictionary<string, object>>(data);
+
+            var id = string.Empty;
+            var name = string.Empty;
+            var email = string.Empty;
+            var roleList = new ArrayList();
+            var facilityList = new ArrayList();
+
+            foreach (var o in obj)
+            {
+                switch (o.Key)
+                {
+                    case "Id":
+                        id = o.Value.ToString();
+                        break;
+                    case "name":
+                        name = o.Value.ToString();
+                        break;
+                    case "email":
+                        email = o.Value.ToString();
+                        break;
+                    case "list_facilities":
+                        facilityList = (ArrayList)o.Value;
+                        break;
+                    case "list_roles":
+                        roleList = (ArrayList)o.Value;
+                        break;
+                }
+            }
+
+            var Baseurl = GetURL();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/UpdateUser";
+
+                var parameters = new Dictionary<string, string>();
+                parameters["Id"] = id;
                 parameters["name"] = name;
                 parameters["email"] = email;
                 parameters["roleList"] = JsonConvert.SerializeObject(roleList);
