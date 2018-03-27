@@ -1,7 +1,38 @@
-﻿
-@{
-    ViewBag.Title = "_report";
-}
+﻿<div style="padding-top:20px">
 
-<h2>_report</h2>
+    <div class="card">
+        <div class="card-header">
+            <h4>Reports</h4>
+        </div>
+        <div class="card-body">
+            <div id="RdTable_loader" class="loader"></div>
+            <div id="RdTableData"></div>
+        </div>
+    </div>
+</div>
 
+<script>
+    $(document).ready(function () {
+        loadReports();
+    });
+
+    function loadReports()
+    {
+        $("#RdTableData").hide();
+        $("#RdTable_loader").show();
+
+        var src = "@Url.Action("LoadReports", "Home", new { area = "" })";
+
+        $.ajax({
+            url: src,
+            type: 'GET',
+            cache: false,
+            data: {}
+        }).done(function (result) {
+            $('#RdTableData').html(result);
+            $("#RdTable_loader").hide();
+            $("#RdTableData").show();
+         });
+    }
+
+</script>

@@ -328,10 +328,10 @@
     <Content Include="Views\Dashboard\PartialViews\_updateQuantity.cshtml" />
     <Content Include="Views\Home\PartialViews\_report.cshtml" />
     <Content Include="Views\Dashboard\PartialViews\_missingQuantity.cshtml" />
+    <Content Include="Views\Home\PartialViews\Report\_data.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Home\PartialViews\Report\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

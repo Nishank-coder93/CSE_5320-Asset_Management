@@ -216,6 +216,60 @@ namespace InventoryManagementSystem.Controllers
             return response;
         }
 
+        public string GetReports()
+        {
+            var db = new Context();
+            var result = new List<ReportModel>();
+
+            var report = db.Report.ToList();
+            var resources = db.Resource.ToList();
+            var facilities = db.Facility.ToList();
+
+            foreach (var f in facilities)
+            {
+                var rep = new ReportModel();
+                rep.FacilityId = f.Id;
+
+                foreach (var r in report)
+                {
+                    foreach (var re in resources)
+                    {
+                        if (re.Id == r.ResourceId && re.FacilityId == f.Id)
+                        {
+                            var res = new ResourceReportModel();
+                            res.ResourceId = r.ResourceId;
+                            res.ResourceName = r.Resource.Name;
+                            res.MissingQuantity = r.MissingQuantity;
+                            res.QuantityChange = r.QuantityChange;
+                            res.Status = string.Empty;
+
+                            if (r.Verify)
+                            {
+                                res.Status = "Verified";
+                                res.Verified = true;
+                            }
+
+                            if (r.MissingQuantity.HasValue)
+                            {
+                                if (r.Missing)
+                                {
+                                    res.Status = "Missing";
+                                    res.Missing = true;
+                                }
+                            } 
+
+                            rep.ResourceReport.Add(res);
+                        }
+                    }
+                }
+                result.Add(rep);
+            }
+            
+
+            var response = JsonConvert.SerializeObject(result);
+            return response;
+        }
+
         [HttpPost]
         public bool NewUser()
         {

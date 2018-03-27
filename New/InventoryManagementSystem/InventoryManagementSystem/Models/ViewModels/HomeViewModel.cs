@@ -11,6 +11,7 @@ namespace InventoryManagementSystem.Models.ViewModels
     {
         public HomeViewModel()
         {
+            ReportData = new List<ReportModel>();
             UserManagementData = new List<UserManagementModel>();
             FacilityManagementData = new List<FacilityManagementModel>();
             ResourceManagmentData = new List<ResourceModel>();
@@ -19,6 +20,7 @@ namespace InventoryManagementSystem.Models.ViewModels
 
         public int FacilityId { get; set; }
         public string FacilityName { get; set; }
+        public List<ReportModel> ReportData { get; set; }
         public List<ResourceModel> ResourceManagmentData { get; set; }
         public List<UserManagementModel> UserManagementData { get; set; }
         public List<FacilityManagementModel> FacilityManagementData { get; set; }
@@ -80,5 +82,29 @@ namespace InventoryManagementSystem.Models.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public int Quantity { get; set; }
+    }
+
+    public class ReportModel
+    {
+        public ReportModel()
+        {
+            ResourceReport = new List<ResourceReportModel>();
+        }
+
+        public int FacilityId { get; set; }
+        public List<ResourceReportModel> ResourceReport { get; set; }
+    }
+
+    public class ResourceReportModel
+    {
+        public int ResourceId { get; set; }
+        public string ResourceName { get; set; }
+        public string Status { get; set; }
+        public bool Verified { get; set; }
+        public bool Missing { get; set; }
+        public int? QuantityChange { get; set; }
+        public int? MissingQuantity { get; set; }
+        public string UserName { get; set; }
+
     }
 }

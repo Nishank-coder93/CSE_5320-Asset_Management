@@ -925,6 +925,35 @@ namespace InventoryManagementSystem.Controllers
             }
         }
 
+        public async Task<ActionResult> LoadReports()
+        {
+            var model = new HomeViewModel();
+            var Baseurl = GetURL();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/GetReports";
+
+                HttpResponseMessage Res = await client.GetAsync(apiURL);
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = await Res.Content.ReadAsStringAsync();
+
+                    var response = new ResponseHelper();
+                    var output = response.fixListResult(result);
+
+                    model.ReportData = JsonConvert.DeserializeObject<List<ReportModel>>(output);
+                }
+            }
+
+            return PartialView("PartialViews/Report/_data", model);
+        }
+
+
         public string GetURL()
         {
             var result = Request.Url.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped);
