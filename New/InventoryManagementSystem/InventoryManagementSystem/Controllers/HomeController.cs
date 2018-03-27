@@ -80,7 +80,7 @@ namespace InventoryManagementSystem.Controllers
 
                     model.FacilityManagementData = JsonConvert.DeserializeObject<List<FacilityManagementModel>>(output);
                 }
-            }
+            }  
 
             return PartialView("PartialViews/Facility_Management/_data", model);
         }
@@ -161,7 +161,7 @@ namespace InventoryManagementSystem.Controllers
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var apiURL = "/api/Values/GetUser/"+Id;
+                var apiURL = "/api/Values/GetUser/" + Id;
 
                 HttpResponseMessage Res = await client.GetAsync(apiURL);
                 if (Res.IsSuccessStatusCode)
@@ -198,7 +198,7 @@ namespace InventoryManagementSystem.Controllers
                     foreach (var u in userDetails)
                     {
                         model.SelectedFacilities.Add(u.FacilityId);
-                    } 
+                    }
                 }
             }
 
@@ -282,6 +282,41 @@ namespace InventoryManagementSystem.Controllers
             );
         }
 
+        [HttpPost]
+        public async Task<JsonResult> DeleteFacility(string Id)
+        {
+            var result = false;
+
+            var Baseurl = GetURL();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/DeleteFacility/"+ Id;
+
+                var parameters = new Dictionary<string, string>();
+
+                var content = new StringContent(JsonConvert.SerializeObject(parameters), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage Res = await client.PostAsync(apiURL, content);
+                if (Res.IsSuccessStatusCode)
+                {
+                    result = true;
+                }
+            }
+
+            switch (result)
+            {
+                case true:
+                    return Json("'Success':'true'");
+                case false:
+                    return Json("'Success':'false'");
+                default:
+                    return Json("'Success':'false'");
+            }
+        }
         [HttpPost]
         public async Task<JsonResult> CreateFacility(string data)
         {
@@ -489,7 +524,7 @@ namespace InventoryManagementSystem.Controllers
             var id = string.Empty;
             var name = string.Empty;
             var location = string.Empty;
-            
+
 
             foreach (var o in obj)
             {
@@ -575,7 +610,7 @@ namespace InventoryManagementSystem.Controllers
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var apiURL = "/api/Values/GetResourcesByFacilityId/"+ FacilityId;
+                var apiURL = "/api/Values/GetResourcesByFacilityId/" + FacilityId;
 
                 HttpResponseMessage Res = await client.GetAsync(apiURL);
                 if (Res.IsSuccessStatusCode)
@@ -593,7 +628,7 @@ namespace InventoryManagementSystem.Controllers
                         res.Id = d.Id;
                         res.Name = d.Name;
                         res.Quantity = d.Quantity;
-                        res.FacilityId = d.FacilityId; 
+                        res.FacilityId = d.FacilityId;
 
                         model.ResourceManagmentData.Add(res);
                     }
@@ -688,7 +723,7 @@ namespace InventoryManagementSystem.Controllers
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var apiURL = "/api/Values/GetResourceById/"+Id;
+                var apiURL = "/api/Values/GetResourceById/" + Id;
 
                 HttpResponseMessage Res = await client.GetAsync(apiURL);
                 if (Res.IsSuccessStatusCode)
@@ -705,7 +740,7 @@ namespace InventoryManagementSystem.Controllers
                     model.FacilityId = data.FacilityId;
                 }
             }
-            
+
 
             return Json(new
             {
@@ -757,6 +792,117 @@ namespace InventoryManagementSystem.Controllers
                 parameters["Id"] = id;
                 parameters["name"] = name;
                 parameters["quantity"] = quantity;
+
+                var content = new StringContent(JsonConvert.SerializeObject(parameters), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage Res = await client.PostAsync(apiURL, content);
+                if (Res.IsSuccessStatusCode)
+                {
+                    result = true;
+                }
+            }
+
+            switch (result)
+            {
+                case true:
+                    return Json("'Success':'true'");
+                case false:
+                    return Json("'Success':'false'");
+                default:
+                    return Json("'Success':'false'");
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DisableUser(string Id)
+        {
+            var result = false;
+
+            var Baseurl = GetURL();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/DisableUser";
+
+                var parameters = new Dictionary<string, string>();
+                parameters["Id"] = Id;
+
+                var content = new StringContent(JsonConvert.SerializeObject(parameters), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage Res = await client.PostAsync(apiURL, content);
+                if (Res.IsSuccessStatusCode)
+                {
+                    result = true;
+                }
+            }
+
+            switch (result)
+            {
+                case true:
+                    return Json("'Success':'true'");
+                case false:
+                    return Json("'Success':'false'");
+                default:
+                    return Json("'Success':'false'");
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> EnableUser(string Id)
+        {
+            var result = false;
+
+            var Baseurl = GetURL();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/EnableUser";
+
+                var parameters = new Dictionary<string, string>();
+                parameters["Id"] = Id;
+
+                var content = new StringContent(JsonConvert.SerializeObject(parameters), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage Res = await client.PostAsync(apiURL, content);
+                if (Res.IsSuccessStatusCode)
+                {
+                    result = true;
+                }
+            }
+
+            switch (result)
+            {
+                case true:
+                    return Json("'Success':'true'");
+                case false:
+                    return Json("'Success':'false'");
+                default:
+                    return Json("'Success':'false'");
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DeleteResource(string Id)
+        {
+            var result = false;
+
+            var Baseurl = GetURL();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/DeleteResource/"+Id;
+
+                var parameters = new Dictionary<string, string>();
+                parameters["Id"] = Id;
 
                 var content = new StringContent(JsonConvert.SerializeObject(parameters), Encoding.UTF8, "application/json");
 

@@ -9,6 +9,7 @@
             <tr>
                 <th scope="col">Name</th>
                 <th scope="col">Location</th>
+                <th scope="col"># Resources</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
@@ -18,6 +19,7 @@
                 <tr>
                     <td scope="row">@d.Name</td>
                     <td>@d.Location</td>
+                    <td>@d.NumberOfResources</td>
                     <td>
                         <button type="button" class="btn btn-sm btn-outline-info" onclick="viewFacility(@d.Id)">
                             View Resources
@@ -25,9 +27,18 @@
                         <button type="button" class="btn btn-sm btn-outline-warning" onclick="editFacility(@d.Id)">
                             Edit
                         </button>
-                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="disableFacility(@d.Id)">
-                            Delete
-                        </button>
+                        @if (d.NumberOfResources > 0)
+                        {
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteMessage()">
+                                Delete
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteFacility(@d.Id)">
+                                Delete
+                            </button>
+                        }
                     </td>
                 </tr>
             }

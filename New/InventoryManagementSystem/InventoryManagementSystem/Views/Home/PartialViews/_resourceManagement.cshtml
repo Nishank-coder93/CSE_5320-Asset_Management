@@ -1,6 +1,7 @@
 ﻿<div style="padding-top:20px">
     <div id="RmTable_loader" class="loader"></div>
-    <div id="RmTableData">
+    <div id="RmTableData"></div>
+    <div id="initMessage">
         <div class="alert alert-warning" role="alert">
             Select a Facility to view the associated resources
         </div>
@@ -11,6 +12,49 @@
 <div id="editResourceModalContainer"></div>
 
 <script>
+    function deleteResource(Id, FacilityId)
+    {
+        var result = confirm("Delete resource?");
+        if (result)
+        {
+            var src = "@Url.Action("DeleteResource", "Home", new { area = "" })"+"?Id="+Id;
+
+            $.ajax({
+                type: "POST",
+                url: src,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    loadData(FacilityId);
+                },
+                Error: function (data) {
+
+                }
+            });
+        }
+    }
+
+    function loadData(FacilityId) {
+        $("#FmTableData").hide();
+        $("#FmTable_loader").show();
+
+        var src = "@Url.Action("LoadFacilityManagement", "Home", new { area = "" })";
+
+        $.ajax({
+            url: src,
+            type: 'GET',
+            cache: false,
+            data: {}
+        }).done(function (result) {
+            $('#FmTableData').html(result);
+            $("#FmTable_loader").hide();
+            $("#FmTableData").show();
+
+            viewFacility(FacilityId);
+         });
+    }
+
+
     function editResource(Id) {
         var src = "@Url.Action("EditResource", "Home", new { area = "" })"+"?Id="+Id;
 

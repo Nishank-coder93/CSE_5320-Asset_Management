@@ -28,6 +28,46 @@
         list_roles.push(1);
     };
 
+    function disableUser(Id) {
+        var result = confirm("Do you want to disable the User?");
+        if (result) {
+            var src = '@Url.Action("DisableUser", "Home", new { area = "" })' + '?Id=' + Id;
+
+            $.ajax({
+                url: src,
+                type: "post",
+                data: [],
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    loadUserManagementTable();
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+
+    function enableUser(Id) {
+        var result = confirm("Do you want to enable the User?");
+        if (result) {
+            var src = '@Url.Action("EnableUser", "Home", new { area = "" })' + '?Id=' + Id;
+
+            $.ajax({
+                url: src,
+                type: "post",
+                data: [],
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    loadUserManagementTable();
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+
     function createUser() {
         var name = document.getElementById("name").value;
         var email = document.getElementById("email").value;

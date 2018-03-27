@@ -108,9 +108,20 @@ namespace InventoryManagementSystem.Controllers
         {
             var db = new Context();
 
-            var result = db.Facility.ToList();
+            var model = new List<FacilityManagementModel>();
 
-            var response = JsonConvert.SerializeObject(result);
+            var result = db.Facility.ToList();
+            foreach(var r in result){
+                var f = new FacilityManagementModel();
+                f.Id = r.Id;
+                f.Name = r.Name;
+                f.Location = r.Location; 
+                f.NumberOfResources = db.Resource.Where(x => x.FacilityId == f.Id).Count();
+
+                model.Add(f);
+            }
+
+            var response = JsonConvert.SerializeObject(model);
             return response;
         }
 
@@ -208,6 +219,7 @@ namespace InventoryManagementSystem.Controllers
             }
 
             user.Password = GeneratePassword();
+            user.Active = true;
             db.User.Add(user);
             SendEmail(user.Email, user.Password);
 
@@ -345,6 +357,58 @@ namespace InventoryManagementSystem.Controllers
         }
 
         [HttpPost]
+        public bool DisableUser()
+        {
+            var request = Request.Content.ReadAsStringAsync().Result;
+            var request_parse = JsonConvert.DeserializeObject<Dictionary<string, string>>(request);
+
+            var db = new Context();
+            var userId = 0;
+
+            foreach (var r in request_parse)
+            {
+                switch (r.Key)
+                {
+                    case "Id":
+                        userId = int.Parse(r.Value);
+                        break;
+                }
+            }
+
+            var user = db.User.Where(x => x.Id == userId).FirstOrDefault();
+            user.Active = false;
+            db.SaveChanges();
+            
+            return true;
+        }
+
+        [HttpPost]
+        public bool EnableUser()
+        {
+            var request = Request.Content.ReadAsStringAsync().Result;
+            var request_parse = JsonConvert.DeserializeObject<Dictionary<string, string>>(request);
+
+            var db = new Context();
+            var userId = 0;
+
+            foreach (var r in request_parse)
+            {
+                switch (r.Key)
+                {
+                    case "Id":
+                        userId = int.Parse(r.Value);
+                        break;
+                }
+            }
+
+            var user = db.User.Where(x => x.Id == userId).FirstOrDefault();
+            user.Active = true;
+            db.SaveChanges();
+
+            return true;
+        }
+
+        [HttpPost]
         public bool UpdateFacility()
         {
             var request = Request.Content.ReadAsStringAsync().Result;
@@ -454,6 +518,42 @@ namespace InventoryManagementSystem.Controllers
             {
                 res.Name = name;
                 res.Quantity = int.Parse(quantity);
+            }
+
+            db.SaveChanges();
+
+            return true;
+        }
+
+        [HttpPost]
+        public bool DeleteFacility(string Id)
+        {
+            var db = new Context();
+            var FacilityId = int.Parse(Id);
+
+            var fac = db.Facility.Where(x => x.Id == FacilityId).FirstOrDefault();
+
+            if (fac != null)
+            {
+                db.Facility.Remove(fac);
+            } 
+
+            db.SaveChanges();
+
+            return true;
+        }
+
+        [HttpPost]
+        public bool DeleteResource(string Id)
+        {
+            var db = new Context();
+            var ResourceId = int.Parse(Id);
+
+            var res = db.Resource.Where(x => x.Id == ResourceId).FirstOrDefault();
+
+            if (res != null)
+            {
+                db.Resource.Remove(res);
             }
 
             db.SaveChanges();

@@ -71,6 +71,7 @@ namespace InventoryManagementSystem.Models.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string Location { get; set; }
+        public int NumberOfResources { get; set; }
     }
 
     public class ResourceModel

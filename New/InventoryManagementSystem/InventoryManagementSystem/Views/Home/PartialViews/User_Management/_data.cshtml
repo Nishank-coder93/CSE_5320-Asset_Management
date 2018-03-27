@@ -28,13 +28,13 @@
                         </button>
                         @if (d.Status)
                         {
-                            <button type="button" class="btn btn-outline-danger">
+                            <button type="button" class="btn btn-outline-danger" onclick="disableUser(@d.Id)">
                                 Disable
                             </button>
                         }
                         else
                         {
-                            <button type="button" class="btn btn-outline-info">
+                            <button type="button" class="btn btn-outline-info" onclick="enableUser(@d.Id)">
                                 Enable
                             </button>
                         }

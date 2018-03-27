@@ -21,8 +21,34 @@
         loadFacilityManagementTable();
         $("#RmTable_loader").hide();
     });
+    
+
+    function deleteMessage() {
+        alert("Error. Delete all the resources associated with the facility first");
+    }
+
+    function deleteFacility(Id) {
+        var result = confirm("Delete this facility?");
+        if (result)
+        {
+            var src = "@Url.Action("DeleteFacility", "Home", new { area = "" })"+"?Id="+Id;
+
+            $.ajax({
+                url: src,
+                type: 'POST',
+                cache: false,
+                data: {}
+            }).done(function (result) {
+                loadFacilityManagementTable();
+                $("#initMessage").show();
+                $("#RmTableData").hide();
+            });
+        }
+
+    }
 
     function viewFacility(Id) {
+        $("#initMessage").hide();
         $("#RmTableData").hide();
         $("#RmTable_loader").show();
 
@@ -42,7 +68,6 @@
 
     function loadFacilityManagementTable() {
         intialize();
-
         $("#FmTableData").hide();
         $("#FmTable_loader").show();
 
