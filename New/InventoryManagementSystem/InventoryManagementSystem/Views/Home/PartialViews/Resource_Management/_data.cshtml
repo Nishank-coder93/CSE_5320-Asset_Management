@@ -7,6 +7,7 @@
             <h4>Add / Manage Resources for @Model.FacilityName</h4>
         </div>
         <div class="card-body">
+
             @if (Model.ResourceManagmentData.Count > 0)
             {
                 <table class="table" style="table-layout : fixed;">
@@ -28,7 +29,7 @@
                                         Edit
                                     </button>
                                     <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteResource(@d.Id,@Model.FacilityId)">
-                                        Delete
+                                        Disable
                                     </button>
                                 </td>
                             </tr>

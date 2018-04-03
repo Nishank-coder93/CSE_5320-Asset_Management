@@ -50,23 +50,44 @@
         var name_update = document.getElementById("edit_name").value;
         var quantity_update = document.getElementById("edit_quantity").value;
 
-        var data = { Id: id, name: name_update, quantity: quantity_update}
-        var send_to_controller = JSON.stringify(data);
-        var src = '@Url.Action("UpdateResource", "Home", new { area = "" })' + '?data=' + send_to_controller;
+        if (validateResourceName(name_update) && validateQuantity(quantity_update))
+        {
 
-        $.ajax({
-            url: src,
-            type: "post",
-            data: send_to_controller,
-            dataType: "json",
-            contentType: "application/json",
-            success: function (data) {
-                viewFacility(facilityId);
-                $('#editResourceModal').modal('hide');
-            },
-            error: function () {
-                $('#editResourceModal').modal('hide');
+            var data = { Id: id, name: name_update, quantity: quantity_update}
+            var send_to_controller = JSON.stringify(data);
+            var src = '@Url.Action("UpdateResource", "Home", new { area = "" })' + '?data=' + send_to_controller;
+
+            $.ajax({
+                url: src,
+                type: "post",
+                data: send_to_controller,
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    viewFacility(facilityId);
+                    $('#editResourceModal').modal('hide');
+                    $("#resource_update_success").show();
+                },
+                error: function () {
+                    $('#editResourceModal').modal('hide');
+                }
+            });
+        }
+        else
+        {
+            var message = "Invalid";
+            if (!validateResourceName(name_update)) {
+                message += " name format";
             }
-        });
+
+            if (!validateQuantity(quantity_update)) {
+                if (message != "Invalid") {
+                    message += " and";
+                }
+                message += " quantity Format";
+            }
+
+            alert(message);
+        }
     }
 </script>

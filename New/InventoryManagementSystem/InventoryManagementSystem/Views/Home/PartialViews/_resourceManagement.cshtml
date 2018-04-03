@@ -1,4 +1,19 @@
 ﻿<div style="padding-top:20px">
+    <div class="alert alert-success" id="resource_add_success" role="alert">
+        A new Resource has been added successfully
+    </div>
+
+    <div class="alert alert-success" id="resource_update_success" role="alert">
+        Resource has been updated successfully
+    </div>
+
+    <div class="alert alert-success" id="resource_disable_success" role="alert">
+        Resource Disabled successfully
+    </div>
+
+    <div class="alert alert-danger" id="resource_error" role="alert">
+        Opps! Something went wrong.
+    </div>
     <div id="RmTable_loader" class="loader"></div>
     <div id="RmTableData"></div>
     <div id="initMessage">
@@ -12,9 +27,21 @@
 <div id="editResourceModalContainer"></div>
 
 <script>
+
+    $(document).ready(function () {
+        initializeResourceMessages();
+    });
+
+    function initializeResourceMessages() {
+        $("#resource_add_success").hide();
+        $("#resource_update_success").hide();
+        $("#resource_disable_success").hide();
+        $("#resource_error").hide();
+    };
+
     function deleteResource(Id, FacilityId)
     {
-        var result = confirm("Delete resource?");
+        var result = confirm("Disable resource?");
         if (result)
         {
             var src = "@Url.Action("DeleteResource", "Home", new { area = "" })"+"?Id="+Id;
@@ -26,15 +53,18 @@
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     loadData(FacilityId);
+                    $("#resource_disable_success").show();
                 },
                 Error: function (data) {
-
+                    $("#resource_error").show();
                 }
             });
         }
     }
 
     function loadData(FacilityId) {
+
+        initializeResourceMessages();
         $("#FmTableData").hide();
         $("#FmTable_loader").show();
 
@@ -49,7 +79,6 @@
             $('#FmTableData').html(result);
             $("#FmTable_loader").hide();
             $("#FmTableData").show();
-
             viewFacility(FacilityId);
          });
     }
@@ -69,6 +98,7 @@
             },
             Error: function (data) {
                 $('#editResourceModal').modal('hide');
+                $("#resource_error").show();
             }
         });
     }
@@ -78,25 +108,66 @@
         var quantity = document.getElementById("new_resource_quantity").value;
         var facilityId = Id;
 
+        if (validateResourceName(name) && validateQuantity(quantity))
+        {
 
-        var data = { name: name, quantity: quantity, facilityId: facilityId}
-        var send_to_controller = JSON.stringify(data);
-        var src = '@Url.Action("CreateResource", "Home", new { area = "" })' + '?data=' + send_to_controller;
+            var data = { name: name, quantity: quantity, facilityId: facilityId}
+            var send_to_controller = JSON.stringify(data);
+            var src = '@Url.Action("CreateResource", "Home", new { area = "" })' + '?data=' + send_to_controller;
 
-        $.ajax({
-            url: src,
-            type: "post",
-            data: send_to_controller,
-            dataType: "json",
-            contentType: "application/json",
-            success: function (data) {
-                loadData(facilityId);
-                $('#newResourceModal').modal('hide');
-            },
-            error: function () {
-                $('#newResourceModal').modal('hide');
+            $.ajax({
+                url: src,
+                type: "post",
+                data: send_to_controller,
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    loadData(facilityId);
+                    $('#newResourceModal').modal('hide');
+                    $("#resource_add_success").show();
+                },
+                error: function () {
+                    $('#newResourceModal').modal('hide');
+                    $("#resource_error").show();
+                }
+            });
+        }
+        else
+        {
+            var message = "Invalid";
+            if (!validateResourceName(name)) {
+                message += " name format";
             }
-        });
+
+            if (!validateQuantity(quantity)) {
+                if (message != "Invalid") {
+                    message += " and";
+                }
+                message += " quantity Format";
+            }
+
+            alert(message);
+        }
+    }
+
+    function validateResourceName(name) {
+        var result = false;
+
+        if (/^[a-zA-Z0-9][a-zA-Z0-9._\-]*$/.exec(name)) {
+            result = true;
+        }
+
+        return result;
+    }
+
+    function validateQuantity(quantity) {
+        var result = true;
+
+        if (isNaN(quantity) || quantity < 1) {
+            result = false;
+        }
+
+        return result;
     }
 
     function addResource(Id) {
@@ -113,6 +184,7 @@
             },
             Error: function (data) {
                 $('#newResourceModal').modal('hide');
+                $("#resource_error").show();
             }
         });
     }
