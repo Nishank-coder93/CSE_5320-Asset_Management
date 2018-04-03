@@ -15,12 +15,12 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" class="form-control" id="name" aria-describedby="Name" placeholder="Enter the name of the Facility">
+                        <label for="edit_facility_name">Name</label>
+                        <input type="text" class="form-control" id="edit_facility_name" aria-describedby="Name" placeholder="Enter the name of the Facility">
                     </div>
                     <div class="form-group">
-                        <label for="location">Location</label>
-                        <input type="text" class="form-control" id="locationData" aria-describedby="location" placeholder="Enter the location">
+                        <label for="edit_facility_location">Location</label>
+                        <input type="text" class="form-control" id="edit_facility_location" aria-describedby="location" placeholder="Enter the location">
                     </div>
                 </form>
             </div>
@@ -38,15 +38,15 @@
     var id = @Html.Raw(Json.Encode(Model.Id));
 
     var name = @Html.Raw(Json.Encode(Model.Name));
-    document.getElementById("name").value = name;
+    document.getElementById("edit_facility_name").value = name;
 
     var locationData = @Html.Raw(Json.Encode(Model.Location));
-    document.getElementById("locationData").value = locationData;
+    document.getElementById("edit_facility_location").value = locationData;
 
     function updateFacility() {
 
-        var name_update = document.getElementById("name").value;
-        var location_update = document.getElementById("locationData").value;
+        var name_update = document.getElementById("edit_facility_name").value;
+        var location_update = document.getElementById("edit_facility_location").value;
 
         var data = { Id: id, name: name_update, location: location_update}
         var send_to_controller = JSON.stringify(data);

@@ -84,7 +84,7 @@
     var id = @Html.Raw(Json.Encode(Model.Id));
     var name = @Html.Raw(Json.Encode(Model.Name));
     document.getElementById("name").value = name;
-    
+
     var email = @Html.Raw(Json.Encode(Model.Email));
     document.getElementById("email").value = email;
 
@@ -121,24 +121,45 @@
         var name_update = document.getElementById("name").value;
         var email_update = document.getElementById("email").value;
 
-        var data = { Id: id, name: name_update, email: email_update, list_facilities: list_facilities_edit, list_roles: list_roles_edit }
-        var send_to_controller = JSON.stringify(data);
-        var src = '@Url.Action("UpdateUser", "Home", new { area = "" })' + '?data=' + send_to_controller;
 
-        $.ajax({
-            url: src,
-            type: "post",
-            data: send_to_controller,
-            dataType: "json",
-            contentType: "application/json",
-            success: function (data) {
-                loadUserManagementTable();
-                initialize();
-                $('#editUserModal').modal('hide');
-            },
-            error: function () {
-                $('#editUserModal').modal('hide');
+        if (validateName(name_update) && validateEmail(email_update))
+        {
+            var data = { Id: id, name: name_update, email: email_update, list_facilities: list_facilities_edit, list_roles: list_roles_edit }
+            var send_to_controller = JSON.stringify(data);
+            var src = '@Url.Action("UpdateUser", "Home", new { area = "" })' + '?data=' + send_to_controller;
+
+            $.ajax({
+                url: src,
+                type: "post",
+                data: send_to_controller,
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    loadUserManagementTable();
+                    $('#editUserModal').modal('hide');
+                    $("#user_update_success").show();
+                },
+                error: function () {
+                    $('#editUserModal').modal('hide');
+                    $("#error").show();
+                }
+            });
+        }
+        else
+        {
+            var message = "Invalid";
+            if (!validateName(name_update)) {
+                message += " name format";
             }
-        });
+
+            if (!validateEmail(email_update)) {
+                if (message != "Invalid") {
+                    message += " and";
+                }
+                message += " Email Format";
+            }
+
+            alert(message);
+        }
     }
 </script>

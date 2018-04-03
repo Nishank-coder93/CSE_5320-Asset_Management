@@ -104,8 +104,8 @@
     }
 
     function createFacility() {
-        var name = document.getElementById("name").value;
-        var location = document.getElementById("location").value;
+        var name = document.getElementById("new_facility_name").value;
+        var location = document.getElementById("new_facility_location").value;
 
         var data = { name: name, location: location}
         var send_to_controller = JSON.stringify(data);

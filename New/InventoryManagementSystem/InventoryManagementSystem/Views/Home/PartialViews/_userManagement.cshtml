@@ -7,6 +7,26 @@
             <h4>Add / Manage users</h4>
         </div>
         <div class="card-body">
+            <div class="alert alert-success" id="user_add_success" role="alert">
+                A new user has been added successfully
+            </div>
+
+            <div class="alert alert-success" id="user_update_success" role="alert">
+                User has been updated successfully
+            </div>
+
+            <div class="alert alert-success" id="user_enable_success" role="alert">
+                User Enabled successfully
+            </div>
+
+            <div class="alert alert-success" id="user_disable_success" role="alert">
+                User Disabled successfully
+            </div>
+
+            <div class="alert alert-danger" id="error" role="alert">
+                Opps! Something went wrong.
+            </div>
+
             <div id="UmTable_loader" class="loader"></div>
             <div id="UmTableData"></div>
         </div>
@@ -21,6 +41,14 @@
     $(document).ready(function () {
         loadUserManagementTable();
     });
+
+    function initializeMessages() {
+        $("#user_add_success").hide();
+        $("#user_update_success").hide();
+        $("#user_enable_success").hide();
+        $("#user_disable_success").hide();
+        $("#error").hide();
+    };
 
     function intialize() {
         list_facilities = [];
@@ -41,8 +69,10 @@
                 contentType: "application/json",
                 success: function (data) {
                     loadUserManagementTable();
+                    $("#user_disable_success").show();
                 },
                 error: function () {
+                    $("#error").show();
                 }
             });
         }
@@ -61,8 +91,10 @@
                 contentType: "application/json",
                 success: function (data) {
                     loadUserManagementTable();
+                    $("#user_enable_success").show();
                 },
                 error: function () {
+                    $("#error").show();
                 }
             });
         }
@@ -72,27 +104,68 @@
         var name = document.getElementById("name").value;
         var email = document.getElementById("email").value;
 
-        console.log(list_roles);
-        console.log(list_facilities);
+        //console.log(list_roles);
+        //console.log(list_facilities);
 
-        var data = { name: name, email: email, list_facilities: list_facilities, list_roles: list_roles }
-        var send_to_controller = JSON.stringify(data);
-        var src = '@Url.Action("CreateUser", "Home", new { area = "" })' + '?data=' + send_to_controller;
+        if (validateName(name) && validateEmail(email))
+        { 
+            var data = { name: name, email: email, list_facilities: list_facilities, list_roles: list_roles }
+            var send_to_controller = JSON.stringify(data);
+            var src = '@Url.Action("CreateUser", "Home", new { area = "" })' + '?data=' + send_to_controller;
 
-        $.ajax({
-            url: src,
-            type: "post",
-            data: send_to_controller,
-            dataType: "json",
-            contentType: "application/json",
-            success: function (data) {
-                loadUserManagementTable();
-                $('#newUserModal').modal('hide');
-            },
-            error: function () {
-                $('#newUserModal').modal('hide');
+            $.ajax({
+                url: src,
+                type: "post",
+                data: send_to_controller,
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    loadUserManagementTable();
+                    $('#newUserModal').modal('hide');
+                    $("#user_add_success").show();
+                },
+                error: function () {
+                    $('#newUserModal').modal('hide');
+                    $("#error").show();
+                }
+            }); 
+        }
+        else
+        {
+            var message = "Invalid";
+            if (!validateName(name)) {
+                message += " name format";
             }
-        });
+
+            if (!validateEmail(email)) {
+                if (message != "Invalid") {
+                    message += " and";
+                }
+                message += " Email Format";
+            }
+
+            alert(message);
+        }
+    }
+
+    function validateName(name) {
+        var result = false;
+
+        if (/^[a-zA-Z0-9][a-zA-Z0-9._\-]*$/.exec(name)) {
+            result = true;
+        }
+
+        return result;
+    }
+
+    function validateEmail(email) {
+        var result = false;
+
+        var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+
+        result = pattern.test(email);
+
+        return result;
     }
 
     function Role_List(id) {
@@ -113,6 +186,7 @@
 
     function loadUserManagementTable() {
         intialize();
+        initializeMessages();
 
         $("#UmTableData").hide();
         $("#UmTable_loader").show();
@@ -146,6 +220,7 @@
             },
             Error: function (data) {
                 $('#newUserModal').modal('hide');
+                $("#error").show();
             }
         });
     }
@@ -165,6 +240,7 @@
             },
             Error: function (data) {
                 $('#editUserModal').modal('hide');
+                $("#error").show();
             }
         });
     }
