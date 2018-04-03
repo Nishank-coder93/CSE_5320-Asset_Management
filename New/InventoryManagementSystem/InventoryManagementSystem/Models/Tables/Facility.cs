@@ -9,6 +9,11 @@ namespace InventoryManagementSystem.Models.Tables
 {
     public class Facility
     {
+        public Facility()
+        {
+            Status = true;
+        }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int Id { get; set; }
@@ -16,5 +21,7 @@ namespace InventoryManagementSystem.Models.Tables
         public string Name { get; set; }
 
         public string Location { get; set; }
+
+        public bool Status { get; set; }
     }
 }

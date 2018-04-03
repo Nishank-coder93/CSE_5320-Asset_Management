@@ -5,6 +5,11 @@ namespace InventoryManagementSystem.Models.Tables
 {
     public class Resource
     {
+        public Resource()
+        {
+            Status = true;
+        }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int Id { get; set; }
@@ -14,6 +19,8 @@ namespace InventoryManagementSystem.Models.Tables
         public int Quantity { get; set; }
 
         public bool Verfied { get; set; }
+
+        public bool Status { get; set; }
 
         [ForeignKey("Facility")]
         public int FacilityId { get; set; }

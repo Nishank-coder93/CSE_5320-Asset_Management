@@ -110,13 +110,13 @@ namespace InventoryManagementSystem.Controllers
 
             var model = new List<FacilityManagementModel>();
 
-            var result = db.Facility.ToList();
+            var result = db.Facility.Where(x=>x.Status == true).ToList();
             foreach(var r in result){
                 var f = new FacilityManagementModel();
                 f.Id = r.Id;
                 f.Name = r.Name;
                 f.Location = r.Location; 
-                f.NumberOfResources = db.Resource.Where(x => x.FacilityId == f.Id).Count();
+                f.NumberOfResources = db.Resource.Where(x => x.FacilityId == f.Id && x.Status == true).Count();
 
                 model.Add(f);
             }
@@ -171,7 +171,7 @@ namespace InventoryManagementSystem.Controllers
             var db = new Context();
 
             var facilityId = int.Parse(Id);
-            var result = db.Resource.Where(x => x.FacilityId == facilityId).ToList();
+            var result = db.Resource.Where(x => x.FacilityId == facilityId && x.Status == true).ToList();
 
             var response = JsonConvert.SerializeObject(result);
             return response;
@@ -181,7 +181,7 @@ namespace InventoryManagementSystem.Controllers
         {
             var ResourceId = int.Parse(Id);
             var db = new Context();
-            var result = db.Resource.Where(x=>x.Id == ResourceId).FirstOrDefault();
+            var result = db.Resource.Where(x=>x.Id == ResourceId && x.Status == true).FirstOrDefault();
 
             var response = JsonConvert.SerializeObject(result);
             return response;
@@ -738,7 +738,8 @@ namespace InventoryManagementSystem.Controllers
 
             if (fac != null)
             {
-                db.Facility.Remove(fac);
+                //db.Facility.Remove(fac);
+                fac.Status = false;
             } 
 
             db.SaveChanges();
@@ -764,7 +765,8 @@ namespace InventoryManagementSystem.Controllers
 
             if (res != null)
             {
-                db.Resource.Remove(res);
+                //db.Resource.Remove(res);
+                res.Status = false;
             }
 
             db.SaveChanges();
