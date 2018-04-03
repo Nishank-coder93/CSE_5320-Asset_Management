@@ -48,23 +48,42 @@
         var name_update = document.getElementById("edit_facility_name").value;
         var location_update = document.getElementById("edit_facility_location").value;
 
-        var data = { Id: id, name: name_update, location: location_update}
-        var send_to_controller = JSON.stringify(data);
-        var src = '@Url.Action("UpdateFacility", "Home", new { area = "" })' + '?data=' + send_to_controller;
+        if (validateFacilityName(name_update) && validateFacilityLocation(location_update)) {
+            var data = { Id: id, name: name_update, location: location_update}
+            var send_to_controller = JSON.stringify(data);
+            var src = '@Url.Action("UpdateFacility", "Home", new { area = "" })' + '?data=' + send_to_controller;
 
-        $.ajax({
-            url: src,
-            type: "post",
-            data: send_to_controller,
-            dataType: "json",
-            contentType: "application/json",
-            success: function (data) {
-                loadFacilityManagementTable();
-                $('#editFacilityModal').modal('hide');
-            },
-            error: function () {
-                $('#editFacilityModal').modal('hide');
+            $.ajax({
+                url: src,
+                type: "post",
+                data: send_to_controller,
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    loadFacilityManagementTable();
+                    $("#facility_update_success").show();
+                    $('#editFacilityModal').modal('hide');
+                },
+                error: function () {
+                    $('#editFacilityModal').modal('hide');
+                }
+            });
+        }
+        else
+        {
+            var message = "Invalid";
+            if (!validateFacilityName(name_update)) {
+                message += " name format";
             }
-        });
+
+            if (!validateFacilityLocation(location_update)) {
+                if (message != "Invalid") {
+                    message += " and";
+                }
+                message += " Location Format";
+            }
+
+            alert(message);
+        }
     }
 </script>
