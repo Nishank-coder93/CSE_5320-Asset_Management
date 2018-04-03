@@ -37,26 +37,33 @@
     document.getElementById("quantity").value = quantity;
 
     function update(id) {
-        
+
         var quantity_update = document.getElementById("quantity").value;
 
-        var data = { Id: id, quantity: quantity_update}
-        var send_to_controller = JSON.stringify(data);
-        var src = '@Url.Action("Update", "Dashboard", new { area = "" })' + '?data=' + send_to_controller;
+        if (validateQuantity(quantity_update)) {
+            var data = { Id: id, quantity: quantity_update}
+            var send_to_controller = JSON.stringify(data);
+            var src = '@Url.Action("Update", "Dashboard", new { area = "" })' + '?data=' + send_to_controller;
 
-        $.ajax({
-            url: src,
-            type: "post",
-            data: send_to_controller,
-            dataType: "json",
-            contentType: "application/json",
-            success: function (data) { 
-                $('#updateModal').modal('hide');
-                loadData();                
-            },
-            error: function () {
-                $('#updateModal').modal('hide');
-            }
-        });
+            $.ajax({
+                url: src,
+                type: "post",
+                data: send_to_controller,
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    $('#updateModal').modal('hide');
+                    loadData();
+                    $("#quantity_update_success").show();
+                },
+                error: function () {
+                    $('#updateModal').modal('hide');
+                }
+            });
+        }
+        else
+        {
+            alert("Invalid quantity format");
+        }
     }
 </script>

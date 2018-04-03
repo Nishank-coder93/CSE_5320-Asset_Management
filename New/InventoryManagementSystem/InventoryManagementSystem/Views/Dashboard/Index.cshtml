@@ -9,6 +9,22 @@
         <h4>Resource Verification</h4>
     </div>
     <div class="card-body">
+        <div class="alert alert-success" id="quantity_update_success" role="alert">
+            The quantity has been updated successfully
+        </div>
+
+        <div class="alert alert-success" id="quantity_confirm_success" role="alert">
+            The quantity for the facility has been confirmed
+        </div>
+
+        <div class="alert alert-success" id="quantity_missing_success" role="alert">
+            The quantity for the facility has been marked as missing
+        </div>
+
+        <div class="alert alert-danger" id="quantity_error" role="alert">
+            Opps! Something went wrong.
+        </div>
+
         <div id="Table_loader" class="loader"></div>
         <div id="TableData"></div>
     </div>
@@ -19,8 +35,15 @@
         loadData();
     });
 
+    function initializeDashboard() {
+        $("#quantity_update_success").hide();
+        $("#quantity_confirm_success").hide();
+        $("#quantity_missing_success").hide();
+        $("#quantity_error").hide();
+    };
+
     function loadData() {
-        //intialize();
+        initializeDashboard();
 
         $("#TableData").hide();
         $("#Table_loader").show();

@@ -70,6 +70,16 @@ else
 
     });
 
+    function validateQuantity(quantity) {
+        var result = true;
+
+        if (isNaN(quantity) || quantity < 1) {
+            result = false;
+        }
+
+        return result;
+    }
+
     function updateQuantity(Id) {
         var src = "@Url.Action("UpdateQuantity", "Dashboard", new { area = "" })"+"?Id="+Id;
 
@@ -84,6 +94,7 @@ else
             },
             Error: function (data) {
                 $('#updateModal').modal('hide');
+                $("#quantity_error").show();
             }
         });
     }
@@ -102,6 +113,7 @@ else
             },
             Error: function (data) {
                 $('#missingModal').modal('hide');
+                $("#quantity_error").show();
             }
         });
     }
@@ -119,9 +131,10 @@ else
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     loadData();
+                    $("#quantity_confirm_success").show();
                 },
                 Error: function (data) {
-
+                    $("#quantity_error").show();
                 }
             });
         }
@@ -129,25 +142,32 @@ else
 
     function markAsMissing(id)
     {
-        var quantity = document.getElementById("quantity_missing").value; 
+        var quantity = document.getElementById("quantity_missing").value;
 
-        var data = { Id: id, quantity: quantity}
-        var send_to_controller = JSON.stringify(data);
-        var src = '@Url.Action("MarkAsMissing", "Dashboard", new { area = "" })' + '?data=' + send_to_controller;
+        if (validateQuantity(quantity)) {
+            var data = { Id: id, quantity: quantity}
+            var send_to_controller = JSON.stringify(data);
+            var src = '@Url.Action("MarkAsMissing", "Dashboard", new { area = "" })' + '?data=' + send_to_controller;
 
-        $.ajax({
-            url: src,
-            type: "post",
-            data: send_to_controller,
-            dataType: "json",
-            contentType: "application/json",
-            success: function (data) {
-                loadData();
-                $('#missingModal').modal('hide');
-            },
-            error: function () {
-                $('#missingModal').modal('hide');
-            }
-        });
+            $.ajax({
+                url: src,
+                type: "post",
+                data: send_to_controller,
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    loadData();
+                    $('#missingModal').modal('hide');
+                    $("#quantity_missing_success").show();
+                },
+                error: function () {
+                    $('#missingModal').modal('hide');
+                }
+            });
+        }
+        else
+        {
+            alert("Invalid quantity format");
+        }
     }
 </script>
