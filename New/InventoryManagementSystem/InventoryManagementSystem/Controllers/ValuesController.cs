@@ -238,44 +238,50 @@ namespace InventoryManagementSystem.Controllers
 
             foreach (var f in facilities)
             {
-                var rep = new ReportModel();
-                rep.FacilityId = f.Id;
-
-                foreach (var r in report)
+                if (f.Status)
                 {
-                    foreach (var re in resources)
+                    var rep = new ReportModel();
+                    rep.FacilityId = f.Id;
+                    rep.FacilityName = f.Name;
+                    foreach (var r in report)
                     {
-                        if (re.Id == r.ResourceId && re.FacilityId == f.Id)
+                        foreach (var re in resources)
                         {
-                            var res = new ResourceReportModel();
-                            res.ResourceId = r.ResourceId;
-                            res.ResourceName = r.Resource.Name;
-                            res.MissingQuantity = r.MissingQuantity;
-                            res.QuantityChange = r.QuantityChange;
-                            res.Status = string.Empty;
-
-                            if (r.Verify)
+                            if (re.Status)
                             {
-                                res.Status = "Verified";
-                                res.Verified = true;
-                            }
-
-                            if (r.MissingQuantity.HasValue)
-                            {
-                                if (r.Missing)
+                                if (re.Id == r.ResourceId && re.FacilityId == f.Id)
                                 {
-                                    res.Status = "Missing";
-                                    res.Missing = true;
+                                    var res = new ResourceReportModel();
+                                    res.ResourceId = r.ResourceId;
+                                    res.ResourceName = r.Resource.Name;
+                                    res.MissingQuantity = r.MissingQuantity;
+                                    res.QuantityChange = r.QuantityChange;
+                                    res.Status = string.Empty;
+
+                                    if (r.Verify)
+                                    {
+                                        res.Status = "Verified";
+                                        res.Verified = true;
+                                    }
+
+                                    if (r.MissingQuantity.HasValue)
+                                    {
+                                        if (r.Missing)
+                                        {
+                                            res.Status = "Missing";
+                                            res.Missing = true;
+                                        }
+                                    }
+
+                                    rep.ResourceReport.Add(res);
                                 }
                             }
-
-                            rep.ResourceReport.Add(res);
                         }
                     }
+                    result.Add(rep);
                 }
-                result.Add(rep);
-            }
 
+            }
 
             var response = JsonConvert.SerializeObject(result);
             return response;
@@ -826,7 +832,7 @@ namespace InventoryManagementSystem.Controllers
             var subject = "Welcome to Inventory Managment System";
             var to = new EmailAddress(email, Name);
             var plainTextContent = "and easy to do anywhere, even with C#";
-            var htmlContent = "<strong>Login into with "+ URL + " with the username: "+ email + " and password: "+ password + "</strong>";
+            var htmlContent = "<strong>Login into with " + URL + " with the username: " + email + " and password: " + password + "</strong>";
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             var response = await client.SendEmailAsync(msg);
         }

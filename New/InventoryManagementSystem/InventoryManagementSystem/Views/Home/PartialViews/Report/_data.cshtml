@@ -1,7 +1,42 @@
-﻿
-@{
-    ViewBag.Title = "_data";
-}
+﻿@model InventoryManagementSystem.Models.ViewModels.HomeViewModel
 
-<h2>_data</h2>
+
+
+@if (Model.ReportData.Count > 0)
+{
+    foreach (var d in Model.ReportData)
+    {
+        <div class="card">
+            <div class="card-header">
+                Report for @d.FacilityName
+            </div>
+            <div class="card-body">
+
+                @if (d.ResourceReport.Count > 0)
+                {
+                    foreach (var r in d.ResourceReport)
+                    {
+                        <h5 class="card-title">Resource name</h5>
+                        <p class="card-text">Status</p>
+                    }
+
+                    <a href="#" class="btn btn-outline-primary">Download as PDF</a>
+                }
+                else
+                {
+                    <div class="alert alert-warning" role="alert">
+                        There is no data to be shown
+                    </div>
+                }
+
+            </div>
+        </div><br />
+    }
+}
+else
+{
+    <div class="alert alert-warning" role="alert">
+        There is no data to be shown
+    </div>
+}
 

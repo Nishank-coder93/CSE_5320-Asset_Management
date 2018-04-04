@@ -153,7 +153,7 @@
     function validateResourceName(name) {
         var result = false;
 
-        if (/^[a-zA-Z0-9][a-zA-Z0-9._\-]*$/.exec(name)) {
+        if (/^[a-zA-Z-,](\s{0,1}[a-zA-Z-, ])*[^\s]$/.exec(name)) {
             result = true;
         }
 

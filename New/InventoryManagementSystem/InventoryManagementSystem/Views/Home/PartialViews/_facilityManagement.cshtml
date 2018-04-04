@@ -48,7 +48,7 @@
     function validateFacilityName(name) {
         var result = false;
 
-        if (/^[a-zA-Z0-9][a-zA-Z0-9._\-]*$/.exec(name)) {
+        if (/^[a-zA-Z-,](\s{0,1}[a-zA-Z-, ])*[^\s]$/.exec(name)) {
             result = true;
         }
 
@@ -58,7 +58,7 @@
     function validateFacilityLocation(location) {
         var result = false;
 
-        if (/^[a-zA-Z0-9][a-zA-Z0-9._\-]*$/.exec(location)) {
+        if (/^[a-zA-Z-,](\s{0,1}[a-zA-Z-, ])*[^\s]$/.exec(location)) {
             result = true;
         }
 
@@ -91,7 +91,6 @@
     }
 
     function viewFacility(Id) {
-
         $("#initMessage").hide();
         $("#RmTableData").hide();
         $("#RmTable_loader").show();
