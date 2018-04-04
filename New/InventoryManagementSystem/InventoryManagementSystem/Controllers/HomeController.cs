@@ -7,13 +7,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 
@@ -116,6 +113,41 @@ namespace InventoryManagementSystem.Controllers
             },
               JsonRequestBehavior.AllowGet
             );
+        }
+
+        public async Task<JsonResult> LoadUsers()
+        {
+            var model = new HomeViewModel();
+            var Baseurl = GetURL();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/GetUsers";
+
+                HttpResponseMessage Res = await client.GetAsync(apiURL);
+                if (Res.IsSuccessStatusCode)
+                {
+                    var result = await Res.Content.ReadAsStringAsync();
+
+                    var response = new ResponseHelper();
+                    var output = response.fixListResult(result);
+
+                    var data = JsonConvert.DeserializeObject<List<UserManagementModel>>(output);
+
+                    foreach (var d in data)
+                    {
+                        model.UserListData.Add(d.Email);
+                    }
+
+                    return Json(model.UserListData, JsonRequestBehavior.AllowGet);
+                }
+            }
+
+            return Json("'Success':'false'", JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult NewFacility()

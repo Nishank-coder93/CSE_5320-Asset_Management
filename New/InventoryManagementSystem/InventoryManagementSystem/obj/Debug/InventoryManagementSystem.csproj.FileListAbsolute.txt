@@ -50,3 +50,7 @@ D:\GitHub\CSE_5320\New\InventoryManagementSystem\InventoryManagementSystem\obj\D
 D:\GitHub\CSE_5320\New\InventoryManagementSystem\InventoryManagementSystem\obj\Debug\InventoryManagementSystem.csproj.CoreCompileInputs.cache
 D:\GitHub\CSE_5320\New\InventoryManagementSystem\InventoryManagementSystem\obj\Debug\InventoryManagementSystem.dll
 D:\GitHub\CSE_5320\New\InventoryManagementSystem\InventoryManagementSystem\obj\Debug\InventoryManagementSystem.pdb
+D:\GitHub\CSE_5320\New\InventoryManagementSystem\InventoryManagementSystem\bin\SendGrid.dll
+D:\GitHub\CSE_5320\New\InventoryManagementSystem\InventoryManagementSystem\bin\SendGrid.pdb
+D:\GitHub\CSE_5320\New\InventoryManagementSystem\InventoryManagementSystem\bin\SendGrid.xml
+D:\GitHub\CSE_5320\New\InventoryManagementSystem\InventoryManagementSystem\obj\Debug\InventoryManagementSystem.csproj.CopyComplete

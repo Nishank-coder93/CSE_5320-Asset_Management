@@ -38,6 +38,8 @@
 
 <script>
     var list_facilities = [];
+    var list_users = [];
+
     $(document).ready(function () {
         loadUserManagementTable();
     });
@@ -53,6 +55,7 @@
     function intialize() {
         list_facilities = [];
         list_roles = [];
+        list_users = [];
         list_roles.push(1);
     };
 
@@ -108,27 +111,36 @@
         //console.log(list_facilities);
 
         if (validateName(name) && validateEmail(email))
-        { 
-            var data = { name: name, email: email, list_facilities: list_facilities, list_roles: list_roles }
-            var send_to_controller = JSON.stringify(data);
-            var src = '@Url.Action("CreateUser", "Home", new { area = "" })' + '?data=' + send_to_controller;
+        {
+            var check = $.inArray(email, list_users);
+            if (check != -1) {
+                alert("User already exists");
+            }
+            else
+            {
+                var data = { name: name, email: email, list_facilities: list_facilities, list_roles: list_roles }
+                var send_to_controller = JSON.stringify(data);
+                var src = '@Url.Action("CreateUser", "Home", new { area = "" })' + '?data=' + send_to_controller;
 
-            $.ajax({
-                url: src,
-                type: "post",
-                data: send_to_controller,
-                dataType: "json",
-                contentType: "application/json",
-                success: function (data) {
-                    loadUserManagementTable();
-                    $('#newUserModal').modal('hide');
-                    $("#user_add_success").show();
-                },
-                error: function () {
-                    $('#newUserModal').modal('hide');
-                    $("#error").show();
-                }
-            }); 
+                $.ajax({
+                    url: src,
+                    type: "post",
+                    data: send_to_controller,
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function (data) {
+                        console.log(data);
+                        loadUserManagementTable();
+                        $('#newUserModal').modal('hide');
+                        $("#user_add_success").show();
+                    },
+                    error: function () {
+                        //alert("User already exists");
+                        $('#newUserModal').modal('hide');
+                        $("#error").show();
+                    }
+                });
+            } 
         }
         else
         {
@@ -151,7 +163,7 @@
     function validateName(name) {
         var result = false;
 
-        if (/^[a-zA-Z0-9][a-zA-Z0-9._\-]*$/.exec(name)) {
+        if (/^[a-zA-Z-,](\s{0,1}[a-zA-Z-, ])*[^\s]$/.exec(name)) {
             result = true;
         }
 
@@ -184,9 +196,20 @@
         }
     }
 
+    function User_List(id) {
+        var check = $.inArray(id, list_users);
+        if (check == -1) {
+            list_users.push(id);
+        }
+        else {
+            list_users = list_users.filter(item => item !== id)
+        }
+    }
+
     function loadUserManagementTable() {
         intialize();
         initializeMessages();
+        loadUsers();
 
         $("#UmTableData").hide();
         $("#UmTable_loader").show();
@@ -202,6 +225,21 @@
             $('#UmTableData').html(result);
             $("#UmTable_loader").hide();
             $("#UmTableData").show();
+         });
+    }
+
+    function loadUsers() {
+        var src = "@Url.Action("LoadUsers", "Home", new { area = "" })";
+
+        $.ajax({
+            url: src,
+            type: 'GET',
+            cache: false,
+            data: {}
+        }).done(function (result) {
+            for (var i = 0, len = result.length; i < len; i++) {
+                User_List(result[i]);
+            }
          });
     }
 

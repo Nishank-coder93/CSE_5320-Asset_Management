@@ -3,12 +3,12 @@ using InventoryManagementSystem.Models;
 using InventoryManagementSystem.Models.Tables;
 using InventoryManagementSystem.Models.ViewModels;
 using Newtonsoft.Json;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace InventoryManagementSystem.Controllers
@@ -110,12 +110,13 @@ namespace InventoryManagementSystem.Controllers
 
             var model = new List<FacilityManagementModel>();
 
-            var result = db.Facility.Where(x=>x.Status == true).ToList();
-            foreach(var r in result){
+            var result = db.Facility.Where(x => x.Status == true).ToList();
+            foreach (var r in result)
+            {
                 var f = new FacilityManagementModel();
                 f.Id = r.Id;
                 f.Name = r.Name;
-                f.Location = r.Location; 
+                f.Location = r.Location;
                 f.NumberOfResources = db.Resource.Where(x => x.FacilityId == f.Id && x.Status == true).Count();
 
                 model.Add(f);
@@ -141,6 +142,15 @@ namespace InventoryManagementSystem.Controllers
             var db = new Context();
             var userId = int.Parse(Id);
             var result = db.User.Where(x => x.Id == userId).FirstOrDefault();
+
+            var response = JsonConvert.SerializeObject(result);
+            return response;
+        }
+
+        public string GetUserByEmail(string Email)
+        {
+            var db = new Context();
+            var result = db.User.Where(x => x.Email == Email).FirstOrDefault();
 
             var response = JsonConvert.SerializeObject(result);
             return response;
@@ -181,7 +191,7 @@ namespace InventoryManagementSystem.Controllers
         {
             var ResourceId = int.Parse(Id);
             var db = new Context();
-            var result = db.Resource.Where(x=>x.Id == ResourceId && x.Status == true).FirstOrDefault();
+            var result = db.Resource.Where(x => x.Id == ResourceId && x.Status == true).FirstOrDefault();
 
             var response = JsonConvert.SerializeObject(result);
             return response;
@@ -195,14 +205,14 @@ namespace InventoryManagementSystem.Controllers
             var model = new List<ResourceReport>();
             var result = db.Report.Where(x => x.Resource.FacilityId == FacilityId).ToList();
 
-            foreach(var r in result)
+            foreach (var r in result)
             {
-                var resource = new ResourceReport(); 
+                var resource = new ResourceReport();
                 resource.Verified = r.Verify;
                 resource.Missing = r.Missing;
                 resource.ResourceId = r.ResourceId;
 
-                var res = db.Resource.Where(x=>x.Id == r.ResourceId).FirstOrDefault();
+                var res = db.Resource.Where(x => x.Id == r.ResourceId).FirstOrDefault();
                 if (res != null)
                 {
                     resource.Quantity = res.Quantity;
@@ -256,7 +266,7 @@ namespace InventoryManagementSystem.Controllers
                                     res.Status = "Missing";
                                     res.Missing = true;
                                 }
-                            } 
+                            }
 
                             rep.ResourceReport.Add(res);
                         }
@@ -264,7 +274,7 @@ namespace InventoryManagementSystem.Controllers
                 }
                 result.Add(rep);
             }
-            
+
 
             var response = JsonConvert.SerializeObject(result);
             return response;
@@ -291,6 +301,7 @@ namespace InventoryManagementSystem.Controllers
                         break;
                     case "email":
                         user.Email = r.Value;
+                        user.UserName = r.Value;
                         break;
                     case "facilityList":
                         facilities = JsonConvert.DeserializeObject<ArrayList>(r.Value);
@@ -303,8 +314,16 @@ namespace InventoryManagementSystem.Controllers
 
             user.Password = GeneratePassword();
             user.Active = true;
+
+            var check = db.User.Where(x => x.Email == user.Email).FirstOrDefault();
+
+            if (check != null)
+            {
+                return false;
+            }
+
             db.User.Add(user);
-            SendEmail(user.Email, user.Password);
+            SendEmail(user.Name, user.Email, user.Password);
 
             foreach (var f in facilities)
             {
@@ -461,7 +480,7 @@ namespace InventoryManagementSystem.Controllers
             var user = db.User.Where(x => x.Id == userId).FirstOrDefault();
             user.Active = false;
             db.SaveChanges();
-            
+
             return true;
         }
 
@@ -617,14 +636,14 @@ namespace InventoryManagementSystem.Controllers
                 var oldQuantity = res.Quantity;
                 var newQuantity = int.Parse(quantity);
 
-                difference = newQuantity - oldQuantity; 
+                difference = newQuantity - oldQuantity;
 
                 res.Quantity = int.Parse(quantity);
             }
 
             db.SaveChanges();
 
-            var res_report = db.Report.Where(x=>x.ResourceId == resourceId).FirstOrDefault();
+            var res_report = db.Report.Where(x => x.ResourceId == resourceId).FirstOrDefault();
             if (res_report != null)
             {
                 res_report.Verify = false;
@@ -740,7 +759,7 @@ namespace InventoryManagementSystem.Controllers
             {
                 //db.Facility.Remove(fac);
                 fac.Status = false;
-            } 
+            }
 
             db.SaveChanges();
 
@@ -781,9 +800,18 @@ namespace InventoryManagementSystem.Controllers
             return result;
         }
 
-        private void SendEmail(string email, string password)
+        private async void SendEmail(string Name, string email, string password)
         {
-            //todo
+            var URL = "";
+            var apiKey = "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";
+            var client = new SendGridClient(apiKey);
+            var from = new EmailAddress("group7@uta", "Group 7");
+            var subject = "Welcome to Inventory Managment System";
+            var to = new EmailAddress(email, Name);
+            var plainTextContent = "and easy to do anywhere, even with C#";
+            var htmlContent = "<strong>Login into with "+ URL + " with the username: "+ email + " and password: "+ password + "</strong>";
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+            var response = await client.SendEmailAsync(msg);
         }
     }
 }

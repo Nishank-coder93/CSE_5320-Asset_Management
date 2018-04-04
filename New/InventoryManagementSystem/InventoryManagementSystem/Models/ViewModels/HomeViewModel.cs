@@ -11,6 +11,7 @@ namespace InventoryManagementSystem.Models.ViewModels
     {
         public HomeViewModel()
         {
+            UserListData = new List<String>();
             ReportData = new List<ReportModel>();
             UserManagementData = new List<UserManagementModel>();
             FacilityManagementData = new List<FacilityManagementModel>();
@@ -20,6 +21,7 @@ namespace InventoryManagementSystem.Models.ViewModels
 
         public int FacilityId { get; set; }
         public string FacilityName { get; set; }
+        public List<String> UserListData { get; set; }
         public List<ReportModel> ReportData { get; set; }
         public List<ResourceModel> ResourceManagmentData { get; set; }
         public List<UserManagementModel> UserManagementData { get; set; }
