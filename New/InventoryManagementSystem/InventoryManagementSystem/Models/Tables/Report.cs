@@ -20,6 +20,8 @@ namespace InventoryManagementSystem.Models.Tables
 
         public bool Missing { get; set; }
 
+        public string Message { get; set; }
+
         public int? MissingQuantity { get; set; }
 
         public int? QuantityChange { get; set; }

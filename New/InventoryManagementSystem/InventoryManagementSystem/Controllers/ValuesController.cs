@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web.Http;
 
 namespace InventoryManagementSystem.Controllers
@@ -312,7 +313,14 @@ namespace InventoryManagementSystem.Controllers
                 }
             }
 
-            user.Password = GeneratePassword();
+            var password = GeneratePassword();
+
+            var code = "teamseven";
+            var hashKey = PasswordHelper.GetHashKey(code);
+            var encrypt = PasswordHelper.Encrypt(hashKey, password);
+
+            user.Password = encrypt;
+
             user.Active = true;
 
             var check = db.User.Where(x => x.Email == user.Email).FirstOrDefault();
@@ -323,7 +331,7 @@ namespace InventoryManagementSystem.Controllers
             }
 
             db.User.Add(user);
-            SendEmail(user.Name, user.Email, user.Password);
+            SendEmail(user.Name, user.Email, password);
 
             foreach (var f in facilities)
             {
@@ -796,7 +804,16 @@ namespace InventoryManagementSystem.Controllers
         private string GeneratePassword()
         {
             var result = string.Empty;
+            var length = 7;
+            const string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            StringBuilder res = new StringBuilder();
+            Random rnd = new Random();
+            while (0 < length--)
+            {
+                res.Append(valid[rnd.Next(valid.Length)]);
+            }
 
+            result = res.ToString();
             return result;
         }
 
