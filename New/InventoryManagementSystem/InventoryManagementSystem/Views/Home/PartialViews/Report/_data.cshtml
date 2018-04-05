@@ -6,7 +6,7 @@
 {
     foreach (var d in Model.ReportData)
     {
-        <div class="card">
+        <div class="card" id="report_@d.FacilityId">
             <div class="card-header">
                 Report for @d.FacilityName
             </div>
@@ -75,7 +75,7 @@
                         </tbody>
                     </table>
 
-                    <a href="#" class="btn btn-outline-primary">Download as PDF</a>
+                    <a href="#" class="btn btn-outline-primary" onclick="downloadPDF(@d.FacilityId)">Download as PDF</a>
                 }
                 else
                 {

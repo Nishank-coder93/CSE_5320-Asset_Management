@@ -15,7 +15,8 @@ namespace InventoryManagementSystem.Helpers
             var user_1 = new User();
             user_1.Id = 1;
             user_1.Name = "Admin";
-            user_1.UserName = "admin";
+            user_1.Email = "admin@gmail.com";
+            user_1.UserName = "admin@gmail.com";
             user_1.Password = "admin";
             user_1.Active = true;
             result.Add(user_1);
@@ -23,7 +24,8 @@ namespace InventoryManagementSystem.Helpers
             var user_2 = new User();
             user_2.Id = 2;
             user_2.Name = "Neil";
-            user_2.UserName = "neil";
+            user_2.Email = "neil@gmail.com";
+            user_2.UserName = "neil@gmail.com";
             user_2.Password = "neil";
             user_2.Active = true;
             result.Add(user_2);

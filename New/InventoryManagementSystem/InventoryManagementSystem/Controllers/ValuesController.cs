@@ -432,6 +432,14 @@ namespace InventoryManagementSystem.Controllers
             }
 
             var user = db.User.Where(x => x.Id == userId).FirstOrDefault();
+
+            var tempEmail = user.Email;
+
+            if (tempEmail != email)
+            {
+                SendEmail(string.Empty, email, string.Empty, true);
+            }
+
             user.Name = name;
             user.Email = email;
 
@@ -817,7 +825,7 @@ namespace InventoryManagementSystem.Controllers
             var request_parse = JsonConvert.DeserializeObject<Dictionary<string, string>>(request);
 
             var db = new Context();
-            
+
             var resourceId = 0;
             var message = string.Empty;
             var UserId = 0;
@@ -872,18 +880,34 @@ namespace InventoryManagementSystem.Controllers
             return result;
         }
 
-        private async void SendEmail(string Name, string email, string password)
+        private async void SendEmail(string Name, string email, string password, bool? update)
         {
-            var URL = "";
-            var apiKey = "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";
-            var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("group7@uta", "Group 7");
-            var subject = "Welcome to Inventory Managment System";
-            var to = new EmailAddress(email, Name);
-            var plainTextContent = "and easy to do anywhere, even with C#";
-            var htmlContent = "<strong>Login into with " + URL + " with the username: " + email + " and password: " + password + "</strong>";
-            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-            var response = await client.SendEmailAsync(msg);
+            if (update.HasValue && update.Value)
+            {
+                var URL = "";
+                var apiKey = "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";
+                var client = new SendGridClient(apiKey);
+                var from = new EmailAddress("group7@uta", "Group 7");
+                var subject = "Welcome to Inventory Managment System";
+                var to = new EmailAddress(email, Name);
+                var plainTextContent = "Email updated";
+                var htmlContent = "<p>Email updated. Login to " + URL + " with this email.</p>";
+                var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+                var response = await client.SendEmailAsync(msg);
+            }
+            else
+            {
+                var URL = "";
+                var apiKey = "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";
+                var client = new SendGridClient(apiKey);
+                var from = new EmailAddress("group7@uta", "Group 7");
+                var subject = "Welcome to Inventory Managment System";
+                var to = new EmailAddress(email, Name);
+                var plainTextContent = "Login in credentials. Username: " + email + " Password: " + password;
+                var htmlContent = "<p>Login into with " + URL + "</p> <p>with the following credentials </p> <p>username: " + email + "</p><p>password: " + password + "</p>";
+                var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+                var response = await client.SendEmailAsync(msg);
+            }
         }
     }
 }
