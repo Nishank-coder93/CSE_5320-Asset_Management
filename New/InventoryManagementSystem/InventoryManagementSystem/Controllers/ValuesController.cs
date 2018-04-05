@@ -339,7 +339,7 @@ namespace InventoryManagementSystem.Controllers
             }
 
             db.User.Add(user);
-            SendEmail(user.Name, user.Email, password);
+            SendEmail(user.Name, user.Email, password, null);
 
             foreach (var f in facilities)
             {

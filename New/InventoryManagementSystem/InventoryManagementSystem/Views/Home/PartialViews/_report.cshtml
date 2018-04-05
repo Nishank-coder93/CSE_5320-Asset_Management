@@ -28,7 +28,6 @@
     function downloadPDF(id)
     {
         var div_id = "#report_" + id;
-        alert(div_id);
 
         doc.fromHTML($(div_id).html(), 30, 30, {
             'width': 500,
