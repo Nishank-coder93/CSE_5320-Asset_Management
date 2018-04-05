@@ -1,0 +1,213 @@
+﻿<div style="padding-top:20px">
+
+    <div class="card">
+        <div class="card-header">
+            <button type="button" class="btn btn-outline-primary float-right" onclick="addFacility()">Add a new facility</button>
+            <h4>Add / Manage facilities</h4>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-success" id="facility_add_success" role="alert">
+                A new Facility has been added successfully
+            </div>
+
+            <div class="alert alert-success" id="facility_update_success" role="alert">
+                Facility has been updated successfully
+            </div>
+
+            <div class="alert alert-success" id="facility_disable_success" role="alert">
+                Facility Disabled successfully
+            </div>
+
+            <div class="alert alert-danger" id="facility_error" role="alert">
+                Opps! Something went wrong.
+            </div>
+
+            <div id="FmTable_loader" class="loader"></div>
+            <div id="FmTableData"></div>
+        </div>
+    </div>
+</div>
+
+<div id="newFacilityModalContainer"></div>
+<div id="editFacilityModalContainer"></div>
+
+
+<script>
+    $(document).ready(function () {
+        loadFacilityManagementTable();
+        $("#RmTable_loader").hide();
+    });
+
+    function initializeFacilityMessages() {
+        $("#facility_add_success").hide();
+        $("#facility_update_success").hide();
+        $("#facility_disable_success").hide();
+        $("#facility_error").hide();
+    };
+
+    function validateFacilityName(name) {
+        var result = false;
+
+        if (/^[a-zA-Z-,](\s{0,1}[a-zA-Z-, ])*[^\s]$/.exec(name)) {
+            result = true;
+        }
+
+        return result;
+    }
+
+    function validateFacilityLocation(location) {
+        var result = false;
+
+        if (/^[a-zA-Z-,](\s{0,1}[a-zA-Z-, ])*[^\s]$/.exec(location)) {
+            result = true;
+        }
+
+        return result;
+    }
+
+    function deleteMessage() {
+        alert("Error. Disable all the resources associated with the facility first");
+    }
+
+    function deleteFacility(Id) {
+        var result = confirm("Disable this facility?");
+        if (result)
+        {
+            var src = "@Url.Action("DeleteFacility", "Home", new { area = "" })"+"?Id="+Id;
+
+            $.ajax({
+                url: src,
+                type: 'POST',
+                cache: false,
+                data: {}
+            }).done(function (result) {
+                loadFacilityManagementTable();
+                $("#facility_disable_success").show();
+                $("#initMessage").show();
+                $("#RmTableData").hide();
+            });
+        }
+
+    }
+
+    function viewFacility(Id) {
+        $("#initMessage").hide();
+        $("#RmTableData").hide();
+        $("#RmTable_loader").show();
+
+        var src = "@Url.Action("LoadResources", "Home", new { area = "" })"+"?FacilityId="+Id;
+
+        $.ajax({
+            url: src,
+            type: 'GET',
+            cache: false,
+            data: {}
+        }).done(function (result) {
+            $('#RmTableData').html(result);
+            $("#RmTable_loader").hide();
+            $("#RmTableData").show();
+         });
+    }
+
+    function loadFacilityManagementTable() {
+        intialize();
+        initializeFacilityMessages();
+        $("#FmTableData").hide();
+        $("#FmTable_loader").show();
+
+        var src = "@Url.Action("LoadFacilityManagement", "Home", new { area = "" })";
+
+        $.ajax({
+            url: src,
+            type: 'GET',
+            cache: false,
+            data: {}
+        }).done(function (result) {
+            $('#FmTableData').html(result);
+            $("#FmTable_loader").hide();
+            $("#FmTableData").show();
+         });
+    }
+
+    function addFacility() {
+        var src = "@Url.Action("NewFacility", "Home", new { area = "" })";
+
+        $.ajax({
+            type: "GET",
+            url: src,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#newFacilityModalContainer").html(data.LocationModal);
+                $('#newFacilityModal').modal('show');
+            },
+            Error: function (data) {
+                $('#newFacilityModal').modal('hide');
+                $("#facility_error").show();
+            }
+        });
+    }
+
+    function createFacility() {
+        var name = document.getElementById("new_facility_name").value;
+        var location = document.getElementById("new_facility_location").value;
+
+        if (validateFacilityName(name) && validateFacilityLocation(location)) {
+            var data = { name: name, location: location}
+            var send_to_controller = JSON.stringify(data);
+            var src = '@Url.Action("CreateFacility", "Home", new { area = "" })' + '?data=' + send_to_controller;
+
+            $.ajax({
+                url: src,
+                type: "post",
+                data: send_to_controller,
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    loadFacilityManagementTable();
+                    $('#newFacilityModal').modal('hide');
+                    $("#facility_add_success").show();
+                },
+                error: function () {
+                    $('#newFacilityModal').modal('hide');
+                    $("#facility_error").show();
+                }
+            });
+        }
+        else
+        {
+            var message = "Invalid";
+            if (!validateFacilityName(name)) {
+                message += " name format";
+            }
+
+            if (!validateFacilityLocation(location)) {
+                if (message != "Invalid") {
+                    message += " and";
+                }
+                message += " Location Format";
+            }
+
+            alert(message);
+        }
+    }
+
+    function editFacility(id) {
+        var src = "@Url.Action("EditFacility", "Home", new { area = "" })"+"?Id="+id;
+
+        $.ajax({
+            type: "GET",
+            url: src,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#editFacilityModalContainer").html(data.LocationModal);
+                $('#editFacilityModal').modal('show');
+            },
+            Error: function (data) {
+                $('#editFacilityModal').modal('hide');
+                $("#facility_error").show();
+            }
+        });
+    }
+</script>

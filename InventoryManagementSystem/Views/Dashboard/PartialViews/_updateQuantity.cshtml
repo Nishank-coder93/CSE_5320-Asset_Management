@@ -1,0 +1,69 @@
+﻿@model InventoryManagementSystem.Models.ViewModels.DashboardViewModel
+
+<div class="modal" id="updateModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Edit a resource
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="Quantity">Quantity</label>
+                        <input type="text" class="form-control" id="quantity" aria-describedby="quantity" placeholder="Enter the Quantity">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="float-right">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-outline-success" onclick="update(@Model.Id)">Update Quantity</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var id = @Html.Raw(Json.Encode(Model.Id));
+
+    var quantity = @Html.Raw(Json.Encode(Model.Quantity));
+    document.getElementById("quantity").value = quantity;
+
+    function update(id) {
+
+        var quantity_update = document.getElementById("quantity").value;
+
+        if (validateQuantity(quantity_update)) {
+            var data = { Id: id, quantity: quantity_update}
+            var send_to_controller = JSON.stringify(data);
+            var src = '@Url.Action("Update", "Dashboard", new { area = "" })' + '?data=' + send_to_controller;
+
+            $.ajax({
+                url: src,
+                type: "post",
+                data: send_to_controller,
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    $('#updateModal').modal('hide');
+                    loadData();
+                    $("#quantity_update_success").show();
+                },
+                error: function () {
+                    $('#updateModal').modal('hide');
+                }
+            });
+        }
+        else
+        {
+            alert("Invalid quantity format");
+        }
+    }
+</script>

@@ -1,0 +1,165 @@
+﻿
+@model InventoryManagementSystem.Models.ViewModels.NewUserModel
+
+<div class="modal" id="editUserModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Edit a user
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" aria-describedby="Name" placeholder="Enter the name of the user">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <p>User Role</p><hr />
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons" id="roles">
+                            @if (Model.RoleId == 1)
+                            {
+                                <label class="btn btn-secondary active" onclick="Role_List_Edit(1)">
+                                    <input type="radio" name="options" id="Admin" autocomplete="off"> Admin
+                                </label>
+                                <label class="btn btn-secondary" onclick="Role_List_Edit(2)">
+                                    <input type="radio" name="options" id="RecourceChecker" autocomplete="off"> Resource Checker
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="btn btn-secondary" onclick="Role_List_Edit(1)">
+                                    <input type="radio" name="options" id="Admin" autocomplete="off"> Admin
+                                </label>
+                                <label class="btn btn-secondary active" onclick="Role_List_Edit(2)">
+                                    <input type="radio" name="options" id="RecourceChecker" autocomplete="off"> Resource Checker
+                                </label>
+                            }
+                        </div>
+                    </div>
+                    @if (Model.Facilities.Count > 0)
+                    {
+                        <p>Assign Facilities</p><hr />
+                        foreach (var f in Model.Facilities)
+                        {
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="@f.Id" onclick="Facility_List_Edit(@f.Id)">
+                                <label class="form-check-label" for="@f.Id">@f.Name</label>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="float-right">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-outline-success" onclick="updateUser()">Update User</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    list_roles_edit = [];
+    list_facilities_edit = [];
+
+    function initialize() {
+        list_roles_edit = [];
+        list_facilities_edit = [];
+    }
+
+    var id = @Html.Raw(Json.Encode(Model.Id));
+    var name = @Html.Raw(Json.Encode(Model.Name));
+    document.getElementById("name").value = name;
+
+    var email = @Html.Raw(Json.Encode(Model.Email));
+    document.getElementById("email").value = email;
+
+    var SelectedFacilities = @Html.Raw(Json.Encode(Model.SelectedFacilities));
+    var SelectedRoles = @Html.Raw(Json.Encode(Model.SelectedRoles));
+
+    SelectedRoles.forEach(function (element) {
+        Role_List_Edit(element);
+    });
+
+    SelectedFacilities.forEach(function (element) {
+        document.getElementById(element).checked = true;
+        Facility_List_Edit(element);
+    });
+
+    function Role_List_Edit(id) {
+        list_roles_edit = [];
+        list_roles_edit.push(id);
+        //console.log(list_roles);
+    }
+
+    function Facility_List_Edit(id) {
+        var check = $.inArray(id, list_facilities_edit);
+        if (check == -1) {
+            list_facilities_edit.push(id);
+        }
+        else {
+            list_facilities_edit = list_facilities_edit.filter(item => item !== id)
+        }
+    }
+
+    function updateUser() {
+
+        var name_update = document.getElementById("name").value;
+        var email_update = document.getElementById("email").value;
+
+
+        if (validateName(name_update) && validateEmail(email_update))
+        {
+            var data = { Id: id, name: name_update, email: email_update, list_facilities: list_facilities_edit, list_roles: list_roles_edit }
+            var send_to_controller = JSON.stringify(data);
+            var src = '@Url.Action("UpdateUser", "Home", new { area = "" })' + '?data=' + send_to_controller;
+
+            $.ajax({
+                url: src,
+                type: "post",
+                data: send_to_controller,
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    loadUserManagementTable();
+                    $('#editUserModal').modal('hide');
+                    $("#user_update_success").show();
+                },
+                error: function () {
+                    $('#editUserModal').modal('hide');
+                    $("#error").show();
+                }
+            });
+        }
+        else
+        {
+            var message = "Invalid";
+            if (!validateName(name_update)) {
+                message += " name format";
+            }
+
+            if (!validateEmail(email_update)) {
+                if (message != "Invalid") {
+                    message += " and";
+                }
+                message += " Email Format";
+            }
+
+            alert(message);
+        }
+    }
+</script>

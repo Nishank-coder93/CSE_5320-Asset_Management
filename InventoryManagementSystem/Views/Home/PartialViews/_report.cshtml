@@ -1,0 +1,85 @@
+﻿<div style="padding-top:20px">
+
+    <div class="card">
+        <div class="card-header">
+            <h4>Reports</h4>
+        </div>
+        <div class="card-body">
+            <div id="RdTable_loader" class="loader"></div>
+            <div id="RdTableData"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.debug.js" integrity="sha384-CchuzHs077vGtfhGYl9Qtc7Vx64rXBXdIAZIPbItbNyWIRTdG0oYAqki3Ry13Yzu" crossorigin="anonymous"></script>
+<script>
+
+    $(document).ready(function () {
+        loadReports();
+    });
+
+    var doc = new jsPDF();
+    var specialElementHandlers = {
+        '#editor': function (element, renderer) {
+            return true;
+        }
+    };
+
+    function downloadPDF(id)
+    {
+        var div_id = "#report_" + id;
+
+        doc.fromHTML($(div_id).html(), 10, 10, {
+            'width': 500,
+            'elementHandlers': specialElementHandlers
+        });
+
+        var filename = "Report_Facility_" + id + ".pdf";
+        doc.save(filename);
+    }
+
+    function SendMessage(reportId)
+    {
+        var id = "message_" + reportId;
+        var message = document.getElementById(id).value;
+        
+        var data = { Id: reportId, message: message }
+
+        var send_to_controller = JSON.stringify(data);
+            var src = '@Url.Action("SendMessage", "Home", new { area = "" })' + '?data=' + send_to_controller;
+
+            $.ajax({
+                url: src,
+                type: "post",
+                data: send_to_controller,
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    loadReports();
+                },
+                error: function () {
+                    
+                }
+            });
+    }
+
+    function loadReports()
+    {
+        $("#RdTableData").hide();
+        $("#RdTable_loader").show();
+
+        var src = "@Url.Action("LoadReports", "Home", new { area = "" })";
+
+        $.ajax({
+            url: src,
+            type: 'GET',
+            cache: false,
+            data: {}
+        }).done(function (result) {
+            $('#RdTableData').html(result);
+            $("#RdTable_loader").hide();
+            $("#RdTableData").show();
+         });
+    }
+
+</script>
