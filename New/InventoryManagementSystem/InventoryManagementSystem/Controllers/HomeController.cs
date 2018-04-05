@@ -315,6 +315,65 @@ namespace InventoryManagementSystem.Controllers
         }
 
         [HttpPost]
+        public async Task<JsonResult> SendMessage(string data)
+        {
+            var result = false;
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            var obj = serializer.Deserialize<Dictionary<string, object>>(data);
+
+            var id = string.Empty;
+            var message = string.Empty;
+
+
+            foreach (var o in obj)
+            {
+                switch (o.Key)
+                {
+                    case "Id":
+                        id = o.Value.ToString();
+                        break;
+                    case "message":
+                        message = o.Value.ToString();
+                        break;
+                }
+            }
+
+            var Baseurl = GetURL();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var apiURL = "/api/Values/SendMessage";
+
+                var parameters = new Dictionary<string, string>();
+                parameters["Id"] = id;
+                parameters["message"] = message;
+                parameters["UserId"] = Session["LoggedInUserId"].ToString();
+
+                var content = new StringContent(JsonConvert.SerializeObject(parameters), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage Res = await client.PostAsync(apiURL, content);
+                if (Res.IsSuccessStatusCode)
+                {
+                    result = true;
+                }
+            }
+
+            switch (result)
+            {
+                case true:
+                    return Json("'Success':'true'");
+                case false:
+                    return Json("'Success':'false'");
+                default:
+                    return Json("'Success':'false'");
+            }
+        }
+
+        [HttpPost]
         public async Task<JsonResult> DeleteFacility(string Id)
         {
             var result = false;

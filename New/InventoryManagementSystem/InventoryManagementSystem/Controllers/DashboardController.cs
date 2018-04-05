@@ -129,7 +129,7 @@ namespace InventoryManagementSystem.Controllers
             );
         }
 
-        public async Task<ActionResult> MissingQuantity(string Id)
+        public ActionResult MissingQuantity(string Id)
         {
             var model = new DashboardViewModel();
             model.Id = int.Parse(Id);

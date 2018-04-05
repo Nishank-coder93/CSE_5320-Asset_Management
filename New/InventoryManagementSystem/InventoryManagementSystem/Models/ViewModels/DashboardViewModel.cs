@@ -32,6 +32,7 @@ namespace InventoryManagementSystem.Models.ViewModels
 
     public class ResourceReport
     {
+        public string Message { get; set; }
         public int ResourceId { get; set; }
         public string ResourceName { get; set; }
         public bool Verified { get; set; }

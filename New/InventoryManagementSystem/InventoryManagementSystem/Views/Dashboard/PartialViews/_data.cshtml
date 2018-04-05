@@ -17,8 +17,9 @@
                         <thead class="thead-dark">
                             <tr>
                                 <th scope="col">Name</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Action</th>
+                                <th>Quantity</th>
+                                <th>Message</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -27,14 +28,15 @@
                                 <tr>
                                     <th scope="row">@r.ResourceName</th>
                                     <td>@r.Quantity</td>
+                                    <td>@r.Message</td>
                                     <td>
-                                        <button type="button" class="btn btn-outline-info" onclick="updateQuantity(@r.ResourceId)">
+                                        <button type="button" class="btn btn-sm btn-outline-info" onclick="updateQuantity(@r.ResourceId)">
                                             Update Quantity
                                         </button>
-                                        <button type="button" class="btn btn-outline-success" onclick="confirmQuantity(@r.ResourceId)">
+                                        <button type="button" class="btn btn-sm btn-outline-success" onclick="confirmQuantity(@r.ResourceId)">
                                             Confirm Quantity
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger" onclick="missingQuantity(@r.ResourceId)">
+                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="missingQuantity(@r.ResourceId)">
                                             Mark as Missing
                                         </button>
                                     </td>

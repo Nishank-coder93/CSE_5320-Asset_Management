@@ -212,6 +212,7 @@ namespace InventoryManagementSystem.Controllers
                 resource.Verified = r.Verify;
                 resource.Missing = r.Missing;
                 resource.ResourceId = r.ResourceId;
+                resource.Message = r.Message;
 
                 var res = db.Resource.Where(x => x.Id == r.ResourceId).FirstOrDefault();
                 if (res != null)
@@ -252,6 +253,7 @@ namespace InventoryManagementSystem.Controllers
                                 if (re.Id == r.ResourceId && re.FacilityId == f.Id)
                                 {
                                     var res = new ResourceReportModel();
+                                    res.ReportId = r.Id;
                                     res.ResourceId = r.ResourceId;
                                     res.ResourceName = r.Resource.Name;
                                     res.MissingQuantity = r.MissingQuantity;
@@ -703,7 +705,7 @@ namespace InventoryManagementSystem.Controllers
             {
                 res_report.Verify = true;
                 res_report.Missing = false;
-
+                res_report.Message = string.Empty;
                 if (UserId > 0)
                 {
                     res_report.UpdatedBy = UserId;
@@ -750,6 +752,8 @@ namespace InventoryManagementSystem.Controllers
             {
                 res_report.Verify = false;
                 res_report.Missing = true;
+                res_report.Message = string.Empty;
+
                 res_report.MissingQuantity = Quantity;
                 if (UserId > 0)
                 {
@@ -802,6 +806,51 @@ namespace InventoryManagementSystem.Controllers
                 res.Status = false;
             }
 
+            db.SaveChanges();
+
+            return true;
+        }
+
+        public bool SendMessage()
+        {
+            var request = Request.Content.ReadAsStringAsync().Result;
+            var request_parse = JsonConvert.DeserializeObject<Dictionary<string, string>>(request);
+
+            var db = new Context();
+            
+            var resourceId = 0;
+            var message = string.Empty;
+            var UserId = 0;
+
+            foreach (var r in request_parse)
+            {
+                switch (r.Key)
+                {
+                    case "Id":
+                        resourceId = int.Parse(r.Value);
+                        break;
+                    case "message":
+                        message = r.Value;
+                        break;
+                    case "UserId":
+                        UserId = int.Parse(r.Value);
+                        break;
+                }
+            }
+
+            var res_report = db.Report.Where(x => x.ResourceId == resourceId).FirstOrDefault();
+            if (res_report != null)
+            {
+                res_report.Verify = false;
+                res_report.Missing = false;
+                res_report.MissingQuantity = null;
+
+                if (UserId > 0)
+                {
+                    res_report.Message = message;
+                    res_report.UpdatedBy = UserId;
+                }
+            }
             db.SaveChanges();
 
             return true;

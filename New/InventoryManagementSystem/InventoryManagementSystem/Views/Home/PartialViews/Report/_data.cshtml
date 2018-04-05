@@ -14,11 +14,66 @@
 
                 @if (d.ResourceReport.Count > 0)
                 {
-                    foreach (var r in d.ResourceReport)
-                    {
-                        <h5 class="card-title">Resource name</h5>
-                        <p class="card-text">Status</p>
-                    }
+
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Resource Name</th>
+                                <th>Status</th>
+                                <th>Note</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var r in d.ResourceReport)
+                            {
+                                <tr>
+                                    <td>@r.ResourceName</td>
+
+                                    @if (r.Verified)
+                                    {
+                                        <td>Verified</td>
+                                    }
+                                    else if (r.Missing)
+                                    {
+                                        <td>
+                                            Missing
+
+                                            @if (r.MissingQuantity.HasValue)
+                                            {
+                                                <span> (No of missing items: @r.MissingQuantity.Value)</span>
+                                            }
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>Verification Pending</td>
+                                    }
+                                    <td>
+                                        @if (r.QuantityChange.HasValue)
+                                        {
+                                            <p>Quantity updated by @r.QuantityChange.Value Items</p>
+                                        }
+                                        else
+                                        {
+                                            <p>N/A</p>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (r.Missing)
+                                        { 
+                                            <form class="form-inline">
+                                                <label class="sr-only" for="message_@r.ReportId">Name</label>
+                                                <input type="text" class="form-control mb-2 mr-sm-2" id="message_@r.ReportId" placeholder="Enter message here">
+
+                                                <button type="button" class="btn btn-primary mb-2" onclick="SendMessage(@r.ReportId)">Send Message</button>
+                                            </form>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
 
                     <a href="#" class="btn btn-outline-primary">Download as PDF</a>
                 }

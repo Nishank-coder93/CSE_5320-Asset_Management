@@ -93,6 +93,7 @@ namespace InventoryManagementSystem.Models.ViewModels
             ResourceReport = new List<ResourceReportModel>();
         }
 
+        public int Id { get; set; }
         public int FacilityId { get; set; }
         public string FacilityName { get; set; }
         public List<ResourceReportModel> ResourceReport { get; set; }
@@ -100,6 +101,8 @@ namespace InventoryManagementSystem.Models.ViewModels
 
     public class ResourceReportModel
     {
+        public string Message { get; set; }
+        public int ReportId { get; set; }
         public int ResourceId { get; set; }
         public string ResourceName { get; set; }
         public string Status { get; set; }

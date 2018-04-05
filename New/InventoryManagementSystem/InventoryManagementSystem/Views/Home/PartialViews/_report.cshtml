@@ -16,6 +16,31 @@
         loadReports();
     });
 
+    function SendMessage(reportId)
+    {
+        var id = "message_" + reportId;
+        var message = document.getElementById(id).value;
+        
+        var data = { Id: reportId, message: message }
+
+        var send_to_controller = JSON.stringify(data);
+            var src = '@Url.Action("SendMessage", "Home", new { area = "" })' + '?data=' + send_to_controller;
+
+            $.ajax({
+                url: src,
+                type: "post",
+                data: send_to_controller,
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    loadReports();
+                },
+                error: function () {
+                    
+                }
+            });
+    }
+
     function loadReports()
     {
         $("#RdTableData").hide();
