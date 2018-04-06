@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="Cse5320-Web.config Connection String" description="Cse5320 Connection String used in web.config by the application to access the database." defaultValue="Data Source=aabifgjpz0uktk.c7jczudmjdve.us-east-2.rds.amazonaws.com;       Initial Catalog=InventoryManagementSystem;       Integrated Security=False;       User Id=root;       Password=YesjKuvuBezu5$;       MultipleActiveResultSets=True" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="D:\\GitHub\\CSE_5320\\InventoryManagementSystem\\obj\\Debug\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='Cse5320']/@connectionString" />
+  </parameter>
+</parameters>

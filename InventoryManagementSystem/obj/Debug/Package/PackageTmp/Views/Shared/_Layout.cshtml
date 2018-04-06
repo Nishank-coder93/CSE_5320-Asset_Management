@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+    @Styles.Render("~/Content/dashboard")
+    @Scripts.Render("~/bundles/jquery")
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Welcome @Session["LoggedInName"]</a>
+        <form class="form-inline my-2 my-lg-0 float-right">
+            @using (Html.BeginForm("logout", "Login", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+            }
+
+            @using (Html.BeginForm("logout", "Login", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <input type="submit" class="btn btn-outline-light btn-sm" value="Sign Out">
+            }
+        </form>
+    </nav>
+
+    <div class="nav-scroller bg-white box-shadow">
+        <nav class="nav nav-underline">
+            <span class="nav-link active">@ViewBag.Title</span>
+            <span class="nav-link">
+                Inventory Management System
+            </span>
+        </nav>
+    </div>
+
+    <div style="padding:30px">
+        <main role="main" class="">
+            @RenderBody()
+        </main>
+    </div>
+
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/dashboard")
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

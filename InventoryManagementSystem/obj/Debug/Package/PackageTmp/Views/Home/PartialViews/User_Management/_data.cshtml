@@ -1,0 +1,53 @@
+﻿@model InventoryManagementSystem.Models.ViewModels.HomeViewModel
+
+
+
+@if (Model.UserManagementData.Count > 0)
+{
+    <table class="table" style="table-layout : fixed;">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Role</th>
+                <th scope="col">Facility</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var d in Model.UserManagementData)
+            {
+                <tr>
+                    <td scope="row">@d.Name</td>
+                    <td>@d.Email</td>
+                    <td>@d.Roles</td>
+                    <td>@d.Facilities</td>
+                    <td>
+                        <button type="button" class="btn btn-outline-warning" onclick="editUser(@d.Id)">
+                            Edit
+                        </button>
+                        @if (d.Status)
+                        {
+                            <button type="button" class="btn btn-outline-danger" onclick="disableUser(@d.Id)">
+                                Disable
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-outline-info" onclick="enableUser(@d.Id)">
+                                Enable
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning" role="alert">
+        There is no data to be shown
+    </div>
+}
+

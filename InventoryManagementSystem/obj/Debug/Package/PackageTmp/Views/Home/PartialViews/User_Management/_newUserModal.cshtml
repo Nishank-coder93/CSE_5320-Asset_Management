@@ -1,0 +1,61 @@
+﻿
+@model InventoryManagementSystem.Models.ViewModels.NewUserModel
+
+<div class="modal" id="newUserModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Create a new User
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" aria-describedby="Name" placeholder="Enter the name of the user">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email address / Username</label>
+                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <p>User Role</p><hr />
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons" id="roles">
+                            <label class="btn btn-secondary active" onclick ="Role_List(1)">
+                                <input type="radio" name="options" id="Admin" autocomplete="off"> Admin
+                            </label>
+                            <label class="btn btn-secondary" onclick ="Role_List(2)">
+                                <input type="radio" name="options" id="RecourceChecker" autocomplete="off"> Resource Checker
+                            </label>
+                        </div>
+                    </div>
+                    @if (Model.Facilities.Count > 0)
+                    {
+                        <p>Assign Facilities</p><hr />
+                        foreach (var f in Model.Facilities)
+                        {
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="@f.Id" onclick ="Facility_List(@f.Id)">
+                                <label class="form-check-label" for="@f.Id">@f.Name</label>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="float-right">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-outline-success" onclick="createUser()">Create User</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

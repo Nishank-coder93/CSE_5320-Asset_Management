@@ -1,0 +1,38 @@
+﻿@model InventoryManagementSystem.Models.ViewModels.LoginViewModel
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+@using (Html.BeginForm("Index", "Login", FormMethod.Post, new { @class = "signin" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="text-center mb-4">
+        <img class="mb-4" src="https://cdn0.iconfinder.com/data/icons/everyday-objects-line-art-1/128/clipboard-512.png" alt="" width="100" height="92">
+        <h1 class="h3 mb-3 font-weight-normal">Inventory Management</h1><hr />
+
+        @if (!Model.Login)
+        {
+            <div class="alert alert-danger" role="alert">
+                Invalid Username / Password
+            </div>
+        }
+
+        <p>Enter your username and password to continue</p>
+    </div>
+
+    <div class="form-label-group">
+        @Html.TextBoxFor(l => l.Username, new { @class = "form-control", @placeholder = "Username", @requried = "required" })
+        <label for="Username">Username</label>
+    </div>
+
+    <div class="form-label-group">
+        @Html.PasswordFor(l => l.Password, new { @class = "form-control", @placeholder = "password" })
+        <label for="Password">Password</label>
+    </div>
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    <hr />
+    <small class="mt-5 mb-3 text-muted text-center">&copy; CSE 5320 - Group 7</small>
+}

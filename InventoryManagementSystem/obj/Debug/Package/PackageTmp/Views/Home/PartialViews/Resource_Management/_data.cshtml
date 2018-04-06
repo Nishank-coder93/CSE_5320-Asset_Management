@@ -1,0 +1,48 @@
+﻿@model InventoryManagementSystem.Models.ViewModels.HomeViewModel
+
+<div>
+    <div class="card">
+        <div class="card-header">
+            <button type="button" class="btn btn-outline-primary float-right" onclick="addResource(@Model.FacilityId)">Add a new Resource</button>
+            <h4>Add / Manage Resources for @Model.FacilityName</h4>
+        </div>
+        <div class="card-body">
+
+            @if (Model.ResourceManagmentData.Count > 0)
+            {
+                <table class="table" style="table-layout : fixed;">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var d in Model.ResourceManagmentData)
+                        {
+                            <tr>
+                                <td scope="row">@d.Name</td>
+                                <td>@d.Quantity</td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-outline-warning" onclick="editResource(@d.Id)">
+                                        Edit
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteResource(@d.Id,@Model.FacilityId)">
+                                        Disable
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-warning" role="alert">
+                    There are no resources associated with this facility
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,93 @@
+﻿
+@model InventoryManagementSystem.Models.ViewModels.ResourceModel
+
+<div class="modal" id="editResourceModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Edit a resource
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="edit_name" aria-describedby="Name" placeholder="Enter the name of the Resource">
+                    </div>
+                    <div class="form-group">
+                        <label for="Quantity">Quantity</label>
+                        <input type="text" class="form-control" id="edit_quantity" aria-describedby="quantity" placeholder="Enter the Quantity">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="float-right">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-outline-success" onclick="updateResource(@Model.Id)">Update Resource</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var id = @Html.Raw(Json.Encode(Model.Id));
+    var facilityId = @Html.Raw(Json.Encode(Model.FacilityId));
+
+    var name = @Html.Raw(Json.Encode(Model.Name));
+    document.getElementById("edit_name").value = name;
+
+    var quantity = @Html.Raw(Json.Encode(Model.Quantity));
+    document.getElementById("edit_quantity").value = quantity;
+
+    function updateResource() {
+
+        var name_update = document.getElementById("edit_name").value;
+        var quantity_update = document.getElementById("edit_quantity").value;
+
+        if (validateResourceName(name_update) && validateQuantity(quantity_update))
+        {
+
+            var data = { Id: id, name: name_update, quantity: quantity_update}
+            var send_to_controller = JSON.stringify(data);
+            var src = '@Url.Action("UpdateResource", "Home", new { area = "" })' + '?data=' + send_to_controller;
+
+            $.ajax({
+                url: src,
+                type: "post",
+                data: send_to_controller,
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    viewFacility(facilityId);
+                    $('#editResourceModal').modal('hide');
+                    $("#resource_update_success").show();
+                },
+                error: function () {
+                    $('#editResourceModal').modal('hide');
+                }
+            });
+        }
+        else
+        {
+            var message = "Invalid";
+            if (!validateResourceName(name_update)) {
+                message += " name format";
+            }
+
+            if (!validateQuantity(quantity_update)) {
+                if (message != "Invalid") {
+                    message += " and";
+                }
+                message += " quantity Format";
+            }
+
+            alert(message);
+        }
+    }
+</script>

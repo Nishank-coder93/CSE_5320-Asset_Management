@@ -21,8 +21,15 @@ namespace InventoryManagementSystem.Controllers
     public class DashboardController : Controller
     {
         public ActionResult Index()
-        { 
-            return View();
+        {
+            if (Session["Role"] != null && int.Parse(Session["Role"].ToString()) == 2)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index","Home");
+            }
         }
 
         public async Task<ActionResult> LoadResourcesByFacility()

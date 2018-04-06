@@ -1,0 +1,285 @@
+﻿
+<div style="padding-top:20px">
+
+    <div class="card">
+        <div class="card-header">
+            <button type="button" class="btn btn-outline-primary float-right" onclick="addUser()">Add a new user</button>
+            <h4>Add / Manage users</h4>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-success" id="user_add_success" role="alert">
+                A new user has been added successfully
+            </div>
+
+            <div class="alert alert-success" id="user_update_success" role="alert">
+                User has been updated successfully
+            </div>
+
+            <div class="alert alert-success" id="user_enable_success" role="alert">
+                User Enabled successfully
+            </div>
+
+            <div class="alert alert-success" id="user_disable_success" role="alert">
+                User Disabled successfully
+            </div>
+
+            <div class="alert alert-danger" id="error" role="alert">
+                Opps! Something went wrong.
+            </div>
+
+            <div id="UmTable_loader" class="loader"></div>
+            <div id="UmTableData"></div>
+        </div>
+    </div>
+</div>
+
+<div id="newUserModalContainer"></div>
+<div id="editUserModalContainer"></div>
+
+<script>
+    var list_facilities = [];
+    var list_users = [];
+
+    $(document).ready(function () {
+        loadUserManagementTable();
+    });
+
+    function initializeMessages() {
+        $("#user_add_success").hide();
+        $("#user_update_success").hide();
+        $("#user_enable_success").hide();
+        $("#user_disable_success").hide();
+        $("#error").hide();
+    };
+
+    function intialize() {
+        list_facilities = [];
+        list_roles = [];
+        list_users = [];
+        list_roles.push(1);
+    };
+
+    function disableUser(Id) {
+        var result = confirm("Do you want to disable the User?");
+        if (result) {
+            var src = '@Url.Action("DisableUser", "Home", new { area = "" })' + '?Id=' + Id;
+
+            $.ajax({
+                url: src,
+                type: "post",
+                data: [],
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    loadUserManagementTable();
+                    $("#user_disable_success").show();
+                },
+                error: function () {
+                    $("#error").show();
+                }
+            });
+        }
+    }
+
+    function enableUser(Id) {
+        var result = confirm("Do you want to enable the User?");
+        if (result) {
+            var src = '@Url.Action("EnableUser", "Home", new { area = "" })' + '?Id=' + Id;
+
+            $.ajax({
+                url: src,
+                type: "post",
+                data: [],
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    loadUserManagementTable();
+                    $("#user_enable_success").show();
+                },
+                error: function () {
+                    $("#error").show();
+                }
+            });
+        }
+    }
+
+    function createUser() {
+        var name = document.getElementById("name").value;
+        var email = document.getElementById("email").value;
+
+        //console.log(list_roles);
+        //console.log(list_facilities);
+
+        if (validateName(name) && validateEmail(email))
+        {
+            var check = $.inArray(email, list_users);
+            if (check != -1) {
+                alert("User already exists");
+            }
+            else
+            {
+                var data = { name: name, email: email, list_facilities: list_facilities, list_roles: list_roles }
+                var send_to_controller = JSON.stringify(data);
+                var src = '@Url.Action("CreateUser", "Home", new { area = "" })' + '?data=' + send_to_controller;
+
+                $.ajax({
+                    url: src,
+                    type: "post",
+                    data: send_to_controller,
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function (data) {
+                        //console.log(data);
+                        loadUserManagementTable();
+                        $('#newUserModal').modal('hide');
+                        $("#user_add_success").show();
+                    },
+                    error: function () {
+                        //alert("User already exists");
+                        $('#newUserModal').modal('hide');
+                        $("#error").show();
+                    }
+                });
+            } 
+        }
+        else
+        {
+            var message = "Invalid";
+            if (!validateName(name)) {
+                message += " name format";
+            }
+
+            if (!validateEmail(email)) {
+                if (message != "Invalid") {
+                    message += " and";
+                }
+                message += " Email Format";
+            }
+
+            alert(message);
+        }
+    }
+
+    function validateName(name) {
+        var result = false;
+
+        if (/^[a-zA-Z-,](\s{0,1}[a-zA-Z-, ])*[^\s]$/.exec(name)) {
+            result = true;
+        }
+
+        return result;
+    }
+
+    function validateEmail(email) {
+        var result = false;
+
+        var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+
+        result = pattern.test(email);
+
+        return result;
+    }
+
+    function Role_List(id) {
+        list_roles = [];
+        list_roles.push(id);
+        console.log(list_roles);
+    }
+
+    function Facility_List(id) {
+        var check = $.inArray(id, list_facilities);
+        if (check == -1) {
+            list_facilities.push(id);
+        }
+        else {
+            list_facilities = list_facilities.filter(item => item !== id)
+        }
+    }
+
+    function User_List(id) {
+        var check = $.inArray(id, list_users);
+        if (check == -1) {
+            list_users.push(id);
+        }
+        else {
+            list_users = list_users.filter(item => item !== id)
+        }
+    }
+
+    function loadUserManagementTable() {
+        intialize();
+        initializeMessages();
+        loadUsers();
+
+        $("#UmTableData").hide();
+        $("#UmTable_loader").show();
+
+        var src = "@Url.Action("LoadUserManagement", "Home", new { area = "" })";
+
+        $.ajax({
+            url: src,
+            type: 'GET',
+            cache: false,
+            data: {}
+        }).done(function (result) {
+            $('#UmTableData').html(result);
+            $("#UmTable_loader").hide();
+            $("#UmTableData").show();
+         });
+    }
+
+    function loadUsers() {
+        var src = "@Url.Action("LoadUsers", "Home", new { area = "" })";
+
+        $.ajax({
+            url: src,
+            type: 'GET',
+            cache: false,
+            data: {}
+        }).done(function (result) {
+            for (var i = 0, len = result.length; i < len; i++) {
+                User_List(result[i]);
+            }
+         });
+    }
+
+    function addUser() {
+
+        var src = "@Url.Action("NewUser", "Home", new { area = "" })";
+
+        $.ajax({
+            type: "GET",
+            url: src,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#newUserModalContainer").html(data.LocationModal);
+                $('#newUserModal').modal('show');
+            },
+            Error: function (data) {
+                $('#newUserModal').modal('hide');
+                $("#error").show();
+            }
+        });
+    }
+
+    function editUser(id) {
+
+        var src = "@Url.Action("EditUser", "Home", new { area = "" })"+"?Id="+id;
+
+        $.ajax({
+            type: "GET",
+            url: src,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#editUserModalContainer").html(data.LocationModal);
+                $('#editUserModal').modal('show');
+            },
+            Error: function (data) {
+                $('#editUserModal').modal('hide');
+                $("#error").show();
+            }
+        });
+    }
+</script>

@@ -1,0 +1,89 @@
+﻿
+@model InventoryManagementSystem.Models.ViewModels.NewFacilityModel
+
+<div class="modal" id="editFacilityModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Create a new Facility
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="edit_facility_name">Name</label>
+                        <input type="text" class="form-control" id="edit_facility_name" aria-describedby="Name" placeholder="Enter the name of the Facility">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_facility_location">Location</label>
+                        <input type="text" class="form-control" id="edit_facility_location" aria-describedby="location" placeholder="Enter the location">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="float-right">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-outline-success" onclick="updateFacility()">Update Facility</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var id = @Html.Raw(Json.Encode(Model.Id));
+
+    var name = @Html.Raw(Json.Encode(Model.Name));
+    document.getElementById("edit_facility_name").value = name;
+
+    var locationData = @Html.Raw(Json.Encode(Model.Location));
+    document.getElementById("edit_facility_location").value = locationData;
+
+    function updateFacility() {
+
+        var name_update = document.getElementById("edit_facility_name").value;
+        var location_update = document.getElementById("edit_facility_location").value;
+
+        if (validateFacilityName(name_update) && validateFacilityLocation(location_update)) {
+            var data = { Id: id, name: name_update, location: location_update}
+            var send_to_controller = JSON.stringify(data);
+            var src = '@Url.Action("UpdateFacility", "Home", new { area = "" })' + '?data=' + send_to_controller;
+
+            $.ajax({
+                url: src,
+                type: "post",
+                data: send_to_controller,
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    loadFacilityManagementTable();
+                    $("#facility_update_success").show();
+                    $('#editFacilityModal').modal('hide');
+                },
+                error: function () {
+                    $('#editFacilityModal').modal('hide');
+                }
+            });
+        }
+        else
+        {
+            var message = "Invalid";
+            if (!validateFacilityName(name_update)) {
+                message += " name format";
+            }
+
+            if (!validateFacilityLocation(location_update)) {
+                if (message != "Invalid") {
+                    message += " and";
+                }
+                message += " Location Format";
+            }
+
+            alert(message);
+        }
+    }
+</script>

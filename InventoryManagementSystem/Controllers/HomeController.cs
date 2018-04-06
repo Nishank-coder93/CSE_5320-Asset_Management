@@ -21,7 +21,14 @@ namespace InventoryManagementSystem.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            if (Session["Role"] != null && int.Parse(Session["Role"].ToString()) == 1)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
         }
 
         public async Task<ActionResult> LoadUserManagement()

@@ -1,0 +1,97 @@
+﻿@model InventoryManagementSystem.Models.ViewModels.HomeViewModel
+
+
+
+@if (Model.ReportData.Count > 0)
+{
+    foreach (var d in Model.ReportData)
+    {
+        <div class="card" id="report_@d.FacilityId">
+            <div class="card-header">
+                Report for @d.FacilityName
+            </div>
+            <div class="card-body">
+
+                @if (d.ResourceReport.Count > 0)
+                {
+
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Resource Name</th>
+                                <th>Status</th>
+                                <th>Note</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var r in d.ResourceReport)
+                            {
+                                <tr>
+                                    <td>@r.ResourceName</td>
+
+                                    @if (r.Verified)
+                                    {
+                                        <td>Verified</td>
+                                    }
+                                    else if (r.Missing)
+                                    {
+                                        <td>
+                                            Missing
+
+                                            @if (r.MissingQuantity.HasValue)
+                                            {
+                                                <span> (No of missing items: @r.MissingQuantity.Value)</span>
+                                            }
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>Verification Pending</td>
+                                    }
+                                    <td>
+                                        @if (r.QuantityChange.HasValue)
+                                        {
+                                            <p>Quantity updated by @r.QuantityChange.Value Items</p>
+                                        }
+                                        else
+                                        {
+                                            <p>N/A</p>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (r.Missing)
+                                        { 
+                                            <form class="form-inline">
+                                                <label class="sr-only" for="message_@r.ReportId">Name</label>
+                                                <input type="text" class="form-control mb-2 mr-sm-2" id="message_@r.ReportId" placeholder="Enter message here">
+
+                                                <button type="button" class="btn btn-primary mb-2" onclick="SendMessage(@r.ReportId)">Send Message</button>
+                                            </form>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <a href="#" class="btn btn-outline-primary" onclick="downloadPDF(@d.FacilityId)">Download as PDF</a>
+                }
+                else
+                {
+                    <div class="alert alert-warning" role="alert">
+                        There is no data to be shown
+                    </div>
+                }
+
+            </div>
+        </div><br />
+    }
+}
+else
+{
+    <div class="alert alert-warning" role="alert">
+        There is no data to be shown
+    </div>
+}
+

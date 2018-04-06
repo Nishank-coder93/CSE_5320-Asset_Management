@@ -1,0 +1,191 @@
+﻿<div style="padding-top:20px">
+    <div class="alert alert-success" id="resource_add_success" role="alert">
+        A new Resource has been added successfully
+    </div>
+
+    <div class="alert alert-success" id="resource_update_success" role="alert">
+        Resource has been updated successfully
+    </div>
+
+    <div class="alert alert-success" id="resource_disable_success" role="alert">
+        Resource Disabled successfully
+    </div>
+
+    <div class="alert alert-danger" id="resource_error" role="alert">
+        Opps! Something went wrong.
+    </div>
+    <div id="RmTable_loader" class="loader"></div>
+    <div id="RmTableData"></div>
+    <div id="initMessage">
+        <div class="alert alert-warning" role="alert">
+            Select a Facility to view the associated resources
+        </div>
+    </div>
+</div>
+
+<div id="newResourceModalContainer"></div>
+<div id="editResourceModalContainer"></div>
+
+<script>
+
+    $(document).ready(function () {
+        initializeResourceMessages();
+    });
+
+    function initializeResourceMessages() {
+        $("#resource_add_success").hide();
+        $("#resource_update_success").hide();
+        $("#resource_disable_success").hide();
+        $("#resource_error").hide();
+    };
+
+    function deleteResource(Id, FacilityId)
+    {
+        var result = confirm("Disable resource?");
+        if (result)
+        {
+            var src = "@Url.Action("DeleteResource", "Home", new { area = "" })"+"?Id="+Id;
+
+            $.ajax({
+                type: "POST",
+                url: src,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    loadData(FacilityId);
+                    $("#resource_disable_success").show();
+                },
+                Error: function (data) {
+                    $("#resource_error").show();
+                }
+            });
+        }
+    }
+
+    function loadData(FacilityId) {
+
+        initializeResourceMessages();
+        $("#FmTableData").hide();
+        $("#FmTable_loader").show();
+
+        var src = "@Url.Action("LoadFacilityManagement", "Home", new { area = "" })";
+
+        $.ajax({
+            url: src,
+            type: 'GET',
+            cache: false,
+            data: {}
+        }).done(function (result) {
+            $('#FmTableData').html(result);
+            $("#FmTable_loader").hide();
+            $("#FmTableData").show();
+            viewFacility(FacilityId);
+         });
+    }
+
+
+    function editResource(Id) {
+        var src = "@Url.Action("EditResource", "Home", new { area = "" })"+"?Id="+Id;
+
+        $.ajax({
+            type: "GET",
+            url: src,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#editResourceModalContainer").html(data.LocationModal);
+                $('#editResourceModal').modal('show');
+            },
+            Error: function (data) {
+                $('#editResourceModal').modal('hide');
+                $("#resource_error").show();
+            }
+        });
+    }
+
+    function createResource(Id) {
+        var name = document.getElementById("new_resource_name").value;
+        var quantity = document.getElementById("new_resource_quantity").value;
+        var facilityId = Id;
+
+        if (validateResourceName(name) && validateQuantity(quantity))
+        {
+
+            var data = { name: name, quantity: quantity, facilityId: facilityId}
+            var send_to_controller = JSON.stringify(data);
+            var src = '@Url.Action("CreateResource", "Home", new { area = "" })' + '?data=' + send_to_controller;
+
+            $.ajax({
+                url: src,
+                type: "post",
+                data: send_to_controller,
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    loadData(facilityId);
+                    $('#newResourceModal').modal('hide');
+                    $("#resource_add_success").show();
+                },
+                error: function () {
+                    $('#newResourceModal').modal('hide');
+                    $("#resource_error").show();
+                }
+            });
+        }
+        else
+        {
+            var message = "Invalid";
+            if (!validateResourceName(name)) {
+                message += " name format";
+            }
+
+            if (!validateQuantity(quantity)) {
+                if (message != "Invalid") {
+                    message += " and";
+                }
+                message += " quantity Format";
+            }
+
+            alert(message);
+        }
+    }
+
+    function validateResourceName(name) {
+        var result = false;
+
+        if (/^[a-zA-Z-,](\s{0,1}[a-zA-Z-, ])*[^\s]$/.exec(name)) {
+            result = true;
+        }
+
+        return result;
+    }
+
+    function validateQuantity(quantity) {
+        var result = true;
+
+        if (isNaN(quantity) || quantity < 1) {
+            result = false;
+        }
+
+        return result;
+    }
+
+    function addResource(Id) {
+        var src = "@Url.Action("NewResource", "Home", new { area = "" })"+"?FacilityId="+Id;
+
+        $.ajax({
+            type: "GET",
+            url: src,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#newResourceModalContainer").html(data.LocationModal);
+                $('#newResourceModal').modal('show');
+            },
+            Error: function (data) {
+                $('#newResourceModal').modal('hide');
+                $("#resource_error").show();
+            }
+        });
+    }
+</script>
