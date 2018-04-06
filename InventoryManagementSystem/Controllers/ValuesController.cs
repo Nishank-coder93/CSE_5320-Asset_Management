@@ -882,9 +882,9 @@ namespace InventoryManagementSystem.Controllers
 
         private async void SendEmail(string Name, string email, string password, bool? update)
         {
+            var URL = "http://inventorymanagementsystem.us-west-2.elasticbeanstalk.com/";
             if (update.HasValue && update.Value)
             {
-                var URL = "";
                 var apiKey = "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";
                 var client = new SendGridClient(apiKey);
                 var from = new EmailAddress("group7@uta", "Group 7");
@@ -897,7 +897,6 @@ namespace InventoryManagementSystem.Controllers
             }
             else
             {
-                var URL = "";
                 var apiKey = "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";
                 var client = new SendGridClient(apiKey);
                 var from = new EmailAddress("group7@uta", "Group 7");
