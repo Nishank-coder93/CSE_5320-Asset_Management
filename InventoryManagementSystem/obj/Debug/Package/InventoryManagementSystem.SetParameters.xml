@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <parameters>
   <setParameter name="IIS Web Application Name" value="Default Web Site/" />
-  <setParameter name="Cse5320-Web.config Connection String" value="Data Source=aabifgjpz0uktk.c7jczudmjdve.us-east-2.rds.amazonaws.com;       Initial Catalog=InventoryManagementSystem;       Integrated Security=False;       User Id=root;       Password=YesjKuvuBezu5$;       MultipleActiveResultSets=True" />
+  <setParameter name="Cse5320-Web.config Connection String" value="Data Source=aa17ikufsr39rvo.c7jczudmjdve.us-east-2.rds.amazonaws.com;       Initial Catalog=InventoryManagementSystem;       Integrated Security=False;       User Id=root;       Password=password;       MultipleActiveResultSets=True" />
 </parameters>
