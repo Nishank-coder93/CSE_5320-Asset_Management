@@ -20,34 +20,36 @@ namespace InventoryManagementSystem.Controllers
         {
             var db = new Context();
 
-            var user = db.User.Where(x => x.UserName == model.Username).FirstOrDefault();
+            var user = db.User.Where(x => x.UserName == model.Username && x.Password == model.Password ).FirstOrDefault();
 
             if (user != null)
             {
+                /*
                 var code = "teamseven";
                 var hashKey = PasswordHelper.GetHashKey(code);
                 var decrypt = PasswordHelper.Decrypt(hashKey, user.Password);
                 if (decrypt == model.Password)
                 {
-                    var result = new UserViewModel();
+                    
+                }
+                */
 
-                    result.UserId = user.Id;
-                    result.UserName = user.UserName;
-                    result.Name = user.Name;
+                var result = new UserViewModel();
 
-                    var role = db.UserRole.Where(x => x.UserId == user.Id).FirstOrDefault();
+                result.UserId = user.Id;
+                result.UserName = user.UserName;
+                result.Name = user.Name;
 
-                    if (role != null)
-                    {
-                        result.RoleId = role.RoleId;
-                    }
+                var role = db.UserRole.Where(x => x.UserId == user.Id).FirstOrDefault();
 
-                    var response = JsonConvert.SerializeObject(result);
-
-                    return response;
+                if (role != null)
+                {
+                    result.RoleId = role.RoleId;
                 }
 
-                return null;
+                var response = JsonConvert.SerializeObject(result);
+
+                return response;
             }
             else
             {

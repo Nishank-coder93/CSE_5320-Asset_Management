@@ -120,11 +120,11 @@ namespace InventoryManagementSystem.Controllers
             var users = listHelper.UserList();
             foreach (var u in users)
             {
-                var code = "teamseven";
-                var hashKey = PasswordHelper.GetHashKey(code);
-                var encrypt = PasswordHelper.Encrypt(hashKey, u.Password);
+                //var code = "teamseven";
+                //var hashKey = PasswordHelper.GetHashKey(code);
+                //var encrypt = PasswordHelper.Encrypt(hashKey, u.Password);
 
-                u.Password = encrypt;
+                u.Password = u.Password;
                 db.User.Add(u);
             }
 
